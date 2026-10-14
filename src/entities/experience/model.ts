@@ -56,7 +56,7 @@ export const jobs: Job[] = [
     id: "softwhere",
     title: "Frontend Developer",
     company: "Softwhere",
-    location: "Uzbekistan",
+    location: "Remote",
     dates: "2022 – 2024",
     bullets: [
       "Built 2 fintech apps from scratch for NestEgg, a UK loan-matching platform that connects borrowers " +
@@ -76,8 +76,8 @@ export const jobs: Job[] = [
   {
     id: "coyote",
     title: "Frontend Developer",
-    company: "COYOTE",
-    location: "Kazakhstan",
+    company: "COYOTE (Kazakhstan)",
+    location: "Remote",
     dates: "2021 – 2022",
     bullets: [
       "Completed projects left unfinished by junior developers, improving code quality, performance and " +
@@ -90,7 +90,7 @@ export const jobs: Job[] = [
     id: "paybek",
     title: "Frontend Developer",
     company: "Paybek (FinTech)",
-    location: "Uzbekistan",
+    location: "On-site, Uzbekistan",
     dates: "2020 – 2021",
     bullets: [
       "Led the frontend team and mentored 3 frontend developers with day-to-day supervision.",
@@ -112,7 +112,7 @@ export const jobs: Job[] = [
     id: "epam",
     title: "Frontend Developer",
     company: "EPAM Systems",
-    location: "Uzbekistan",
+    location: "On-site, Uzbekistan",
     dates: "2019 – 2020",
     bullets: [
       "Built frontend authentication and authorization for a React Native app in a Scrum team using Jira and Figma.",
