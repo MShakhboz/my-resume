@@ -46,7 +46,3 @@ next-env.d.ts
 /blob-report/
 /playwright/.cache/
 
-# local notes
-CLAUDE.md
-HANDOFF.md
-.claude/
