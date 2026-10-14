@@ -28,7 +28,7 @@ export const jobs: Job[] = [
       "React Hook Form",
       "TanStack Virtual",
     ],
-    liveSites: [],
+    liveSites: ["dev.tradetaxi.ru"],
   },
   {
     id: "lumex",
