@@ -35,8 +35,8 @@ export function Title({
         md && "text-3xl",
         sm && "text-2xl",
         xs && "text-xl",
-        orange && "text-orange-400",
-        gray && "text-neutral-400",
+        orange && "text-accent",
+        gray && "text-muted",
         className
       )}
     >

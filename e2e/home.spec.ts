@@ -30,9 +30,33 @@ test("resume PDFs are served", async ({ page, request }) => {
   }
 });
 
-test("has no detectable accessibility violations", async ({ page }) => {
-  const results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
-    .analyze();
-  expect(results.violations).toEqual([]);
+for (const colorScheme of ["dark", "light"] as const) {
+  test(`has no detectable accessibility violations (${colorScheme})`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme });
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", colorScheme);
+    // Guards against unstyled pages, which axe would happily pass.
+    await expect(page.locator("body")).toHaveCSS(
+      "background-color",
+      colorScheme === "dark" ? "rgb(10, 10, 10)" : "rgb(245, 245, 245)"
+    );
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+}
+
+test("theme toggle overrides the system theme and persists", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.reload();
+  const html = page.locator("html");
+  await expect(html).toHaveAttribute("data-theme", "dark");
+
+  await page.getByRole("button", { name: "Switch to light theme" }).click();
+  await expect(html).toHaveAttribute("data-theme", "light");
+
+  await page.reload();
+  await expect(html).toHaveAttribute("data-theme", "light");
+  await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
 });

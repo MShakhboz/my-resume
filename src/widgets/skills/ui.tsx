@@ -8,7 +8,7 @@ export function Skills() {
       <dl className="space-y-4">
         {skillGroups.map((group) => (
           <div key={group.label} className="space-y-2">
-            <dt className="text-sm font-medium text-white">{group.label}</dt>
+            <dt className="text-sm font-medium text-strong">{group.label}</dt>
             <dd>
               <ul className="flex flex-wrap gap-1.5">
                 {group.items.map((item) => (

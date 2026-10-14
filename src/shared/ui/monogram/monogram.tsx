@@ -10,7 +10,7 @@ export function Monogram({ initials, size = 112 }: MonogramProps) {
       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 opacity-25 blur-lg" />
       <div
         style={{ width: size, height: size, fontSize: size * 0.36 }}
-        className="relative flex items-center justify-center rounded-full border-4 border-neutral-800 bg-gradient-to-br from-orange-400 to-orange-600 font-bold tracking-tight text-neutral-950 shadow-lg"
+        className="relative flex items-center justify-center rounded-full border-4 border-line bg-gradient-to-br from-orange-400 to-orange-600 font-bold tracking-tight text-neutral-950 shadow-lg"
       >
         {initials}
       </div>

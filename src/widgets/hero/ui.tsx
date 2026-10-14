@@ -18,17 +18,17 @@ export function Hero() {
           <Title as="h1" id="hero-title" md>
             {profile.name}
           </Title>
-          <p className="text-lg text-neutral-200">
+          <p className="text-lg text-foreground">
             {headlineRole}
             {headlineStack && (
-              <span className="block text-orange-400 sm:inline">
+              <span className="block text-accent sm:inline">
                 <span className="hidden sm:inline"> · </span>
                 {headlineStack}
               </span>
             )}
           </p>
-          <p className="flex items-center justify-center gap-1.5 text-sm text-neutral-400">
-            <MapPin aria-hidden size={16} />
+          <p className="text-sm text-muted">
+            <MapPin aria-hidden size={16} className="mr-1.5 inline-block align-[-3px]" />
             {profile.location} · {profile.availability}
           </p>
         </div>
@@ -44,7 +44,7 @@ export function Hero() {
                   aria-label={contact.label}
                   title={contact.label}
                   {...(external && { target: "_blank", rel: "noopener noreferrer" })}
-                  className="flex size-10 items-center justify-center rounded-full bg-neutral-800 text-neutral-300 transition hover:bg-neutral-700 hover:text-orange-400"
+                  className="flex size-10 items-center justify-center rounded-full bg-raised text-body transition hover:bg-raised-hover hover:text-accent"
                 >
                   <Icon aria-hidden size={18} />
                 </a>
