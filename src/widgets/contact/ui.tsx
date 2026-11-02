@@ -1,22 +1,25 @@
 import { Mail } from "lucide-react";
-import { contactIcons, profile } from "@/entities/profile";
+import { contactIcons, getProfile } from "@/entities/profile";
+import { getDictionary, Locale } from "@/shared/i18n";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { Section } from "@/shared/ui/section";
 
-export function Contact() {
+export function Contact({ locale }: { locale: Locale }) {
+  const profile = getProfile(locale);
+  const t = getDictionary(locale);
   const email = profile.contacts.find((contact) => contact.id === "email");
 
   return (
-    <Section id="contact" title="Contact">
+    <Section id="contact" title={t.nav.contact}>
       <div className="space-y-4">
         <p className="text-2xl font-semibold tracking-tight text-strong sm:text-3xl">
-          Open to senior React and Next.js roles, remote.
+          {t.contactLead}
         </p>
-        <p className="text-body">Based in {profile.location}.</p>
+        <p className="text-body">{t.basedIn(profile.location)}</p>
         {email && (
           <ButtonLink href={email.href} variant="primary" className="px-5 py-2.5">
             <Mail aria-hidden size={16} />
-            Email me
+            {t.emailMe}
           </ButtonLink>
         )}
       </div>
@@ -35,7 +38,7 @@ export function Contact() {
                 <Icon aria-hidden size={20} className="shrink-0 text-accent" />
                 <span className="min-w-0">
                   <span className="block text-xs text-muted">
-                    {contact.id === "telegram" ? "Telegram / WhatsApp" : contact.label}
+                    {contact.id === "telegram" ? t.messengers : contact.label}
                   </span>
                   <span className="block truncate text-sm text-foreground">{contact.display}</span>
                 </span>

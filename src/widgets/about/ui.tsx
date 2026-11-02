@@ -1,9 +1,12 @@
-import { profile } from "@/entities/profile";
+import { getProfile } from "@/entities/profile";
+import { getDictionary, Locale } from "@/shared/i18n";
 import { Section } from "@/shared/ui/section";
 
-export function About() {
+export function About({ locale }: { locale: Locale }) {
+  const profile = getProfile(locale);
+
   return (
-    <Section id="about" title="About">
+    <Section id="about" title={getDictionary(locale).nav.about}>
       <p className="text-lg leading-relaxed text-body">{profile.summary}</p>
 
       <dl className="grid grid-cols-2 gap-3">

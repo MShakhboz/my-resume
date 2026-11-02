@@ -1,20 +1,33 @@
 import { Download, MapPin } from "lucide-react";
-import { contactIcons, profile } from "@/entities/profile";
+import { contactIcons, getProfile } from "@/entities/profile";
+import { LocaleSwitch } from "@/features/locale-switch";
 import { SectionNav } from "@/features/section-nav";
 import { ThemeToggle } from "@/features/theme-toggle";
 import { resumePdfs } from "@/shared/config";
+import { getDictionary, Locale } from "@/shared/i18n";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { Monogram } from "@/shared/ui/monogram";
 import { Title } from "@/shared/ui/title";
 
 /** Identity column: sticky on desktop with the section nav, stacked on top on mobile. */
-export function Hero() {
+export function Hero({ locale }: { locale: Locale }) {
+  const profile = getProfile(locale);
+  const t = getDictionary(locale);
   const [headlineRole, headlineStack] = profile.headline.split(" | ");
+  // The visitor's own language first: the Russian page leads with the Russian PDF.
+  const pdfs =
+    locale === "ru"
+      ? [...resumePdfs.filter((pdf) => pdf.id === "ru"), ...resumePdfs.filter((pdf) => pdf.id !== "ru")]
+      : resumePdfs;
 
   return (
     <header className="pt-10 lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-[calc(42%+3rem)] lg:shrink-0 lg:flex-col lg:justify-between lg:-mx-6 lg:overflow-y-auto lg:px-6 lg:py-16">
       <div>
-        <Monogram initials={profile.initials} size={64} />
+        <div className="flex items-start justify-between gap-4">
+          <Monogram initials={profile.initials} size={64} />
+          {/* Below lg; on desktop the switch sits at the bottom of the sidebar. */}
+          <LocaleSwitch locale={locale} className="lg:hidden" />
+        </div>
 
         <Title as="h1" className="mt-6 text-4xl text-strong sm:text-5xl">
           {profile.name}
@@ -36,12 +49,12 @@ export function Hero() {
           </span>
         </p>
 
-        <SectionNav variant="sidebar" className="mt-12 hidden lg:block" />
+        <SectionNav variant="sidebar" locale={locale} className="mt-12 hidden lg:block" />
       </div>
 
       <div className="mt-8 space-y-6">
-        <ul aria-label="Download resume" className="flex flex-wrap items-center gap-2">
-          {resumePdfs.map((pdf, i) => (
+        <ul aria-label={t.downloadResume} className="flex flex-wrap items-center gap-2">
+          {pdfs.map((pdf, i) => (
             <li key={pdf.href}>
               <ButtonLink
                 href={pdf.href}
@@ -50,14 +63,14 @@ export function Hero() {
                 variant={i === 0 ? "primary" : "secondary"}
               >
                 <Download aria-hidden size={16} />
-                {pdf.label}
+                {t.pdf[pdf.id]}
               </ButtonLink>
             </li>
           ))}
         </ul>
 
         <div className="flex items-center gap-2">
-          <ul aria-label="Contact links" className="flex items-center gap-2">
+          <ul aria-label={t.contactLinks} className="flex items-center gap-2">
             {profile.contacts.map((contact) => {
               const Icon = contactIcons[contact.id];
               const external = contact.href.startsWith("http");
@@ -76,8 +89,9 @@ export function Hero() {
               );
             })}
           </ul>
-          <div className="ml-auto hidden lg:block">
-            <ThemeToggle />
+          <div className="ml-auto hidden items-center gap-2 lg:flex">
+            <LocaleSwitch locale={locale} />
+            <ThemeToggle locale={locale} />
           </div>
         </div>
       </div>

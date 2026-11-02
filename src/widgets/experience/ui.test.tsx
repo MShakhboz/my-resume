@@ -1,12 +1,15 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { jobs } from "@/entities/experience";
+import { getJobs } from "@/entities/experience";
+import { getDictionary, locales } from "@/shared/i18n";
 import { Experience } from "./ui";
 
-describe("Experience", () => {
+describe.each(locales)("Experience (%s)", (locale) => {
+  const jobs = getJobs(locale);
+
   it("renders one entry per job in order", () => {
-    render(<Experience />);
-    const section = screen.getByRole("region", { name: "Experience" });
+    render(<Experience locale={locale} />);
+    const section = screen.getByRole("region", { name: getDictionary(locale).nav.experience });
     const companies = within(section)
       .getAllByRole("heading", { level: 3 })
       .map((heading) => heading.textContent);
@@ -14,7 +17,7 @@ describe("Experience", () => {
   });
 
   it("opens live sites in a new tab over https", () => {
-    render(<Experience />);
+    render(<Experience locale={locale} />);
     for (const site of jobs.flatMap((job) => job.liveSites)) {
       const link = screen.getByRole("link", { name: new RegExp(site.replace(/\./g, "\\.")) });
       expect(link).toHaveAttribute("href", `https://${site}`);

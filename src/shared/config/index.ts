@@ -1,2 +1,2 @@
-export { navItems, resumePdfs } from "./site";
+export { resumePdfs, sectionIds } from "./site";
 export type { SectionId } from "./site";

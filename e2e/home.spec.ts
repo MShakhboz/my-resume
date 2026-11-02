@@ -44,31 +44,55 @@ test("resume PDFs are served", async ({ page, request }) => {
   }
 });
 
-for (const colorScheme of ["dark", "light"] as const) {
-  test(`has no detectable accessibility violations (${colorScheme})`, async ({ page }) => {
-    await page.emulateMedia({ colorScheme });
-    await page.reload();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", colorScheme);
-    // Guards against unstyled pages, which axe would happily pass.
-    await expect(page.locator("body")).toHaveCSS(
-      "background-color",
-      colorScheme === "dark" ? "rgb(10, 10, 10)" : "rgb(245, 245, 245)"
-    );
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
-      .analyze();
-    expect(results.violations).toEqual([]);
+for (const path of ["/", "/ru"]) {
+  for (const colorScheme of ["dark", "light"] as const) {
+    test(`has no detectable accessibility violations (${path}, ${colorScheme})`, async ({ page }) => {
+      await page.goto(path);
+      await page.emulateMedia({ colorScheme });
+      await page.reload();
+      await expect(page.locator("html")).toHaveAttribute("data-theme", colorScheme);
+      // Guards against unstyled pages, which axe would happily pass.
+      await expect(page.locator("body")).toHaveCSS(
+        "background-color",
+        colorScheme === "dark" ? "rgb(10, 10, 10)" : "rgb(245, 245, 245)"
+      );
+      const results = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+        .analyze();
+      expect(results.violations).toEqual([]);
+    });
+  }
+}
+
+test("the Russian page is in Russian and links back to English", async ({ page }) => {
+  await page.goto("/ru");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ru");
+  await expect(page).toHaveTitle(/Шахбоз Мирзомуротов/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Шахбоз Мирзомуротов");
+  for (const name of ["О себе", "Опыт", "Проекты", "Навыки", "Образование", "Контакты"]) {
+    await expect(page.getByRole("region", { name })).toBeVisible();
+  }
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", /\/$/);
+
+  await page.getByRole("list", { name: "Язык" }).getByRole("link", { name: "en" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+});
+
+for (const path of ["/", "/ru"]) {
+  test(`fits a 320px screen without sideways scrolling (${path})`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto(path);
+    const [scrollWidth, viewportWidth] = await page.evaluate(() => [
+      document.documentElement.scrollWidth,
+      window.innerWidth,
+    ]);
+    expect(scrollWidth).toBeLessThanOrEqual(viewportWidth);
   });
 }
 
-test("fits a 320px screen without sideways scrolling", async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 640 });
-  await page.goto("/");
-  const [scrollWidth, viewportWidth] = await page.evaluate(() => [
-    document.documentElement.scrollWidth,
-    window.innerWidth,
-  ]);
-  expect(scrollWidth).toBeLessThanOrEqual(viewportWidth);
+test("unknown paths are a 404", async ({ request }) => {
+  expect((await request.get("/de")).status()).toBe(404);
 });
 
 test("theme toggle overrides the system theme and persists", async ({ page }) => {

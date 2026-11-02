@@ -1,0 +1,85 @@
+import { jobs as enJobs } from "./model";
+import { Job } from "./types";
+
+const NB = " "; // keeps numbers like "37 822" on one line, as in the PDF
+const TITLE = "Frontend-разработчик";
+
+type Translation = Pick<Job, "title" | "company" | "location" | "bullets">;
+
+// Source of truth: ../build_resume_ru.py; the Hi Bro bullets are website only.
+// Dates, work mode, stack and live sites come from the English model, so the two can't drift apart.
+const translations: Record<string, Translation> = {
+  tradetaxi: {
+    title: TITLE,
+    company: "TradeTaxi",
+    location: "Удалённо",
+    bullets: [
+      "Единственный frontend-разработчик в команде из 7 человек, которая создаёт CRM для таксопарка из " +
+        "России; принял застрявший проект с AI-сгенерированным кодом и написал около 70% frontend-части.",
+      "Спроектировал многовкладочный интерфейс по принципу браузера: каждая вкладка сохраняет состояние " +
+        "страницы и позицию прокрутки.",
+      "Разработал модули «Водители» (список, поддержка, регистрация, рассылки) и «ТС» для " +
+        `37${NB}822 водителей и 5${NB}405 автомобилей; большие таблицы работают быстро благодаря TanStack Virtual.`,
+      "Реализовал модуль «Штрафы» (ГИБДД, ЦКАД, платёжные поручения, обжалования) в первом релизном цикле, " +
+        "посвящённом интеграциям с ГИБДД и Яндексом.",
+      `Backend на PHP/Laravel, мобильное приложение на Flutter. Платформой пользуются около 2${NB}000 водителей.`,
+      "Также разрабатываю Hi Bro (hibro.am) — AI-гид по меню ресторана: гости сканируют QR-код или меню, " +
+        "задают вопросы о блюдах и собирают заказ. С нуля создал гостевое приложение на Next.js: " +
+        "сканирование QR-кодов и меню камерой, AI-чат и виртуализированное меню с листаемыми категориями.",
+      "Разработал функции админ-панели Hi Bro: вход, пользователи, заведения, редактор меню с " +
+        "перетаскиванием и лента источников меню с пошаговым прогрессом распознавания.",
+      "Расширил Laravel API Hi Bro: чат AI-официанта и чтение меню в headless-браузере (Node, Playwright, " +
+        "Docker), который открывает сайты меню как телефон гостя, блокирует запросы к внутренним адресам " +
+        "и каждую ночь заново читает контрольные меню, сравнивая с прошлым результатом.",
+    ],
+  },
+  lumex: {
+    title: TITLE,
+    company: "Lumex Agency (США)",
+    location: "Удалённо",
+    bullets: [
+      "Руководил 2 frontend-разработчиками; реализовал 12 клиентских сайтов: разработка с нуля, новые " +
+        "функции, рефакторинг, поддержка.",
+      "Поднял доступность сайтов с 70–80% до 95–100% (аудиты WAVE и IBM Equal Access).",
+    ],
+  },
+  softwhere: {
+    title: TITLE,
+    company: "Softwhere",
+    location: "Удалённо",
+    bullets: [
+      "Создал с нуля 2 финтех-приложения для NestEgg — британской платформы подбора займов в кредитных " +
+        "союзах: клиентское приложение loans.nestegg.ai и кабинет кредитора для 20+ кредиторов.",
+    ],
+  },
+  coyote: {
+    title: TITLE,
+    company: "COYOTE (Казахстан)",
+    location: "Удалённо",
+    bullets: ["Завершил брошенные junior-разработчиками проекты, улучшив код и производительность."],
+  },
+  paybek: {
+    title: TITLE,
+    company: "Paybek (финтех)",
+    location: "Офис, Узбекистан",
+    bullets: [
+      "Руководил frontend-командой: менторство и ежедневное сопровождение 3 frontend-разработчиков.",
+      "Создал с нуля CRM-системы для 4 веб-продуктов, затем развивал и поддерживал их.",
+    ],
+  },
+  epam: {
+    title: TITLE,
+    company: "EPAM Systems",
+    location: "Офис, Узбекистан",
+    bullets: [
+      "Реализовал аутентификацию и авторизацию на frontend мобильного приложения на React Native " +
+        "в Scrum-команде; Jira, Figma.",
+    ],
+  },
+};
+
+export const jobs: Job[] = enJobs.map((job) => {
+  const translation = translations[job.id];
+  if (!translation) throw new Error(`Missing Russian translation for job "${job.id}"`);
+  return { ...job, ...translation, dates: job.dates.replace("Present", "настоящее время") };
+});

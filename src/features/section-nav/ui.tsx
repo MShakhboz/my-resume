@@ -2,7 +2,8 @@
 
 import { Briefcase, GraduationCap, LayoutGrid, Mail, User, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { navItems, SectionId } from "@/shared/config";
+import { SectionId, sectionIds } from "@/shared/config";
+import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
 import { useActiveSection } from "./model";
 
@@ -15,19 +16,19 @@ const icons: Record<SectionId, LucideIcon> = {
   contact: Mail,
 };
 
-const sectionIds = navItems.map((item) => item.id);
-
 type SectionNavProps = {
   /** `sidebar`: vertical list with growing lines (desktop). `bar`: icon row (mobile). */
   variant: "sidebar" | "bar";
+  locale: Locale;
   className?: string;
 };
 
-export function SectionNav({ variant, className }: SectionNavProps) {
+export function SectionNav({ variant, locale, className }: SectionNavProps) {
   const active = useActiveSection(sectionIds);
+  const t = getDictionary(locale);
 
   return (
-    <nav aria-label="Sections" className={className}>
+    <nav aria-label={t.sectionsNav} className={className}>
       <ul
         className={
           variant === "sidebar"
@@ -35,7 +36,8 @@ export function SectionNav({ variant, className }: SectionNavProps) {
             : "flex items-center justify-between gap-1 sm:justify-start sm:gap-2"
         }
       >
-        {navItems.map(({ id, label }) => {
+        {sectionIds.map((id) => {
+          const label = t.nav[id];
           const current = id === active;
           const Icon = icons[id];
           return (

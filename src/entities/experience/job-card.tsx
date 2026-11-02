@@ -1,12 +1,15 @@
 import { ArrowUpRight, Building2, Globe } from "lucide-react";
+import { getDictionary, Locale } from "@/shared/i18n";
 import { Tag } from "@/shared/ui/tag";
 import { Job } from "./types";
 
 type Props = {
   job: Job;
+  locale: Locale;
 };
 
-export function JobCard({ job }: Props) {
+export function JobCard({ job, locale }: Props) {
+  const t = getDictionary(locale);
   const LocationIcon = job.mode === "remote" ? Globe : Building2;
 
   return (
@@ -39,7 +42,7 @@ export function JobCard({ job }: Props) {
           ))}
         </ul>
 
-        <ul aria-label={`${job.company} tech stack`} className="flex flex-wrap gap-1.5">
+        <ul aria-label={t.techStack(job.company)} className="flex flex-wrap gap-1.5">
           {job.stack.map((tech) => (
             <li key={tech}>
               <Tag variant="accent">{tech}</Tag>
@@ -49,7 +52,7 @@ export function JobCard({ job }: Props) {
 
         {job.liveSites.length > 0 && (
           <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
-            <span>Live:</span>
+            <span>{job.liveSites.length === 1 ? t.live.one : t.live.many}</span>
             {job.liveSites.map((site) => (
               <a
                 key={site}
@@ -64,7 +67,7 @@ export function JobCard({ job }: Props) {
                   size={14}
                   className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 motion-reduce:transition-none"
                 />
-                <span className="sr-only">(opens in a new tab)</span>
+                <span className="sr-only">{t.newTab}</span>
               </a>
             ))}
           </p>

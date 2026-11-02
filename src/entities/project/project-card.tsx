@@ -1,13 +1,16 @@
 import Image from "next/image";
 import { ArrowUpRight, ImageIcon } from "lucide-react";
+import { getDictionary, Locale } from "@/shared/i18n";
 import { Tag } from "@/shared/ui/tag";
 import { Project } from "./types";
 
 type Props = {
   project: Project;
+  locale: Locale;
 };
 
-export function ProjectCard({ project }: Props) {
+export function ProjectCard({ project, locale }: Props) {
+  const t = getDictionary(locale);
   const [mainLink] = project.links;
 
   return (
@@ -34,7 +37,7 @@ export function ProjectCard({ project }: Props) {
                 size={16}
                 className="shrink-0 translate-y-0.5 transition-transform group-hover:-translate-y-0 group-hover:translate-x-0.5 motion-reduce:transition-none"
               />
-              <span className="sr-only">(opens in a new tab)</span>
+              <span className="sr-only">{t.newTab}</span>
             </a>
           ) : (
             project.title
@@ -45,7 +48,7 @@ export function ProjectCard({ project }: Props) {
 
         {project.links.length > 0 && (
           <p className="relative z-10 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
-            <span>Live:</span>
+            <span>{project.links.length === 1 ? t.live.one : t.live.many}</span>
             {project.links.map((site) => (
               <a
                 key={site}
@@ -56,13 +59,13 @@ export function ProjectCard({ project }: Props) {
               >
                 {site}
                 <ArrowUpRight aria-hidden size={14} />
-                <span className="sr-only">(opens in a new tab)</span>
+                <span className="sr-only">{t.newTab}</span>
               </a>
             ))}
           </p>
         )}
 
-        <ul aria-label={`${project.title} tech stack`} className="flex flex-wrap gap-1.5">
+        <ul aria-label={t.techStack(project.title)} className="flex flex-wrap gap-1.5">
           {project.stack.map((tech) => (
             <li key={tech}>
               <Tag variant="accent">{tech}</Tag>
