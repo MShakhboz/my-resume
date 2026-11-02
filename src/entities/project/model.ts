@@ -61,9 +61,10 @@ export const projects: Project[] = [
     id: "coyote-crm",
     title: "COYOTE CRM",
     description:
-      "CRM for COYOTE, a company in Kazakhstan. Took over work that junior developers had left " +
-      "unfinished and completed it, improving code quality, performance and maintainability.",
-    stack: ["Next.js", "RTK Query", "Tailwind CSS", "Sass"],
+      "Back-office ERP for restaurants. As the main frontend developer, built the warehouse documents " +
+      "(invoices; transfer, write-off and inventory acts), stock balances, price lists, menu data with " +
+      "recipe tech cards, an expenses register and sales charts, with Excel import/export and printing.",
+    stack: ["React", "TypeScript", "Redux Toolkit", "Material UI", "MUI X Data Grid", "Recharts"],
     links: ["erp.cascompany.org"],
   },
   {

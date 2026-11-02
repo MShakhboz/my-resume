@@ -46,8 +46,10 @@ const translations: Record<string, Translation> = {
   "coyote-crm": {
     title: "COYOTE CRM",
     description:
-      "Qozogʻistondagi COYOTE kompaniyasi uchun CRM. Junior dasturchilar tugatmay qoldirgan ishni qabul " +
-      "qilib yakunladim, kod sifati, unumdorlik va qoʻllab-quvvatlash qulayligini oshirdim.",
+      "Restoranlar uchun back-office ERP. Asosiy frontend dasturchi sifatida ombor hujjatlari (yuk xatlari; " +
+      "koʻchirish, hisobdan chiqarish va inventarizatsiya dalolatnomalari), qoldiqlar, narxlar roʻyxati, " +
+      "texnologik kartali nomenklatura, xarajatlar reyestri va savdo grafiklarini Excel import/eksporti " +
+      "va chop etish bilan yaratdim.",
   },
   qamqorshy: {
     title: "Qamqorshy",

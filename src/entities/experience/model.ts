@@ -104,8 +104,30 @@ export const jobs: Job[] = [
     bullets: [
       "Completed projects left unfinished by junior developers, improving code quality, performance and " +
         "maintainability.",
+      "Main frontend developer on COYOTE CRM (erp.cascompany.org), a back-office ERP for restaurants, built " +
+        "with React, TypeScript, Redux Toolkit and MUI.",
+      "Built the warehouse documents: incoming and outgoing invoices, transfer, write-off and inventory acts " +
+        "with live document totals, stock balances, price lists, suppliers and contractors, plus Excel import " +
+        "and export and printing.",
+      "Built the menu data (nomenclature): dishes, modifiers, semi-finished goods and ingredients with recipe " +
+        "tech cards by size and validity dates, and dishes on sale per branch.",
+      "Added an operating-expenses register, sales reports with charts, and shared building blocks used across " +
+        "the app: a date-time picker, data tables and searchable product selectors.",
     ],
-    stack: ["Next.js", "RTK Query", "Tailwind CSS", "Sass"],
+    stack: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Redux Toolkit",
+      "RTK Query",
+      "Material UI",
+      "MUI X Data Grid",
+      "React Hook Form",
+      "Recharts",
+      "Tailwind CSS",
+      "Sass",
+      "Vite",
+    ],
     liveSites: ["qamqorshy.kz", "erp.cascompany.org"],
   },
   {

@@ -68,6 +68,15 @@ const translations: Record<string, Translation> = {
     bullets: [
       "Junior dasturchilar tugatmay qoldirgan loyihalarni yakunladim, kod sifati, unumdorlik va " +
         "qoʻllab-quvvatlash qulayligini oshirdim.",
+      "COYOTE CRM (erp.cascompany.org) — restoranlar uchun back-office ERP’ning asosiy frontend dasturchisi; " +
+        "React, TypeScript, Redux Toolkit va MUI.",
+      "Ombor hujjatlarini yaratdim: kirim va chiqim yuk xatlari, koʻchirish, hisobdan chiqarish va " +
+        "inventarizatsiya dalolatnomalari (jami summa avtomatik hisoblanadi), qoldiqlar, narxlar roʻyxati, " +
+        "yetkazib beruvchilar va kontragentlar; Excel import va eksporti, chop etish.",
+      "Nomenklaturani yaratdim: taomlar, modifikatorlar, yarim tayyor mahsulotlar va ingredientlar, oʻlcham va " +
+        "amal qilish sanalari boʻyicha texnologik kartalar, filiallar boʻyicha sotuvdagi taomlar.",
+      "Operatsion xarajatlar reyestri, grafikli savdo hisobotlari va butun ilova uchun umumiy komponentlarni " +
+        "qoʻshdim: sana va vaqt tanlagich, maʼlumotlar jadvallari va qidiruvli mahsulot tanlagichlari.",
     ],
   },
   paybek: {
