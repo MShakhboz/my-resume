@@ -1,17 +1,16 @@
 import { Code, Compass, Database, Palette, Table, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { skillGroups } from "@/entities/skill";
+import { SkillGroup, skillGroups } from "@/entities/skill";
 import { Section } from "@/shared/ui/section";
 import { Tag } from "@/shared/ui/tag";
 
-// Keyed by the group labels in the skill model; unknown labels fall back to Wrench.
-const icons: Record<string, LucideIcon> = {
-  Frontend: Code,
-  "State and data": Database,
-  UI: Palette,
-  "Forms and tables": Table,
-  Tools: Wrench,
-  Practices: Compass,
+const icons: Record<SkillGroup["id"], LucideIcon> = {
+  frontend: Code,
+  data: Database,
+  ui: Palette,
+  forms: Table,
+  tools: Wrench,
+  practices: Compass,
 };
 
 export function Skills() {
@@ -19,9 +18,9 @@ export function Skills() {
     <Section id="skills" title="Skills">
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {skillGroups.map((group) => {
-          const Icon = icons[group.label] ?? Wrench;
+          const Icon = icons[group.id];
           return (
-            <li key={group.label} className="space-y-3 rounded-2xl bg-surface p-5 ring-1 ring-line">
+            <li key={group.id} className="space-y-3 rounded-2xl bg-surface p-5 ring-1 ring-line">
               <h3 className="flex items-center gap-2 text-sm font-semibold text-strong">
                 <Icon aria-hidden size={18} className="text-accent" />
                 {group.label}

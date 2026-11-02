@@ -8,6 +8,7 @@ export const jobs: Job[] = [
     title: "Frontend Developer",
     company: "TradeTaxi",
     location: "Remote",
+    mode: "remote",
     dates: "2026 – Present",
     bullets: [
       "Sole frontend developer on a 7-person team building a fleet-management CRM for a Russia-based " +
@@ -49,6 +50,7 @@ export const jobs: Job[] = [
     title: "Frontend Developer",
     company: "Lumex Agency (USA)",
     location: "Remote",
+    mode: "remote",
     dates: "2024 – 2025",
     bullets: [
       "Led 2 frontend developers and delivered 12 client websites: new builds, features, refactoring, maintenance.",
@@ -71,6 +73,7 @@ export const jobs: Job[] = [
     title: "Frontend Developer",
     company: "Softwhere",
     location: "Remote",
+    mode: "remote",
     dates: "2022 – 2024",
     bullets: [
       "Built 2 fintech apps from scratch for NestEgg, a UK loan-matching platform that connects borrowers " +
@@ -96,6 +99,7 @@ export const jobs: Job[] = [
     title: "Frontend Developer",
     company: "COYOTE (Kazakhstan)",
     location: "Remote",
+    mode: "remote",
     dates: "2021 – 2022",
     bullets: [
       "Completed projects left unfinished by junior developers, improving code quality, performance and " +
@@ -109,6 +113,7 @@ export const jobs: Job[] = [
     title: "Frontend Developer",
     company: "Paybek (FinTech)",
     location: "On-site, Uzbekistan",
+    mode: "on-site",
     dates: "2020 – 2021",
     bullets: [
       "Led the frontend team and mentored 3 frontend developers with day-to-day supervision.",
@@ -131,6 +136,7 @@ export const jobs: Job[] = [
     title: "Frontend Developer",
     company: "EPAM Systems",
     location: "On-site, Uzbekistan",
+    mode: "on-site",
     dates: "2019 – 2020",
     bullets: [
       "Built frontend authentication and authorization for a React Native app in a Scrum team using Jira and Figma.",

@@ -3,6 +3,7 @@ import { SkillGroup } from "./types";
 // Source of truth: SKILLS in ../build_resume.py.
 export const skillGroups: SkillGroup[] = [
   {
+    id: "frontend",
     label: "Frontend",
     items: [
       "JavaScript (ES6+)",
@@ -17,6 +18,7 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
+    id: "data",
     label: "State and data",
     items: [
       "Redux",
@@ -30,6 +32,7 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
+    id: "ui",
     label: "UI",
     items: [
       "Mantine",
@@ -41,10 +44,12 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
+    id: "forms",
     label: "Forms and tables",
     items: ["React Hook Form", "AG Grid", "TanStack Virtual (list virtualization)"],
   },
   {
+    id: "tools",
     label: "Tools",
     items: [
       "Git",
@@ -62,6 +67,7 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
+    id: "practices",
     label: "Practices",
     items: [
       "Accessibility (WCAG, WAVE, IBM Equal Access)",

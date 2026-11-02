@@ -7,7 +7,7 @@ type Props = {
 };
 
 export function JobCard({ job }: Props) {
-  const LocationIcon = job.location === "Remote" ? Globe : Building2;
+  const LocationIcon = job.mode === "remote" ? Globe : Building2;
 
   return (
     <article className="group relative grid gap-3 sm:grid-cols-[9rem_1fr] sm:gap-6">
