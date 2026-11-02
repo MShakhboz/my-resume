@@ -5,6 +5,16 @@ import { Project } from "./types";
 // public/projects/ (16:10 crops best) and set `image`.
 export const projects: Project[] = [
   {
+    id: "hibro",
+    title: "Hi Bro",
+    description:
+      "AI guide to restaurant menus: guests scan a QR code or a menu, ask about dishes and build an order. " +
+      "Built the Next.js guest app from scratch, the admin panel's features, and a headless-browser menu " +
+      "reader for the Laravel API that reads menu sites like a guest's phone.",
+    stack: ["Next.js", "TypeScript", "TanStack Query", "Zustand", "Laravel", "Playwright"],
+    links: ["hibro.am"],
+  },
+  {
     id: "tradetaxi-crm",
     title: "TradeTaxi fleet CRM",
     description:
