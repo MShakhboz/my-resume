@@ -70,8 +70,12 @@ export const jobs: Job[] = [
       "Material UI",
       "Styled Components",
       "Ant Design",
+      // Website only (owner-requested); they don't fit on the 1-page US Letter PDF.
+      "Ideal Postcodes",
+      "Intercom",
     ],
-    liveSites: ["loans.nestegg.ai"],
+    // db2-testing.nestegg.ai is website only, like dev.tradetaxi.ru.
+    liveSites: ["loans.nestegg.ai", "db2-testing.nestegg.ai"],
   },
   {
     id: "coyote",
