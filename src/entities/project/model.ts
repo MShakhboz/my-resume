@@ -2,10 +2,12 @@ import { Project } from "./types";
 
 // Website only (not in the PDF). Every fact here comes from the job bullets in
 // ../build_resume.py. To add a screenshot, put it in
-// public/projects/ (16:10 crops best) and set `image`.
+// public/projects/ (16:10 crops best) and set `image`. `featured` projects show first;
+// the rest are behind the "View more" button.
 export const projects: Project[] = [
   {
     id: "hibro",
+    featured: true,
     title: "Hi Bro",
     description:
       "AI guide to restaurant menus: guests scan a QR code or a menu, ask about dishes and build an order. " +
@@ -16,6 +18,7 @@ export const projects: Project[] = [
   },
   {
     id: "tradetaxi-crm",
+    featured: true,
     title: "TradeTaxi fleet CRM",
     description:
       "Fleet-management CRM for a Russia-based taxi company, used by about 2,000 drivers. As the sole " +
@@ -26,6 +29,7 @@ export const projects: Project[] = [
   },
   {
     id: "nestegg-borrower-app",
+    featured: true,
     title: "NestEgg borrower app",
     description:
       "Borrower-facing app for NestEgg, a UK loan-matching platform that connects borrowers with credit " +
@@ -35,6 +39,7 @@ export const projects: Project[] = [
   },
   {
     id: "nestegg-lender-dashboard",
+    featured: true,
     title: "NestEgg lender dashboard",
     description:
       "Dashboard for the credit unions that lend through NestEgg, used by 20+ lenders. Built from scratch " +

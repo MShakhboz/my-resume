@@ -20,6 +20,20 @@ test("nav links jump to their sections", async ({ page }) => {
   await expect(page.getByRole("region", { name: "Contact" })).toBeInViewport();
 });
 
+test("View more reveals the other projects, with no accessibility violations", async ({ page }) => {
+  const projects = page.getByRole("region", { name: "Projects" });
+  const extra = projects.getByRole("heading", { name: "COYOTE CRM" });
+  await expect(extra).toBeHidden();
+
+  await projects.getByRole("button", { name: /more projects/ }).click();
+  await expect(extra).toBeVisible();
+  const results = await new AxeBuilder({ page }).include("#projects").analyze();
+  expect(results.violations).toEqual([]);
+
+  await projects.getByRole("button", { name: "Show fewer projects" }).click();
+  await expect(extra).toBeHidden();
+});
+
 test("resume PDFs are served", async ({ page, request }) => {
   const links = page.getByRole("list", { name: "Download resume" }).getByRole("link");
   await expect(links).toHaveCount(3);
