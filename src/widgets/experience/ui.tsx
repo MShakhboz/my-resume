@@ -4,9 +4,9 @@ import { Section } from "@/shared/ui/section";
 export function Experience() {
   return (
     <Section id="experience" title="Experience">
-      <ol className="space-y-8">
+      <ol className="space-y-14">
         {jobs.map((job) => (
-          <li key={job.id} className="border-l-2 border-line pl-4 sm:pl-6">
+          <li key={job.id}>
             <JobCard job={job} />
           </li>
         ))}

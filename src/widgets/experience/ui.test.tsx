@@ -10,7 +10,7 @@ describe("Experience", () => {
     const companies = within(section)
       .getAllByRole("heading", { level: 3 })
       .map((heading) => heading.textContent);
-    expect(companies).toEqual(jobs.map((job) => `${job.company} · ${job.location}`));
+    expect(companies).toEqual(jobs.map((job) => job.company));
   });
 
   it("opens live sites in a new tab over https", () => {
