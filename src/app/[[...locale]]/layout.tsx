@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[[...locale]]">
       type: "profile",
       title,
       description: profile.summary,
-      locale: { en: "en_US", ru: "ru_RU" }[locale],
+      locale: { en: "en_US", ru: "ru_RU", uz: "uz_UZ" }[locale],
     },
   };
 }

@@ -44,7 +44,7 @@ test("resume PDFs are served", async ({ page, request }) => {
   }
 });
 
-for (const path of ["/", "/ru"]) {
+for (const path of ["/", "/ru", "/uz"]) {
   for (const colorScheme of ["dark", "light"] as const) {
     test(`has no detectable accessibility violations (${path}, ${colorScheme})`, async ({ page }) => {
       await page.goto(path);
@@ -79,7 +79,17 @@ test("the Russian page is in Russian and links back to English", async ({ page }
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
 });
 
-for (const path of ["/", "/ru"]) {
+test("the Uzbek page is in Uzbek", async ({ page }) => {
+  await page.goto("/uz");
+  await expect(page.locator("html")).toHaveAttribute("lang", "uz");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Shaxboz Mirzomurotov");
+  for (const name of ["Men haqimda", "Tajriba", "Loyihalar", "Koʻnikmalar", "Taʼlim", "Aloqa"]) {
+    await expect(page.getByRole("region", { name })).toBeVisible();
+  }
+  await expect(page.locator('link[rel="alternate"][hreflang="ru"]')).toHaveAttribute("href", /\/ru$/);
+});
+
+for (const path of ["/", "/ru", "/uz"]) {
   test(`fits a 320px screen without sideways scrolling (${path})`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 640 });
     await page.goto(path);

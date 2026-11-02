@@ -8,8 +8,8 @@ import { getSkillGroups } from "@/entities/skill";
 import { locales } from "@/shared/i18n";
 
 // Rules from HANDOFF.md: dates are years only; experience is newest first.
-const YEARS_ONLY = /^\d{4} – (\d{4}|Present|настоящее время)$/;
-const PRESENT = /настоящее время/;
+const YEARS_ONLY = /^\d{4} – (\d{4}|Present|настоящее время|hozirgacha)$/;
+const PRESENT = /настоящее время|hozirgacha/;
 
 const startYear = (dates: string) => Number(dates.slice(0, 4));
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

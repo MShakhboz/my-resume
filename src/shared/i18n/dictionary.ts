@@ -73,6 +73,39 @@ export const dictionaries = {
       "Сделано на Next.js, TypeScript и Tailwind CSS. Тесты: Vitest, React Testing Library и Playwright, " +
       "включая проверку доступности axe в обеих темах, в CI на GitHub Actions.",
   },
+  // Uzbek (Latin script): oʻ/gʻ use U+02BB, the tutuq belgisi uses U+02BC. Technology names stay in English.
+  uz: {
+    languageName: "Oʻzbekcha",
+    skipLink: "Asosiy mazmunga oʻtish",
+    sectionsNav: "Boʻlimlar",
+    languageSwitch: "Til",
+    nav: {
+      about: "Men haqimda",
+      experience: "Tajriba",
+      projects: "Loyihalar",
+      skills: "Koʻnikmalar",
+      education: "Taʼlim",
+      contact: "Aloqa",
+    },
+    theme: { toLight: "Yorugʻ mavzuga oʻtish", toDark: "Qorongʻi mavzuga oʻtish" },
+    contactLinks: "Aloqa havolalari",
+    downloadResume: "Rezyumeni yuklab olish",
+    pdf: { a4: "PDF (A4, inglizcha)", letter: "PDF (US Letter, inglizcha)", ru: "PDF (ruscha)" },
+    newTab: "(yangi oynada ochiladi)",
+    live: { one: "Sayt:", many: "Saytlar:" },
+    techStack: (name: string) => `${name}: texnologiyalar`,
+    moreProjects: (count: number) => `Yana ${count} ta loyiha`,
+    fewerProjects: "Loyihalarni yigʻish",
+    languages: "Tillar",
+    contactLead: "Masofaviy senior React va Next.js lavozimlariga ochiqman.",
+    basedIn: (location: string) => `Joylashuv: ${location}.`,
+    emailMe: "Elektron pochtaga yozish",
+    messengers: "Telegram / WhatsApp",
+    footer:
+      "Next.js, TypeScript va Tailwind CSS asosida yaratilgan. Vitest, React Testing Library va Playwright " +
+      "bilan test qilingan, jumladan ikkala mavzuda axe orqali foydalanish qulayligi tekshiruvi; " +
+      "GitHub Actions CI.",
+  },
 } satisfies Record<Locale, unknown>;
 
 export type Dictionary = (typeof dictionaries)["en"];
