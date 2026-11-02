@@ -18,6 +18,14 @@ export const jobs: Job[] = [
       "Delivered the Fines module (GIBDD traffic-police and TsKAD toll-road fines, payment batches, appeals) " +
         "in the first release cycle, which centered on GIBDD and Yandex integrations.",
       "Works with a PHP/Laravel backend and Flutter mobile app. The platform is used by about 2,000 drivers.",
+      "Also build Hi Bro (hibro.am), an AI guide to restaurant menus: guests scan a QR code or a menu, ask " +
+        "about dishes and build an order. Built the Next.js guest app from scratch: camera QR and menu " +
+        "scanning, AI chat, and a virtualized menu with swipeable category chips.",
+      "Built the Hi Bro admin panel features: sign-in, users, venues, a drag-and-drop menu editor and a " +
+        "menu-sources feed that shows recognition progress step by step.",
+      "Extended the Hi Bro Laravel API with the AI waiter chat and a headless-browser menu reader (Node, " +
+        "Playwright, Docker) that opens menu sites like a guest's phone, blocks requests to internal " +
+        "addresses, and re-reads reference menus nightly to compare with the previous run.",
     ],
     stack: [
       "Next.js",
@@ -27,8 +35,14 @@ export const jobs: Job[] = [
       "Mantine",
       "React Hook Form",
       "TanStack Virtual",
+      "TanStack Query",
+      "Zustand",
+      "Zod",
+      "Laravel",
+      "Playwright",
+      "Docker",
     ],
-    liveSites: ["dev.tradetaxi.ru"],
+    liveSites: ["dev.tradetaxi.ru", "hibro.am"],
   },
   {
     id: "lumex",
