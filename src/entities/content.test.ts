@@ -1,6 +1,8 @@
+import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { education } from "@/entities/education";
 import { jobs } from "@/entities/experience";
+import { projects } from "@/entities/project";
 import { profile } from "@/entities/profile";
 import { skillGroups } from "@/entities/skill";
 
@@ -26,7 +28,7 @@ describe("resume content", () => {
   });
 
   it("stores live sites as bare hostnames", () => {
-    for (const site of jobs.flatMap((job) => job.liveSites)) {
+    for (const site of [...jobs.flatMap((job) => job.liveSites), ...projects.flatMap((p) => p.links)]) {
       expect(site).toMatch(/^[a-z0-9.-]+\.[a-z]{2,}$/);
     }
   });
@@ -44,8 +46,14 @@ describe("resume content", () => {
     }
   });
 
+  it("has a file in public/ for every project screenshot", () => {
+    for (const { image } of projects) {
+      if (image) expect(existsSync(`public${image.src}`), image.src).toBe(true);
+    }
+  });
+
   it("contains no template placeholder content", () => {
-    const text = JSON.stringify({ profile, jobs, skillGroups, education });
+    const text = JSON.stringify({ profile, jobs, projects, skillGroups, education });
     for (const placeholder of ["Christopher", "Lorem", "Framer Template", "TODO"]) {
       expect(text).not.toContain(placeholder);
     }

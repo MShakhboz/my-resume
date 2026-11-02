@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 test("shows the resume", async ({ page }) => {
   await expect(page).toHaveTitle(/Shaxboz Mirzomurotov/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Shaxboz Mirzomurotov");
-  for (const name of ["About", "Experience", "Skills", "Education", "Contact"]) {
+  for (const name of ["About", "Experience", "Projects", "Skills", "Education", "Contact"]) {
     await expect(page.getByRole("region", { name })).toBeVisible();
   }
 });

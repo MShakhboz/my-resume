@@ -1,0 +1,10 @@
+export type Project = {
+  id: string;
+  title: string;
+  description: string;
+  stack: string[];
+  /** Bare hostnames, listed under "Live:". The first one is also the title link. */
+  links: string[];
+  /** A screenshot in public/projects/. Without one the card shows a placeholder tile. */
+  image?: { src: string; alt: string };
+};

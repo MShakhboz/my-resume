@@ -4,6 +4,7 @@ import { Education } from "@/widgets/education";
 import { Experience } from "@/widgets/experience";
 import { Footer } from "@/widgets/footer";
 import { Hero } from "@/widgets/hero";
+import { Projects } from "@/widgets/projects";
 import { Skills } from "@/widgets/skills";
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
         <main id="main" className="space-y-24 pt-16 pb-24 lg:space-y-32 lg:pt-16">
           <About />
           <Experience />
+          <Projects />
           <Skills />
           <Education />
           <Contact />
