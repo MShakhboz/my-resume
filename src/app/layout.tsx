@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/entities/profile";
 import { themeInitScript } from "@/features/theme-toggle";
-import { Footer } from "@/widgets/footer";
+import { Spotlight } from "@/shared/ui/spotlight";
 import { Header } from "@/widgets/header";
 
 const geistSans = Geist({
@@ -63,7 +63,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased px-4`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <a
           href="#main"
@@ -71,11 +71,9 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <Header className="mx-auto max-w-2xl" />
-        <main id="main" className="mx-auto mt-8 max-w-2xl space-y-4">
-          {children}
-        </main>
-        <Footer />
+        <Spotlight />
+        <Header />
+        {children}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
