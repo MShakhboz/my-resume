@@ -6,6 +6,12 @@ export type ContactLink = {
   href: string;
 };
 
+export type Highlight = {
+  /** Must appear word for word in the summary or a job bullet (see content.test.ts). */
+  value: string;
+  label: string;
+};
+
 export type ProfileType = {
   name: string;
   initials: string;
@@ -13,6 +19,7 @@ export type ProfileType = {
   location: string;
   availability: string;
   summary: string;
+  highlights: Highlight[];
   contacts: ContactLink[];
   /** Telegram and WhatsApp share one handle; WhatsApp has no handle URL. */
   messengerHandle: string;

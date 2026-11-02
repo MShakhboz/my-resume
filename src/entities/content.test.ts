@@ -37,6 +37,13 @@ describe("resume content", () => {
     }
   });
 
+  it("only highlights numbers the resume states", () => {
+    const resumeText = [profile.summary, ...jobs.flatMap((job) => job.bullets)].join(" ");
+    for (const { value } of profile.highlights) {
+      expect(resumeText).toMatch(new RegExp(`(^|\\D)${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+    }
+  });
+
   it("contains no template placeholder content", () => {
     const text = JSON.stringify({ profile, jobs, skillGroups, education });
     for (const placeholder of ["Christopher", "Lorem", "Framer Template", "TODO"]) {
