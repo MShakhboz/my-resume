@@ -52,8 +52,8 @@ export async function generateMetadata({ params }: LayoutProps<"/[[...locale]]">
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-    { media: "(prefers-color-scheme: light)", color: "#f5f5f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#111110" },
+    { media: "(prefers-color-scheme: light)", color: "#f9f9f8" },
   ],
   colorScheme: "dark light",
 };

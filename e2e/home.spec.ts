@@ -54,7 +54,7 @@ for (const path of ["/", "/ru", "/uz"]) {
       // Guards against unstyled pages, which axe would happily pass.
       await expect(page.locator("body")).toHaveCSS(
         "background-color",
-        colorScheme === "dark" ? "rgb(10, 10, 10)" : "rgb(245, 245, 245)"
+        colorScheme === "dark" ? "rgb(17, 17, 16)" : "rgb(249, 249, 248)"
       );
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
