@@ -1,34 +1,47 @@
+import { GraduationCap, Languages } from "lucide-react";
 import { education } from "@/entities/education";
 import { profile } from "@/entities/profile";
 import { Section } from "@/shared/ui/section";
-import { Title } from "@/shared/ui/title";
+
+/** "English (advanced)" → ["English", "advanced"]. */
+const splitLevel = (language: string) => {
+  const match = language.match(/^(.*) \((.*)\)$/);
+  return match ? [match[1], match[2]] : [language, ""];
+};
 
 export function Education() {
   return (
     <Section id="education" title="Education">
       <ul className="space-y-3">
         {education.map((item) => (
-          <li
-            key={item.school}
-            className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4"
-          >
-            <p>
-              <span className="font-semibold text-strong">{item.field}</span>
-              <span className="text-muted"> · {item.school}</span>
-            </p>
-            <p className="shrink-0 text-sm tabular-nums text-muted">{item.dates}</p>
+          <li key={item.school} className="flex gap-4 rounded-2xl bg-surface p-5 ring-1 ring-line">
+            <GraduationCap aria-hidden size={22} className="mt-0.5 shrink-0 text-accent" />
+            <div className="flex flex-1 flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+              <p>
+                <span className="block font-semibold text-strong">{item.field}</span>
+                <span className="text-sm text-muted">{item.school}</span>
+              </p>
+              <p className="shrink-0 text-sm tabular-nums text-muted">{item.dates}</p>
+            </div>
           </li>
         ))}
       </ul>
 
-      <div className="space-y-3 pt-2">
-        <Title as="h3" xs className="text-strong">
+      <div className="space-y-3">
+        <h3 className="flex items-center gap-2 text-sm font-semibold text-strong">
+          <Languages aria-hidden size={18} className="text-accent" />
           Languages
-        </Title>
-        <ul className="flex flex-wrap gap-x-6 gap-y-1 text-body">
-          {profile.languages.map((language) => (
-            <li key={language}>{language}</li>
-          ))}
+        </h3>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {profile.languages.map((language) => {
+            const [name, level] = splitLevel(language);
+            return (
+              <li key={language} className="rounded-xl bg-surface px-4 py-3 ring-1 ring-line">
+                <span className="block font-medium text-strong">{name}</span>
+                {level && <span className="text-sm capitalize text-muted">{level}</span>}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </Section>
