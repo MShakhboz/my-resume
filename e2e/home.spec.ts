@@ -61,6 +61,16 @@ for (const colorScheme of ["dark", "light"] as const) {
   });
 }
 
+test("fits a 320px screen without sideways scrolling", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto("/");
+  const [scrollWidth, viewportWidth] = await page.evaluate(() => [
+    document.documentElement.scrollWidth,
+    window.innerWidth,
+  ]);
+  expect(scrollWidth).toBeLessThanOrEqual(viewportWidth);
+});
+
 test("theme toggle overrides the system theme and persists", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.reload();

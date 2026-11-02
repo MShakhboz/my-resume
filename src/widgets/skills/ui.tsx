@@ -17,7 +17,7 @@ const icons: Record<string, LucideIcon> = {
 export function Skills() {
   return (
     <Section id="skills" title="Skills">
-      <ul className="grid gap-3 sm:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {skillGroups.map((group) => {
           const Icon = icons[group.label] ?? Wrench;
           return (
