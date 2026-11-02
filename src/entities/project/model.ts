@@ -75,4 +75,13 @@ export const projects: Project[] = [
     stack: ["Next.js", "RTK Query", "Tailwind CSS", "Sass"],
     links: ["qamqorshy.kz"],
   },
+  {
+    id: "paybek-crm",
+    title: "Paybek CRM systems",
+    description:
+      "CRM systems for 4 of Paybek's fintech web products. Led the frontend team and mentored 3 developers; " +
+      "built the CRMs from scratch, then extended, refactored and supported them.",
+    stack: ["React", "Next.js", "TypeScript", "Redux", "AG Grid", "Tailwind CSS"],
+    links: ["portal.my-uhl.com"],
+  },
 ];
