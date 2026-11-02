@@ -78,6 +78,14 @@ export const jobs: Job[] = [
     bullets: [
       "Built 2 fintech apps from scratch for NestEgg, a UK loan-matching platform that connects borrowers " +
         "with credit unions: the borrower-facing loans.nestegg.ai and a lender dashboard used by 20+ lenders.",
+      // Website only, owner-confirmed (Nov 2026).
+      "Borrower app: the multi-step loan application, bank connection through TrueLayer open banking, " +
+        "document upload, address lookup with Ideal Postcodes and application status tracking.",
+      "Lender dashboard: application review with approve and decline decisions, filterable MUI X Data Grid " +
+        "Pro tables, and charts and reports.",
+      "Wrote unit and integration tests with Vitest, React Testing Library and MSW, and end-to-end tests " +
+        "with Playwright.",
+      "Migrated the build to Vite and shipped features behind LaunchDarkly feature flags.",
     ],
     stack: [
       "React",
@@ -87,9 +95,17 @@ export const jobs: Job[] = [
       "Material UI",
       "Styled Components",
       "Ant Design",
+      "MUI X Data Grid Pro",
       // Website only (owner-requested); they don't fit on the 1-page US Letter PDF.
+      "TrueLayer",
       "Ideal Postcodes",
       "Intercom",
+      "LaunchDarkly",
+      "Vite",
+      "Vitest",
+      "React Testing Library",
+      "Playwright",
+      "MSW",
     ],
     // db2-testing.nestegg.ai is website only, like dev.tradetaxi.ru.
     liveSites: ["loans.nestegg.ai", "db2-testing.nestegg.ai"],

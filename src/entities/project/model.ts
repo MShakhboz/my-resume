@@ -33,8 +33,9 @@ export const projects: Project[] = [
     title: "NestEgg borrower app",
     description:
       "Borrower-facing app for NestEgg, a UK loan-matching platform that connects borrowers with credit " +
-      "unions. Built from scratch at Softwhere.",
-    stack: ["React", "TypeScript", "Redux Toolkit", "RTK Query", "Material UI"],
+      "unions. Built from scratch at Softwhere: the multi-step loan application, TrueLayer open-banking " +
+      "connection, document upload, Ideal Postcodes address lookup and status tracking.",
+    stack: ["React", "TypeScript", "Redux Toolkit", "RTK Query", "Material UI", "TrueLayer", "Ideal Postcodes"],
     links: ["loans.nestegg.ai"],
   },
   {
@@ -43,8 +44,9 @@ export const projects: Project[] = [
     title: "NestEgg lender dashboard",
     description:
       "Dashboard for the credit unions that lend through NestEgg, used by 20+ lenders. Built from scratch " +
-      "at Softwhere.",
-    stack: ["React", "TypeScript", "Redux Toolkit", "RTK Query", "Material UI"],
+      "at Softwhere: application review with approve and decline decisions, filterable MUI X Data Grid Pro " +
+      "tables, charts and reports, and LaunchDarkly feature flags.",
+    stack: ["React", "TypeScript", "Redux Toolkit", "RTK Query", "MUI X Data Grid Pro", "LaunchDarkly", "Vite"],
     links: ["db2-testing.nestegg.ai"],
   },
   {

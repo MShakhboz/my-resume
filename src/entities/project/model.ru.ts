@@ -27,13 +27,15 @@ const translations: Record<string, Translation> = {
     title: "Клиентское приложение NestEgg",
     description:
       "Приложение для заёмщиков NestEgg — британской платформы подбора займов в кредитных союзах. " +
-      "Создано с нуля в Softwhere.",
+      "Создано с нуля в Softwhere: пошаговая заявка на заём, подключение банка через TrueLayer, загрузка " +
+      "документов, поиск адреса через Ideal Postcodes и отслеживание статуса.",
   },
   "nestegg-lender-dashboard": {
     title: "Кабинет кредитора NestEgg",
     description:
       "Кабинет для кредитных союзов, которые выдают займы через NestEgg; им пользуются 20+ кредиторов. " +
-      "Создан с нуля в Softwhere.",
+      "Создан с нуля в Softwhere: рассмотрение заявок с одобрением и отказом, таблицы MUI X Data Grid Pro " +
+      "с фильтрами, графики, отчёты и флаги LaunchDarkly.",
   },
   "lumex-client-sites": {
     title: "Клиентские сайты Lumex Agency",

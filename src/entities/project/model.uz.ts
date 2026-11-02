@@ -28,13 +28,16 @@ const translations: Record<string, Translation> = {
     title: "NestEgg mijozlar ilovasi",
     description:
       "NestEgg — qarz oluvchilarni kredit uyushmalari bilan bogʻlaydigan Britaniya kredit tanlash " +
-      "platformasining qarz oluvchilar uchun ilovasi. Softwhere’da noldan yaratilgan.",
+      "platformasining qarz oluvchilar uchun ilovasi. Softwhere’da noldan yaratilgan: bosqichma-bosqich " +
+      "kredit arizasi, TrueLayer orqali bankni ulash, hujjatlarni yuklash, Ideal Postcodes orqali manzil " +
+      "qidirish va holatni kuzatish.",
   },
   "nestegg-lender-dashboard": {
     title: "NestEgg kreditor kabineti",
     description:
       "NestEgg orqali qarz beradigan kredit uyushmalari uchun kabinet; undan 20+ kreditor foydalanadi. " +
-      "Softwhere’da noldan yaratilgan.",
+      "Softwhere’da noldan yaratilgan: arizalarni koʻrib chiqish, tasdiqlash va rad etish, filtrli MUI X " +
+      "Data Grid Pro jadvallari, grafiklar, hisobotlar va LaunchDarkly flaglari.",
   },
   "lumex-client-sites": {
     title: "Lumex Agency mijoz saytlari",
