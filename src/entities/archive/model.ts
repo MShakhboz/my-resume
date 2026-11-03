@@ -23,9 +23,9 @@ export const archive: ArchiveEntry[] = [
     id: "tradetaxi-crm",
     year: 2026,
     name: "TradeTaxi fleet CRM",
-    description: "Fleet-management CRM for a taxi company, with a browser-style multi-tab workspace.",
+    description: "Fleet-management CRM for a taxi company, with a browser-style multi-tab workspace and real-time support chat.",
     jobId: "tradetaxi",
-    stack: ["Next.js", "TypeScript", "Mantine", "RTK Query", "TanStack Virtual"],
+    stack: ["Next.js", "TypeScript", "Mantine", "RTK Query", "TanStack Virtual", "Laravel Echo"],
     link: "dev.tradetaxi.ru",
   },
   {

@@ -6,15 +6,16 @@ export const skillGroups: SkillGroup[] = [
     id: "frontend",
     label: "Frontend",
     items: [
-      "JavaScript (ES6+)",
+      "JavaScript",
       "TypeScript",
-      "React.js",
+      "React",
       "Next.js",
       "React Native",
       "Solid.js",
       "HTML5",
       "CSS3",
       "Sass",
+      "WebSockets",
     ],
   },
   {

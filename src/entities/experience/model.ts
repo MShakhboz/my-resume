@@ -14,6 +14,8 @@ export const jobs: Job[] = [
       "Sole frontend developer on a 7-person team building a fleet-management CRM for a Russia-based " +
         "taxi company; took over a stalled, AI-generated codebase and built about 70% of the frontend.",
       "Designed a browser-style multi-tab workspace that preserves each tab's page state and scroll position.",
+      "Built the real-time driver support chat over WebSockets (Laravel Echo and Reverb private channels): " +
+        "replies, image sending, unread counts and filters, pending messages with retry, and loading earlier messages.",
       "Built the Drivers module (driver list, support, registration, chat campaigns) and Vehicles module " +
         "for 37,822 drivers and 5,405 vehicles, using TanStack Virtual to keep large tables fast.",
       "Delivered the Fines module (GIBDD traffic-police and TsKAD toll-road fines, payment batches, appeals) " +
@@ -39,6 +41,8 @@ export const jobs: Job[] = [
       "TanStack Query",
       "Zustand",
       "Zod",
+      "WebSockets",
+      "Laravel Echo",
       "Laravel",
       "Playwright",
       "Docker",

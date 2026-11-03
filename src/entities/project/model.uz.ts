@@ -21,8 +21,9 @@ const translations: Record<string, Translation> = {
     description:
       `Rossiyadagi taksi kompaniyasi uchun avtopark CRM tizimi, undan 2${NB}000 ga yaqin haydovchi ` +
       "foydalanadi. Yagona frontend dasturchi sifatida har bir tab sahifa holati va skroll joylashuvini " +
-      "saqlaydigan brauzer uslubidagi koʻp tabli ish maydonini hamda virtualizatsiyalangan jadvallarga " +
-      "ega «Haydovchilar», «Transport vositalari» va «Jarimalar» modullarini yaratdim.",
+      "saqlaydigan brauzer uslubidagi koʻp tabli ish maydonini, virtualizatsiyalangan jadvallarga ega " +
+      "«Haydovchilar», «Transport vositalari» va «Jarimalar» modullarini hamda WebSockets asosidagi real " +
+      "vaqtli qoʻllab-quvvatlash chatini yaratdim.",
   },
   "nestegg-borrower-app": {
     title: "NestEgg mijozlar ilovasi",

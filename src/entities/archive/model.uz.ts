@@ -11,7 +11,7 @@ const translations: Record<string, Translation> = {
   },
   "tradetaxi-crm": {
     name: "TradeTaxi avtopark CRM tizimi",
-    description: "Taksi kompaniyasi uchun brauzer uslubidagi koʻp tabli ish maydoniga ega avtopark CRM tizimi.",
+    description: "Taksi kompaniyasi uchun brauzer uslubidagi tablar va real vaqtli qoʻllab-quvvatlash chatiga ega avtopark CRM tizimi.",
   },
   nxtarmor: { name: "NXTArmor", description: "Qoplama, oyna tonirovkasi va boʻyoqni himoyalash kompaniyasi sayti." },
   earendel: { name: "Earendel Artists", description: "Earendel artistlar platformasi sayti." },

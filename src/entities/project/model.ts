@@ -23,8 +23,9 @@ export const projects: Project[] = [
     description:
       "Fleet-management CRM for a Russia-based taxi company, used by about 2,000 drivers. As the sole " +
       "frontend developer, built a browser-style multi-tab workspace that keeps each tab's page state and " +
-      "scroll position, and the Drivers, Vehicles and Fines modules with virtualized tables.",
-    stack: ["Next.js", "TypeScript", "Mantine", "RTK Query", "TanStack Virtual"],
+      "scroll position, the Drivers, Vehicles and Fines modules with virtualized tables, and a real-time " +
+      "support chat over WebSockets.",
+    stack: ["Next.js", "TypeScript", "Mantine", "RTK Query", "TanStack Virtual", "Laravel Echo"],
     links: ["dev.tradetaxi.ru"],
   },
   {

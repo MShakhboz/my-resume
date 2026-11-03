@@ -21,6 +21,9 @@ const translations: Record<string, Translation> = {
         "qilib, frontendning taxminan 70% qismini yozdim.",
       "Brauzer uslubidagi koʻp tabli ish maydonini loyihalashtirdim: har bir tab sahifa holati va " +
         "skroll joylashuvini saqlaydi.",
+      "WebSockets (Laravel Echo va Reverb yopiq kanallari) asosida haydovchilar uchun real vaqtli " +
+        "qoʻllab-quvvatlash chatini yaratdim: xabarlarga javob, rasm yuborish, oʻqilmaganlar hisoblagichi va " +
+        "filtri, qayta yuborish va oldingi xabarlarni yuklash.",
       "«Haydovchilar» (roʻyxat, qoʻllab-quvvatlash, roʻyxatdan oʻtkazish, xabar tarqatish) va «Transport " +
         `vositalari» modullarini 37${NB}822 haydovchi va 5${NB}405 avtomobil uchun ishlab chiqdim; katta ` +
         "jadvallar TanStack Virtual tufayli tez ishlaydi.",
