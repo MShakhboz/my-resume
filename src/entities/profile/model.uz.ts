@@ -17,10 +17,9 @@ export const profile: ProfileType = {
     `maydoni va 37${NB}000+ haydovchi uchun virtualizatsiyalangan jadvallar. 3 nafargacha frontend ` +
     "dasturchidan iborat jamoalarga rahbarlik qilgan.",
   highlights: [
+    { value: "20+", label: "6 ta kompaniyadagi loyihalar", source: "project-count" },
     { value: "6+", label: "yillik React va Next.js tajribasi" },
-    { value: "12", label: "AQSh agentligi uchun yaratilgan mijoz saytlari" },
-    { value: `37${NB}822`, label: "TradeTaxi avtopark CRM tizimidagi haydovchilar" },
-    { value: "95–100%", label: "foydalanish qulayligi bahosi, avval 70–80%" },
+    { value: "95–100%", label: "foydalanish qulayligi bahosi, avval 70–\u206080%" },
   ],
   contacts,
   messengerHandle: "@nornof",

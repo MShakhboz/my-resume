@@ -7,8 +7,12 @@ export type ContactLink = {
 };
 
 export type Highlight = {
-  /** Must appear word for word in the summary or a job bullet (see content.test.ts). */
+  /**
+   * Must appear word for word in the summary or a job bullet, unless `source` is "project-count":
+   * then the project archive must list at least this many entries (see content.test.ts).
+   */
   value: string;
+  source?: "project-count";
   label: string;
 };
 

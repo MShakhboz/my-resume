@@ -15,10 +15,9 @@ export const profile: ProfileType = {
     "Led teams of up to 3 frontend developers.",
   // Website only: headline numbers pulled from the summary and job bullets.
   highlights: [
+    { value: "20+", label: "projects across 6 companies", source: "project-count" },
     { value: "6+", label: "years building React and Next.js apps" },
-    { value: "12", label: "client websites delivered for a US agency" },
-    { value: "37,822", label: "drivers managed in the TradeTaxi fleet CRM" },
-    { value: "95–100%", label: "accessibility scores, up from 70–80%" },
+    { value: "95–100%", label: "accessibility scores, up from 70–\u206080%" },
   ],
   contacts,
   messengerHandle: "@nornof",

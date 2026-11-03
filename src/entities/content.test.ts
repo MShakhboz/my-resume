@@ -67,9 +67,21 @@ describe.each(locales)("resume content (%s)", (locale) => {
     expect(years).toEqual([...years].sort((a, b) => b - a));
   });
 
+  it("backs the project total with the archive", () => {
+    const archive = getArchive(locale);
+    for (const { value, label, source } of profile.highlights) {
+      if (source !== "project-count") continue;
+      expect(archive.length).toBeGreaterThanOrEqual(Number.parseInt(value, 10));
+      // "across 6 companies": every job has at least one project in the archive.
+      expect(new Set(archive.map((entry) => entry.jobId)).size).toBe(jobs.length);
+      expect(label).toContain(String(jobs.length));
+    }
+  });
+
   it("only highlights numbers the resume states", () => {
     const resumeText = [profile.summary, ...jobs.flatMap((job) => job.bullets)].join(" ");
-    for (const { value } of profile.highlights) {
+    for (const { value, source } of profile.highlights) {
+      if (source === "project-count") continue;
       expect(resumeText).toMatch(new RegExp(`(^|\\D)${escape(value)}`));
     }
   });

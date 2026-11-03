@@ -101,8 +101,8 @@ for (const path of ["/", "/ru", "/uz", "/projects", "/ru/projects", "/uz/project
   });
 }
 
-test("the full project list opens from Projects and links back", async ({ page }) => {
-  await page.getByRole("link", { name: "View all 23 projects" }).click();
+test("the project total opens the full list, which links back", async ({ page }) => {
+  await page.getByRole("link", { name: /projects across 6 companies/ }).click();
   await expect(page).toHaveURL(/\/projects$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("All projects");
   await expect(page.getByRole("table", { name: "All projects, newest first" }).getByRole("row")).toHaveCount(24);
