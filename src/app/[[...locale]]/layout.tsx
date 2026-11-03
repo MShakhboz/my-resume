@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { getProfile } from "@/entities/profile";
+import { getSkillGroups } from "@/entities/skill";
 import { themeInitScript } from "@/features/theme-toggle";
+import { siteUrl } from "@/shared/config";
 import { getDictionary, locales, pagePath, routeSegments, toRoute } from "@/shared/i18n";
 import { Spotlight } from "@/shared/ui/spotlight";
 import { Header } from "@/widgets/header";
@@ -34,10 +36,8 @@ export async function generateMetadata({ params }: LayoutProps<"/[[...locale]]">
       : `${profile.name} — ${profile.headline.split(" | ")[0]}`;
 
   return {
-    // Set NEXT_PUBLIC_SITE_URL once the site has a domain so OG URLs are absolute.
-    metadataBase: process.env.NEXT_PUBLIC_SITE_URL
-      ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
-      : undefined,
+    // Makes canonical, hreflang and Open Graph URLs absolute (see siteUrl).
+    metadataBase: new URL(siteUrl),
     title,
     description: profile.summary,
     authors: [{ name: profile.name }],
@@ -53,7 +53,12 @@ export async function generateMetadata({ params }: LayoutProps<"/[[...locale]]">
       title,
       description: profile.summary,
       locale: { en: "en_US", ru: "ru_RU", uz: "uz_UZ" }[locale],
+      url: pagePath(locale, page),
     },
+    // Google Search Console's HTML-tag verification, if the owner sets it in Vercel.
+    verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : undefined,
   };
 }
 
@@ -75,6 +80,10 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[[.
     name: profile.name,
     alternateName: getProfile("en").name,
     jobTitle: profile.headline.split(" | ")[0],
+    url: `${siteUrl}${pagePath(locale)}`,
+    knowsAbout: getSkillGroups("en")
+      .filter((group) => ["frontend", "data", "testing"].includes(group.id))
+      .flatMap((group) => group.items),
     address: { "@type": "PostalAddress", addressLocality: "Tashkent", addressCountry: "UZ" },
     email: `mailto:${profile.contacts.find((c) => c.id === "email")?.display}`,
     sameAs: profile.contacts.filter((c) => c.href.startsWith("https://")).map((c) => c.href),

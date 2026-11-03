@@ -72,7 +72,8 @@ test("the Russian page is in Russian and links back to English", async ({ page }
   for (const name of ["О себе", "Опыт", "Проекты", "Навыки", "Образование", "Контакты"]) {
     await expect(page.getByRole("region", { name })).toBeVisible();
   }
-  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", /\/$/);
+  // Absolute since metadataBase is always set: the English page is the site root.
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", /^https?:\/\/[^/]+\/?$/);
 
   await page.getByRole("list", { name: "Язык" }).getByRole("link", { name: "en" }).click();
   await expect(page).toHaveURL(/\/$/);
