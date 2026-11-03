@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { getProfile } from "@/entities/profile";
 import { themeInitScript } from "@/features/theme-toggle";
-import { getDictionary, localePath, locales, toLocale } from "@/shared/i18n";
+import { getDictionary, locales, pagePath, routeSegments, toRoute } from "@/shared/i18n";
 import { Spotlight } from "@/shared/ui/spotlight";
 import { Header } from "@/widgets/header";
 
@@ -17,17 +17,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin", "cyrillic"],
 });
 
-// "/" is English and "/ru" is Russian; any other path is a 404.
+// "/" and "/projects" in English, the same under "/ru" and "/uz"; any other path is a 404.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale: locale === "en" ? [] : [locale] }));
+  return routeSegments().map((segments) => ({ locale: segments }));
 }
 
 export async function generateMetadata({ params }: LayoutProps<"/[[...locale]]">): Promise<Metadata> {
-  const locale = toLocale((await params).locale);
+  const { locale, page } = toRoute((await params).locale);
   const profile = getProfile(locale);
-  const title = `${profile.name} — ${profile.headline.split(" | ")[0]}`;
+  const t = getDictionary(locale);
+  const title =
+    page === "projects"
+      ? `${t.archive.title} — ${profile.name}`
+      : `${profile.name} — ${profile.headline.split(" | ")[0]}`;
 
   return {
     // Set NEXT_PUBLIC_SITE_URL once the site has a domain so OG URLs are absolute.
@@ -38,8 +42,11 @@ export async function generateMetadata({ params }: LayoutProps<"/[[...locale]]">
     description: profile.summary,
     authors: [{ name: profile.name }],
     alternates: {
-      canonical: localePath(locale),
-      languages: { ...Object.fromEntries(locales.map((l) => [l, localePath(l)])), "x-default": "/" },
+      canonical: pagePath(locale, page),
+      languages: {
+        ...Object.fromEntries(locales.map((l) => [l, pagePath(l, page)])),
+        "x-default": pagePath("en", page),
+      },
     },
     openGraph: {
       type: "profile",
@@ -59,7 +66,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[[...locale]]">) {
-  const locale = toLocale((await params).locale);
+  const { locale, page } = toRoute((await params).locale);
   const profile = getProfile(locale);
 
   const personJsonLd = {
@@ -87,7 +94,8 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[[.
           {getDictionary(locale).skipLink}
         </a>
         <Spotlight />
-        <Header locale={locale} />
+        {/* The mobile section bar links to anchors that exist only on the home page. */}
+        {page === "home" && <Header locale={locale} />}
         {children}
         <script
           type="application/ld+json"

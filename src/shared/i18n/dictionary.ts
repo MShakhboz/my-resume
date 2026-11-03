@@ -7,6 +7,7 @@ const projectWords: Partial<Record<Intl.LDMLPluralRule, string>> = {
   few: "проекта",
   many: "проектов",
 };
+const ruProjects = (count: number) => `${count} ${projectWords[ruPlural.select(count)] ?? "проекта"}`;
 
 /** Interface text. Resume content lives in the entities' model files. */
 export const dictionaries = {
@@ -41,6 +42,17 @@ export const dictionaries = {
     footer:
       "Built with Next.js, TypeScript and Tailwind CSS. Tested with Vitest, React Testing Library and " +
       "Playwright, with an axe accessibility scan in both themes, on GitHub Actions CI.",
+    archive: {
+      title: "All projects",
+      intro: (count: number, companies: number) =>
+        `Every project behind the resume, newest first: ${count} projects across ${companies} companies. ` +
+        "Live sites are linked; some older ones are offline or were never public.",
+      back: "Back to resume",
+      caption: "All projects, newest first",
+      columns: { year: "Year", project: "Project", madeAt: "Made at", builtWith: "Built with", link: "Link" },
+      status: { offline: "Offline", internal: "Internal" },
+      viewAll: (count: number) => `View all ${count} projects`,
+    },
   },
   ru: {
     languageName: "Русский",
@@ -62,7 +74,7 @@ export const dictionaries = {
     newTab: "(откроется в новой вкладке)",
     live: { one: "Сайт:", many: "Сайты:" },
     techStack: (name: string) => `Стек: ${name}`,
-    moreProjects: (count: number) => `Ещё ${count} ${projectWords[ruPlural.select(count)] ?? "проекта"}`,
+    moreProjects: (count: number) => `Ещё ${ruProjects(count)}`,
     fewerProjects: "Свернуть проекты",
     languages: "Языки",
     contactLead: "Открыт к senior-позициям по React и Next.js, удалённо.",
@@ -72,6 +84,17 @@ export const dictionaries = {
     footer:
       "Сделано на Next.js, TypeScript и Tailwind CSS. Тесты: Vitest, React Testing Library и Playwright, " +
       "включая проверку доступности axe в обеих темах, в CI на GitHub Actions.",
+    archive: {
+      title: "Все проекты",
+      intro: (count: number, companies: number) =>
+        `Все проекты из резюме, сначала новые: ${ruProjects(count)} в ${companies} компаниях. ` +
+        "Работающие сайты со ссылками; часть старых уже не работает или никогда не была публичной.",
+      back: "Назад к резюме",
+      caption: "Все проекты, сначала новые",
+      columns: { year: "Год", project: "Проект", madeAt: "Компания", builtWith: "Стек", link: "Ссылка" },
+      status: { offline: "Не работает", internal: "Внутренний" },
+      viewAll: (count: number) => `Все ${ruProjects(count)}`,
+    },
   },
   // Uzbek (Latin script): oʻ/gʻ use U+02BB, the tutuq belgisi uses U+02BC. Technology names stay in English.
   uz: {
@@ -105,6 +128,17 @@ export const dictionaries = {
       "Next.js, TypeScript va Tailwind CSS asosida yaratilgan. Vitest, React Testing Library va Playwright " +
       "bilan test qilingan, jumladan ikkala mavzuda axe orqali foydalanish qulayligi tekshiruvi; " +
       "GitHub Actions CI.",
+    archive: {
+      title: "Barcha loyihalar",
+      intro: (count: number, companies: number) =>
+        `Rezyumedagi barcha loyihalar, yangilari birinchi: ${companies} ta kompaniyada ${count} ta loyiha. ` +
+        "Ishlayotgan saytlarga havola berilgan; ayrim eskilari endi ishlamaydi yoki hech qachon ochiq boʻlmagan.",
+      back: "Rezyumega qaytish",
+      caption: "Barcha loyihalar, yangilari birinchi",
+      columns: { year: "Yil", project: "Loyiha", madeAt: "Kompaniya", builtWith: "Texnologiyalar", link: "Havola" },
+      status: { offline: "Ishlamaydi", internal: "Ichki" },
+      viewAll: (count: number) => `Barcha ${count} ta loyiha`,
+    },
   },
 } satisfies Record<Locale, unknown>;
 

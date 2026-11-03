@@ -44,7 +44,7 @@ test("resume PDFs are served", async ({ page, request }) => {
   }
 });
 
-for (const path of ["/", "/ru", "/uz"]) {
+for (const path of ["/", "/ru", "/uz", "/projects", "/ru/projects", "/uz/projects"]) {
   for (const colorScheme of ["dark", "light"] as const) {
     test(`has no detectable accessibility violations (${path}, ${colorScheme})`, async ({ page }) => {
       await page.goto(path);
@@ -89,7 +89,7 @@ test("the Uzbek page is in Uzbek", async ({ page }) => {
   await expect(page.locator('link[rel="alternate"][hreflang="ru"]')).toHaveAttribute("href", /\/ru$/);
 });
 
-for (const path of ["/", "/ru", "/uz"]) {
+for (const path of ["/", "/ru", "/uz", "/projects", "/ru/projects", "/uz/projects"]) {
   test(`fits a 320px screen without sideways scrolling (${path})`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 640 });
     await page.goto(path);
@@ -101,8 +101,22 @@ for (const path of ["/", "/ru", "/uz"]) {
   });
 }
 
+test("the full project list opens from Projects and links back", async ({ page }) => {
+  await page.getByRole("link", { name: "View all 23 projects" }).click();
+  await expect(page).toHaveURL(/\/projects$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("All projects");
+  await expect(page.getByRole("table", { name: "All projects, newest first" }).getByRole("row")).toHaveCount(24);
+
+  await page.getByRole("list", { name: "Language" }).getByRole("link", { name: "ru" }).click();
+  await expect(page).toHaveURL(/\/ru\/projects$/);
+  await page.getByRole("link", { name: "Назад к резюме" }).click();
+  await expect(page).toHaveURL(/\/ru$/);
+});
+
 test("unknown paths are a 404", async ({ request }) => {
-  expect((await request.get("/de")).status()).toBe(404);
+  for (const path of ["/de", "/projects/x", "/ru/de", "/projects/ru"]) {
+    expect((await request.get(path)).status(), path).toBe(404);
+  }
 });
 
 test("theme toggle overrides the system theme and persists", async ({ page }) => {

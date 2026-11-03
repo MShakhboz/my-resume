@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { getArchive } from "@/entities/archive";
 import { getEducation } from "@/entities/education";
 import { getJobs } from "@/entities/experience";
 import { getProfile } from "@/entities/profile";
@@ -48,6 +49,24 @@ describe.each(locales)("resume content (%s)", (locale) => {
     }
   });
 
+  it("lists every archive project once, under a real job and within its years", () => {
+    const archive = getArchive(locale);
+    expect(new Set(archive.map((entry) => entry.id)).size).toBe(archive.length);
+    const thisYear = new Date().getFullYear();
+    for (const entry of archive) {
+      const job = jobs.find((j) => j.id === entry.jobId);
+      expect(job, entry.id).toBeDefined();
+      const end = job!.dates.slice(-4).match(/\d{4}/) ? Number(job!.dates.slice(-4)) : thisYear;
+      expect(entry.year, entry.id).toBeGreaterThanOrEqual(startYear(job!.dates));
+      expect(entry.year, entry.id).toBeLessThanOrEqual(end);
+      // A live link or a reason there is none, never both.
+      expect(Boolean(entry.link) !== Boolean(entry.status), entry.id).toBe(true);
+      if (entry.link) expect(entry.link).toMatch(/^[a-z0-9.-]+\.[a-z]{2,}$/);
+    }
+    const years = archive.map((entry) => entry.year);
+    expect(years).toEqual([...years].sort((a, b) => b - a));
+  });
+
   it("only highlights numbers the resume states", () => {
     const resumeText = [profile.summary, ...jobs.flatMap((job) => job.bullets)].join(" ");
     for (const { value } of profile.highlights) {
@@ -83,6 +102,14 @@ describe.each(translated)("%s translation", (locale) => {
         liveSites,
       }));
     expect(facts(locale)).toEqual(facts("en"));
+  });
+
+  it("keeps the same archive entries, years, stacks, links and statuses", () => {
+    const facts = (l: (typeof locales)[number]) =>
+      getArchive(l).map(({ id, year, jobId, stack, link, status }) => ({ id, year, jobId, stack, link, status }));
+    expect(facts(locale)).toEqual(facts("en"));
+    const enDescriptions = new Set(getArchive("en").map((entry) => entry.description));
+    for (const { description } of getArchive(locale)) expect(enDescriptions.has(description)).toBe(false);
   });
 
   it("keeps the same projects, stacks and links", () => {

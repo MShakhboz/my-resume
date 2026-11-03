@@ -1,8 +1,15 @@
-import { getDictionary, Locale, localePath, locales } from "@/shared/i18n";
+import { getDictionary, Locale, locales, Page, pagePath } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
 
-/** EN / RU links to the same page in each language. Each link is marked with its own language. */
-export function LocaleSwitch({ locale, className }: { locale: Locale; className?: string }) {
+/** Links to the same page in each language. Each link is marked with its own language. */
+type LocaleSwitchProps = {
+  locale: Locale;
+  /** The page to link to in each language. */
+  page?: Page;
+  className?: string;
+};
+
+export function LocaleSwitch({ locale, page = "home", className }: LocaleSwitchProps) {
   return (
     <ul
       aria-label={getDictionary(locale).languageSwitch}
@@ -13,7 +20,7 @@ export function LocaleSwitch({ locale, className }: { locale: Locale; className?
         return (
           <li key={target}>
             <a
-              href={localePath(target)}
+              href={pagePath(target, page)}
               hrefLang={target}
               lang={target}
               title={getDictionary(target).languageName}
