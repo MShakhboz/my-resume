@@ -114,6 +114,22 @@ test("the project total opens the full list, which links back", async ({ page })
   await expect(page).toHaveURL(/\/ru$/);
 });
 
+test("search engines and AI crawlers get a sitemap, robots.txt and llms.txt", async ({ request }) => {
+  const sitemap = await request.get("/sitemap.xml");
+  expect(sitemap.ok()).toBe(true);
+  const xml = await sitemap.text();
+  for (const path of ["/ru", "/uz", "/projects", "/ru/projects"]) expect(xml).toContain(`${path}</loc>`);
+  expect(xml).toContain('hreflang="uz"');
+
+  const robots = await (await request.get("/robots.txt")).text();
+  expect(robots).toMatch(/Allow: \//);
+  expect(robots).toMatch(/Sitemap: https?:\/\/\S+\/sitemap\.xml/);
+
+  const llms = await request.get("/llms.txt");
+  expect(llms.headers()["content-type"]).toContain("text/plain");
+  expect(await llms.text()).toContain("# Shaxboz Mirzomurotov");
+});
+
 test("unknown paths are a 404", async ({ request }) => {
   for (const path of ["/de", "/projects/x", "/ru/de", "/projects/ru"]) {
     expect((await request.get(path)).status(), path).toBe(404);
