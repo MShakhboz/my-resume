@@ -1,4 +1,4 @@
-import { Code, Compass, Database, Palette, Table, Wrench } from "lucide-react";
+import { Code, Compass, Database, FlaskConical, Palette, Table, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getSkillGroups, SkillGroup } from "@/entities/skill";
 import { getDictionary, Locale } from "@/shared/i18n";
@@ -10,6 +10,7 @@ const icons: Record<SkillGroup["id"], LucideIcon> = {
   data: Database,
   ui: Palette,
   forms: Table,
+  testing: FlaskConical,
   tools: Wrench,
   practices: Compass,
 };
