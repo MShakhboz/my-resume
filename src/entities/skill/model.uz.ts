@@ -43,6 +43,8 @@ export const skillGroups: SkillGroup[] = [
       "Tailwind CSS",
       "Styled Components",
       "Framer Motion",
+      "MUI X Charts",
+      "Recharts",
     ],
   },
   {
