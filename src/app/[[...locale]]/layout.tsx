@@ -54,7 +54,10 @@ export async function generateMetadata({ params }: LayoutProps<"/[[...locale]]">
       description: profile.summary,
       locale: { en: "en_US", ru: "ru_RU", uz: "uz_UZ" }[locale],
       url: pagePath(locale, page),
+      // The business-card preview from app/og/[locale]/route.tsx.
+      images: [{ url: `/og/${locale}`, width: 1200, height: 630, alt: `${profile.name} — ${profile.headline}` }],
     },
+    twitter: { card: "summary_large_image", title, description: profile.summary, images: [`/og/${locale}`] },
     // Google Search Console's HTML-tag verification, if the owner sets it in Vercel.
     verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
       ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
