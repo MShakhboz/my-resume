@@ -41,7 +41,7 @@ describe.each(locales)("Projects (%s)", (locale) => {
     render(<Projects locale={locale} />);
     await user.click(screen.getByRole("button", { name: t.moreProjects(more.length) }));
     for (const site of projects.flatMap((project) => project.links)) {
-      const link = screen.getByRole("link", { name: new RegExp(site.replace(/\./g, "\\.")) });
+      const link = screen.getByRole("link", { name: new RegExp(`(^|\\s)${site.replace(/\./g, "\\.")}`) });
       expect(link).toHaveAttribute("href", `https://${site}`);
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noopener noreferrer");

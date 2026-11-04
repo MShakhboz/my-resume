@@ -106,7 +106,7 @@ test("the project total opens the full list, which links back", async ({ page })
   await page.getByRole("link", { name: /projects across 6 companies/ }).click();
   await expect(page).toHaveURL(/\/projects$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("All projects");
-  await expect(page.getByRole("table", { name: "All projects, newest first" }).getByRole("row")).toHaveCount(24);
+  await expect(page.getByRole("table", { name: "All projects, newest first" }).getByRole("row")).toHaveCount(25); // 24 projects + the header row
 
   await page.getByRole("list", { name: "Language" }).getByRole("link", { name: "ru" }).click();
   await expect(page).toHaveURL(/\/ru\/projects$/);

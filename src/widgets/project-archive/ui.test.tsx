@@ -21,7 +21,7 @@ describe.each(locales)("ProjectArchive (%s)", (locale) => {
     render(<ProjectArchive locale={locale} />);
     for (const { link } of archive.filter((entry) => entry.link)) {
       // Two copies per row (mobile and desktop columns), shown at different breakpoints.
-      for (const anchor of screen.getAllByRole("link", { name: new RegExp(link!.replace(/\./g, "\\.")) })) {
+      for (const anchor of screen.getAllByRole("link", { name: new RegExp(`(^|\\s)${link!.replace(/\./g, "\\.")}`) })) {
         expect(anchor).toHaveAttribute("href", `https://${link}`);
         expect(anchor).toHaveAttribute("target", "_blank");
         expect(anchor).toHaveAttribute("rel", "noopener noreferrer");

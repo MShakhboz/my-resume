@@ -19,7 +19,7 @@ describe.each(locales)("Experience (%s)", (locale) => {
   it("opens live sites in a new tab over https", () => {
     render(<Experience locale={locale} />);
     for (const site of jobs.flatMap((job) => job.liveSites)) {
-      const link = screen.getByRole("link", { name: new RegExp(site.replace(/\./g, "\\.")) });
+      const link = screen.getByRole("link", { name: new RegExp(`(^|\\s)${site.replace(/\./g, "\\.")}`) });
       expect(link).toHaveAttribute("href", `https://${site}`);
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noopener noreferrer");
