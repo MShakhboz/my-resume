@@ -1,7 +1,7 @@
 import { contacts } from "./contacts";
 import { ProfileType } from "./types";
 
-const NB = " "; // keeps "37 822" on one line
+const NB = " "; // keeps "898 868" on one line
 
 // Website only: translated from ../build_resume.py (there is no Uzbek PDF). Technology names stay in English.
 export const profile: ProfileType = {
@@ -14,7 +14,7 @@ export const profile: ProfileType = {
     "React va Next.js’da TypeScript bilan 6+ yillik tajribaga ega senior frontend dasturchi: AQSh, " +
     "Buyuk Britaniya, Rossiya va Markaziy Osiyodagi fintech, avtopark boshqaruvi va agentlik mijozlari " +
     "uchun. Taksi avtoparki CRM tizimining yagona frontend dasturchisi: brauzer uslubidagi koʻp tabli ish " +
-    `maydoni va 37${NB}000+ haydovchi uchun virtualizatsiyalangan jadvallar. 3 nafargacha frontend ` +
+    `maydoni va 900${NB}000 ga yaqin yozuvli virtualizatsiyalangan jadvallar. 3 nafargacha frontend ` +
     "dasturchidan iborat jamoalarga rahbarlik qilgan.",
   highlights: [
     { value: "20+", label: "6 ta kompaniyadagi loyihalar", source: "project-count" },

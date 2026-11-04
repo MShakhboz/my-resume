@@ -21,10 +21,10 @@ export const projects: Project[] = [
     featured: true,
     title: "Baza-Taxi fleet CRM",
     description:
-      "Fleet-management CRM (formerly TradeTaxi) for a Russia-based taxi company, used by about 2,000 drivers. " +
-      "Built at Itway as the sole " +
+      "Fleet-management CRM (formerly TradeTaxi) for a Russia-based taxi company. Built at Itway as the sole " +
       "frontend developer, built a browser-style multi-tab workspace that keeps each tab's page state and " +
-      "scroll position, the Drivers, Vehicles and Fines modules with virtualized tables, and a real-time " +
+      "scroll position, the Drivers, Vehicles, Orders and Fines modules with virtualized tables for nearly " +
+      "900,000 records, and a real-time " +
       "support chat over WebSockets.",
     stack: ["Next.js", "TypeScript", "Mantine", "RTK Query", "TanStack Virtual", "Laravel Echo"],
     links: ["dev.baza-taxi.ru"],

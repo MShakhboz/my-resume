@@ -1,7 +1,7 @@
 import { jobs as enJobs } from "./model";
 import { Job } from "./types";
 
-const NB = " "; // keeps numbers like "37 822" on one line
+const NB = " "; // keeps numbers like "898 868" on one line
 const TITLE = "Frontend dasturchi";
 const REMOTE = "Masofaviy";
 const ON_SITE = "Ofisda, Oʻzbekiston";
@@ -25,12 +25,12 @@ const translations: Record<string, Translation> = {
       "WebSockets (Laravel Echo va Reverb yopiq kanallari) asosida haydovchilar uchun real vaqtli " +
         "qoʻllab-quvvatlash chatini yaratdim: xabarlarga javob, rasm yuborish, oʻqilmaganlar hisoblagichi va " +
         "filtri, qayta yuborish va oldingi xabarlarni yuklash.",
-      "«Haydovchilar» (roʻyxat, qoʻllab-quvvatlash, roʻyxatdan oʻtkazish, xabar tarqatish) va «Transport " +
-        `vositalari» modullarini 37${NB}822 haydovchi va 5${NB}405 avtomobil uchun ishlab chiqdim; katta ` +
-        "jadvallar TanStack Virtual tufayli tez ishlaydi.",
+      "«Haydovchilar» (roʻyxat, qoʻllab-quvvatlash, roʻyxatdan oʻtkazish, xabar tarqatish), «Transport " +
+        "vositalari» va «Buyurtmalar» modullarini virtualizatsiyalangan jadvallar (TanStack Virtual), " +
+        "qidiruv, filtrlar va skroll paytida yuklash bilan ishlab chiqdim; ular katta hajmda ham tez " +
+        `ishlaydi: 898${NB}868 buyurtma, 276${NB}957 jarima, 36${NB}000+ haydovchi va 5${NB}405 avtomobil.`,
       "«Jarimalar» modulini (GIBDD va TsKAD jarimalari, toʻlov paketlari, eʼtirozlar) GIBDD va Yandex " +
         "integratsiyalariga bagʻishlangan birinchi reliz siklida topshirdim.",
-      `Backend — PHP/Laravel, mobil ilova — Flutter. Platformadan 2${NB}000 ga yaqin haydovchi foydalanadi.`,
       "Shuningdek, Itway’ning yana bir mahsuloti Hi Bro (hibro.am) — restoran menyusi boʻyicha AI-gid ustida ishlayman: mehmonlar " +
         "QR-kod yoki menyuni skanerlaydi, taomlar haqida soʻraydi va buyurtma yigʻadi. Next.js’da " +
         "mehmonlar ilovasini noldan yaratdim: kamera orqali QR-kod va menyuni skanerlash, AI-chat va " +

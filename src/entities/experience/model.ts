@@ -17,11 +17,11 @@ export const jobs: Job[] = [
       "Designed a browser-style multi-tab workspace that preserves each tab's page state and scroll position.",
       "Built the real-time driver support chat over WebSockets (Laravel Echo and Reverb private channels): " +
         "replies, image sending, unread counts and filters, pending messages with retry, and loading earlier messages.",
-      "Built the Drivers module (driver list, support, registration, chat campaigns) and Vehicles module " +
-        "for 37,822 drivers and 5,405 vehicles, using TanStack Virtual to keep large tables fast.",
+      "Built the Drivers (driver list, support, registration, mass messages), Vehicles and Orders modules " +
+        "with virtualized tables (TanStack Virtual), search, filters and load-on-scroll that stay fast on " +
+        "large datasets: 898,868 orders, 276,957 traffic fines, 36,000+ drivers and 5,405 vehicles.",
       "Delivered the Fines module (GIBDD traffic-police and TsKAD toll-road fines, payment batches, appeals) " +
         "in the first release cycle, which centered on GIBDD and Yandex integrations.",
-      "Works with a PHP/Laravel backend and Flutter mobile app. The platform is used by about 2,000 drivers.",
       "Also build Hi Bro (hibro.am), another Itway product: an AI guide to restaurant menus: guests scan a QR code or a menu, ask " +
         "about dishes and build an order. Built the Next.js guest app from scratch: camera QR and menu " +
         "scanning, AI chat, and a virtualized menu with swipeable category chips.",

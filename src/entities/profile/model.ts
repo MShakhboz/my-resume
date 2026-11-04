@@ -11,7 +11,7 @@ export const profile: ProfileType = {
   summary:
     "Senior frontend developer with 6+ years building React and Next.js apps in TypeScript for fintech, " +
     "fleet-management and agency clients in the USA, UK, Russia and Central Asia. Sole frontend developer on a " +
-    "taxi-fleet CRM with a browser-style multi-tab workspace and virtualized tables for 37,000+ drivers. " +
+    "taxi-fleet CRM with a browser-style multi-tab workspace and virtualized tables for nearly 900,000 records. " +
     "Led teams of up to 3 frontend developers.",
   // Website only: headline numbers pulled from the summary and job bullets.
   highlights: [

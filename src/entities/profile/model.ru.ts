@@ -1,7 +1,7 @@
 import { contacts } from "./contacts";
 import { ProfileType } from "./types";
 
-const NB = " "; // keeps "37 822" on one line, as in the PDF
+const NB = " "; // keeps "898 868" on one line, as in the PDF
 
 // Source of truth: ../build_resume_ru.py. Highlight labels are website only.
 export const profile: ProfileType = {
@@ -14,7 +14,7 @@ export const profile: ProfileType = {
     "Senior frontend-разработчик, 6+ лет опыта: React и Next.js на TypeScript для финтеха, управления " +
     "автопарком и агентских проектов (клиенты из США, Великобритании, России и Центральной Азии). " +
     "Единственный frontend-разработчик CRM таксопарка: браузерные вкладки с сохранением состояния и " +
-    `виртуализированные таблицы на 37${NB}000+ водителей. Руководил командами до 3 человек.`,
+    `виртуализированные таблицы почти на 900${NB}000 записей. Руководил командами до 3 человек.`,
   highlights: [
     { value: "20+", label: "проектов в 6 компаниях", source: "project-count" },
     { value: "6+", label: "лет разработки на React и Next.js" },
