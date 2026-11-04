@@ -191,10 +191,10 @@ export const archive: ArchiveEntry[] = [
     link: "portal.my-uhl.com",
   },
   {
-    id: "bekpay",
+    id: "paybek-admin",
     year: 2020,
-    name: "Bekpay",
-    description: "CRM portal, built from scratch, then extended and supported.",
+    name: "Paybek admin panel",
+    description: "Admin panel (CRM), built from scratch, then extended and supported.",
     jobId: "paybek",
     stack: PAYBEK,
     status: "offline",

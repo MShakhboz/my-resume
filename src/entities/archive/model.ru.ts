@@ -64,7 +64,7 @@ const translations: Record<string, Translation> = {
     name: "Админка The Post 365",
     description: "Админ-портал (CRM), созданный с нуля, затем развивался и поддерживался.",
   },
-  bekpay: { name: "Bekpay", description: "CRM-портал, созданный с нуля, затем развивался и поддерживался." },
+  "paybek-admin": { name: "Админ-панель Paybek", description: "Админ-панель (CRM), созданная с нуля, затем развивалась и поддерживалась." },
   sayra: { name: "Sayra", description: "CRM-портал, созданный с нуля, затем развивался и поддерживался." },
   "olmos-blok": { name: "Olmos Blok", description: "CRM-портал, созданный с нуля, затем развивался и поддерживался." },
   "epam-react-native": {

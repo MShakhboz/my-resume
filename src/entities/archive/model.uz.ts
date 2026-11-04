@@ -64,7 +64,7 @@ const translations: Record<string, Translation> = {
     name: "The Post 365 admin paneli",
     description: "Noldan yaratilgan, soʻng rivojlantirilgan va qoʻllab-quvvatlangan admin portal (CRM).",
   },
-  bekpay: { name: "Bekpay", description: "Noldan yaratilgan, soʻng rivojlantirilgan va qoʻllab-quvvatlangan CRM portal." },
+  "paybek-admin": { name: "Paybek admin paneli", description: "Noldan yaratilgan, soʻng rivojlantirilgan va qoʻllab-quvvatlangan admin panel (CRM)." },
   sayra: { name: "Sayra", description: "Noldan yaratilgan, soʻng rivojlantirilgan va qoʻllab-quvvatlangan CRM portal." },
   "olmos-blok": {
     name: "Olmos Blok",
