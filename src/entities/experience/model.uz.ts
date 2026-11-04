@@ -34,9 +34,10 @@ const translations: Record<string, Translation> = {
         "QR-kod yoki menyuni skanerlaydi, taomlar haqida soʻraydi va buyurtma yigʻadi. Next.js’da " +
         "mehmonlar ilovasini noldan yaratdim: kamera orqali QR-kod va menyuni skanerlash, AI-chat va " +
         "kategoriyalari suriladigan virtualizatsiyalangan menyu.",
-      "Hi Bro admin panelining funksiyalarini yaratdim: kirish, foydalanuvchilar, muassasalar, " +
-        "drag-and-drop menyu muharriri va tanib olish jarayonini bosqichma-bosqich koʻrsatadigan menyu " +
-        "manbalari lentasi.",
+      "Hi Bro admin panelini (admin.hibro.am) React, Vite va TanStack Router’da yaratdim: kirish, " +
+        "foydalanuvchilar, qidiruvli muassasalar, taom formasi va stop-listli drag-and-drop menyu muharriri, " +
+        "virtualizatsiyalangan jadvallar hamda AI tanib olish jarayonini bosqichma-bosqich koʻrsatadigan " +
+        "menyu manbalari lentasi (havola yoki rasmlar).",
       "Hi Bro Laravel API’sini kengaytirdim: AI-ofitsiant chati va headless-brauzerda menyu oʻqish " +
         "xizmati (Node, Playwright, Docker) — u menyu saytlarini mehmon telefonidek ochadi, ichki " +
         "manzillarga soʻrovlarni bloklaydi va nazorat menyularini har kecha qayta oʻqib, oldingi natija " +

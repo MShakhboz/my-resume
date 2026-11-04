@@ -12,8 +12,8 @@ const translations: Record<string, Translation> = {
     title: "Hi Bro",
     description:
       "Restoran menyusi boʻyicha AI-gid: mehmonlar QR-kod yoki menyuni skanerlaydi, taomlar haqida " +
-      "soʻraydi va buyurtma yigʻadi. Next.js’da mehmonlar ilovasini noldan yaratdim, admin panel " +
-      "funksiyalarini hamda Laravel API uchun menyu saytlarini mehmon telefonidek ochadigan " +
+      "soʻraydi va buyurtma yigʻadi. Next.js’da mehmonlar ilovasini noldan yaratdim, menyu muharririli " +
+      "admin panelni hamda Laravel API uchun menyu saytlarini mehmon telefonidek ochadigan " +
       "headless-brauzer menyu oʻquvchisini qildim.",
   },
   "tradetaxi-crm": {

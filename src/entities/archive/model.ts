@@ -20,6 +20,15 @@ export const archive: ArchiveEntry[] = [
     link: "hibro.am",
   },
   {
+    id: "hibro-admin",
+    year: 2026,
+    name: "Hi Bro admin panel",
+    description: "Admin panel for Hi Bro: venues, a drag-and-drop menu editor and menu sources read by AI.",
+    jobId: "tradetaxi",
+    stack: ["React", "TypeScript", "Vite", "TanStack Router", "TanStack Query", "Mantine", "TanStack Virtual"],
+    link: "admin.hibro.am",
+  },
+  {
     id: "tradetaxi-crm",
     year: 2026,
     name: "TradeTaxi fleet CRM",

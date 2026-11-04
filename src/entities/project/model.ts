@@ -11,10 +11,10 @@ export const projects: Project[] = [
     title: "Hi Bro",
     description:
       "AI guide to restaurant menus: guests scan a QR code or a menu, ask about dishes and build an order. " +
-      "Built the Next.js guest app from scratch, the admin panel's features, and a headless-browser menu " +
+      "Built the Next.js guest app from scratch, the admin panel with a drag-and-drop menu editor, and a headless-browser menu " +
       "reader for the Laravel API that reads menu sites like a guest's phone.",
     stack: ["Next.js", "TypeScript", "TanStack Query", "Zustand", "Laravel", "Playwright"],
-    links: ["hibro.am"],
+    links: ["hibro.am", "admin.hibro.am"],
   },
   {
     id: "tradetaxi-crm",

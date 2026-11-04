@@ -24,8 +24,9 @@ export const jobs: Job[] = [
       "Also build Hi Bro (hibro.am), an AI guide to restaurant menus: guests scan a QR code or a menu, ask " +
         "about dishes and build an order. Built the Next.js guest app from scratch: camera QR and menu " +
         "scanning, AI chat, and a virtualized menu with swipeable category chips.",
-      "Built the Hi Bro admin panel features: sign-in, users, venues, a drag-and-drop menu editor and a " +
-        "menu-sources feed that shows recognition progress step by step.",
+      "Built the Hi Bro admin panel (admin.hibro.am) on React, Vite and TanStack Router: sign-in, users, " +
+        "venues with search, a drag-and-drop menu editor with a dish form and stop list, virtualized tables, " +
+        "and a menu-sources feed (a link or photos) that shows AI recognition progress step by step.",
       "Extended the Hi Bro Laravel API with the AI waiter chat and a headless-browser menu reader (Node, " +
         "Playwright, Docker) that opens menu sites like a guest's phone, blocks requests to internal " +
         "addresses, and re-reads reference menus nightly to compare with the previous run.",
@@ -40,6 +41,7 @@ export const jobs: Job[] = [
       "TanStack Virtual",
       "TanStack Query",
       "Zustand",
+      "TanStack Router",
       "Zod",
       "WebSockets",
       "Laravel Echo",
@@ -47,7 +49,7 @@ export const jobs: Job[] = [
       "Playwright",
       "Docker",
     ],
-    liveSites: ["dev.tradetaxi.ru", "hibro.am"],
+    liveSites: ["dev.tradetaxi.ru", "hibro.am", "admin.hibro.am"],
   },
   {
     id: "lumex",

@@ -9,6 +9,10 @@ const translations: Record<string, Translation> = {
     name: "Hi Bro",
     description: "Restoran menyusi boʻyicha AI-gid: mehmonlar QR-kod yoki menyuni skanerlaydi, taomlar haqida soʻraydi va buyurtma yigʻadi.",
   },
+  "hibro-admin": {
+    name: "Hi Bro admin paneli",
+    description: "Hi Bro admin paneli: muassasalar, drag-and-drop menyu muharriri va AI oʻqiydigan menyu manbalari.",
+  },
   "tradetaxi-crm": {
     name: "TradeTaxi avtopark CRM tizimi",
     description: "Taksi kompaniyasi uchun brauzer uslubidagi tablar va real vaqtli qoʻllab-quvvatlash chatiga ega avtopark CRM tizimi.",
