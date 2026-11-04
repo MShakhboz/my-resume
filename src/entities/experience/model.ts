@@ -4,14 +4,15 @@ import { Job } from "./types";
 // "Live:" bullet text is split into `stack` and `liveSites` here.
 export const jobs: Job[] = [
   {
-    id: "tradetaxi",
+    id: "itway",
     title: "Frontend Developer",
-    company: "TradeTaxi",
+    company: "Itway",
     location: "Remote",
     mode: "remote",
     dates: "2026 – Present",
     bullets: [
-      "Sole frontend developer on a 7-person team building a fleet-management CRM for a Russia-based " +
+      "Sole frontend developer on a 7-person team building Baza-Taxi (formerly TradeTaxi), a fleet-management " +
+        "CRM for a Russia-based " +
         "taxi company; took over a stalled, AI-generated codebase and built about 70% of the frontend.",
       "Designed a browser-style multi-tab workspace that preserves each tab's page state and scroll position.",
       "Built the real-time driver support chat over WebSockets (Laravel Echo and Reverb private channels): " +
@@ -21,7 +22,7 @@ export const jobs: Job[] = [
       "Delivered the Fines module (GIBDD traffic-police and TsKAD toll-road fines, payment batches, appeals) " +
         "in the first release cycle, which centered on GIBDD and Yandex integrations.",
       "Works with a PHP/Laravel backend and Flutter mobile app. The platform is used by about 2,000 drivers.",
-      "Also build Hi Bro (hibro.am), an AI guide to restaurant menus: guests scan a QR code or a menu, ask " +
+      "Also build Hi Bro (hibro.am), another Itway product: an AI guide to restaurant menus: guests scan a QR code or a menu, ask " +
         "about dishes and build an order. Built the Next.js guest app from scratch: camera QR and menu " +
         "scanning, AI chat, and a virtualized menu with swipeable category chips.",
       "Built the Hi Bro admin panel (admin.hibro.am) on React, Vite and TanStack Router: sign-in, users, " +
@@ -49,7 +50,7 @@ export const jobs: Job[] = [
       "Playwright",
       "Docker",
     ],
-    liveSites: ["dev.tradetaxi.ru", "hibro.am", "admin.hibro.am"],
+    liveSites: ["dev.baza-taxi.ru", "hibro.am", "admin.hibro.am"],
   },
   {
     id: "lumex",
@@ -115,7 +116,7 @@ export const jobs: Job[] = [
       "Playwright",
       "MSW",
     ],
-    // db2-testing.nestegg.ai is website only, like dev.tradetaxi.ru.
+    // db2-testing.nestegg.ai is website only, like dev.baza-taxi.ru.
     liveSites: ["loans.nestegg.ai", "db2-testing.nestegg.ai"],
   },
   {

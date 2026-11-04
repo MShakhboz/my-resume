@@ -13,9 +13,9 @@ const translations: Record<string, Translation> = {
     name: "Админ-панель Hi Bro",
     description: "Админ-панель Hi Bro: заведения, редактор меню с перетаскиванием и источники меню, которые читает AI.",
   },
-  "tradetaxi-crm": {
-    name: "CRM таксопарка TradeTaxi",
-    description: "CRM для управления таксопарком с браузерными вкладками и чатом поддержки в реальном времени.",
+  "baza-taxi-crm": {
+    name: "CRM таксопарка Baza-Taxi",
+    description: "CRM для управления таксопарком (бывший TradeTaxi) с браузерными вкладками и чатом поддержки в реальном времени.",
   },
   nxtarmor: { name: "NXTArmor", description: "Сайт компании по покрытиям, тонировке и защите лакокрасочного покрытия." },
   earendel: { name: "Earendel Artists", description: "Сайт платформы для артистов Earendel." },

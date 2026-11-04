@@ -16,11 +16,11 @@ const translations: Record<string, Translation> = {
       "admin panelni hamda Laravel API uchun menyu saytlarini mehmon telefonidek ochadigan " +
       "headless-brauzer menyu oʻquvchisini qildim.",
   },
-  "tradetaxi-crm": {
-    title: "TradeTaxi avtopark CRM tizimi",
+  "baza-taxi-crm": {
+    title: "Baza-Taxi avtopark CRM tizimi",
     description:
-      `Rossiyadagi taksi kompaniyasi uchun avtopark CRM tizimi, undan 2${NB}000 ga yaqin haydovchi ` +
-      "foydalanadi. Yagona frontend dasturchi sifatida har bir tab sahifa holati va skroll joylashuvini " +
+      `Rossiyadagi taksi kompaniyasi uchun avtopark CRM tizimi (avvalgi nomi TradeTaxi), undan 2${NB}000 ga ` +
+      "yaqin haydovchi foydalanadi. Itway’da yagona frontend dasturchi sifatida har bir tab sahifa holati va skroll joylashuvini " +
       "saqlaydigan brauzer uslubidagi koʻp tabli ish maydonini, virtualizatsiyalangan jadvallarga ega " +
       "«Haydovchilar», «Transport vositalari» va «Jarimalar» modullarini hamda WebSockets asosidagi real " +
       "vaqtli qoʻllab-quvvatlash chatini yaratdim.",

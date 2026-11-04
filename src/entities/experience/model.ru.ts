@@ -9,12 +9,13 @@ type Translation = Pick<Job, "title" | "company" | "location" | "bullets">;
 // Source of truth: ../build_resume_ru.py; the Hi Bro bullets are website only.
 // Dates, work mode, stack and live sites come from the English model, so the two can't drift apart.
 const translations: Record<string, Translation> = {
-  tradetaxi: {
+  itway: {
     title: TITLE,
-    company: "TradeTaxi",
+    company: "Itway",
     location: "Удалённо",
     bullets: [
-      "Единственный frontend-разработчик в команде из 7 человек, которая создаёт CRM для таксопарка из " +
+      "Единственный frontend-разработчик в команде из 7 человек, которая создаёт Baza-Taxi (бывший TradeTaxi) — " +
+        "CRM для таксопарка из " +
         "России; принял застрявший проект с AI-сгенерированным кодом и написал около 70% frontend-части.",
       "Спроектировал многовкладочный интерфейс по принципу браузера: каждая вкладка сохраняет состояние " +
         "страницы и позицию прокрутки.",
@@ -26,7 +27,7 @@ const translations: Record<string, Translation> = {
       "Реализовал модуль «Штрафы» (ГИБДД, ЦКАД, платёжные поручения, обжалования) в первом релизном цикле, " +
         "посвящённом интеграциям с ГИБДД и Яндексом.",
       `Backend на PHP/Laravel, мобильное приложение на Flutter. Платформой пользуются около 2${NB}000 водителей.`,
-      "Также разрабатываю Hi Bro (hibro.am) — AI-гид по меню ресторана: гости сканируют QR-код или меню, " +
+      "Также разрабатываю Hi Bro (hibro.am), ещё один продукт Itway, — AI-гид по меню ресторана: гости сканируют QR-код или меню, " +
         "задают вопросы о блюдах и собирают заказ. С нуля создал гостевое приложение на Next.js: " +
         "сканирование QR-кодов и меню камерой, AI-чат и виртуализированное меню с листаемыми категориями.",
       "Разработал админ-панель Hi Bro (admin.hibro.am) на React, Vite и TanStack Router: вход, пользователи, " +

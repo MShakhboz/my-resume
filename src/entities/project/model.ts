@@ -17,16 +17,17 @@ export const projects: Project[] = [
     links: ["hibro.am", "admin.hibro.am"],
   },
   {
-    id: "tradetaxi-crm",
+    id: "baza-taxi-crm",
     featured: true,
-    title: "TradeTaxi fleet CRM",
+    title: "Baza-Taxi fleet CRM",
     description:
-      "Fleet-management CRM for a Russia-based taxi company, used by about 2,000 drivers. As the sole " +
+      "Fleet-management CRM (formerly TradeTaxi) for a Russia-based taxi company, used by about 2,000 drivers. " +
+      "Built at Itway as the sole " +
       "frontend developer, built a browser-style multi-tab workspace that keeps each tab's page state and " +
       "scroll position, the Drivers, Vehicles and Fines modules with virtualized tables, and a real-time " +
       "support chat over WebSockets.",
     stack: ["Next.js", "TypeScript", "Mantine", "RTK Query", "TanStack Virtual", "Laravel Echo"],
-    links: ["dev.tradetaxi.ru"],
+    links: ["dev.baza-taxi.ru"],
   },
   {
     id: "nestegg-borrower-app",

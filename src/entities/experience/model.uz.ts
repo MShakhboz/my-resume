@@ -11,12 +11,13 @@ type Translation = Pick<Job, "title" | "company" | "location" | "bullets">;
 // Website only: translated from the English model (there is no Uzbek PDF). Technology names stay
 // in English. Dates, work mode, stack and live sites come from the English model.
 const translations: Record<string, Translation> = {
-  tradetaxi: {
+  itway: {
     title: TITLE,
-    company: "TradeTaxi",
+    company: "Itway",
     location: REMOTE,
     bullets: [
-      "Rossiyadagi taksi kompaniyasi uchun avtopark boshqaruvi CRM tizimini yaratayotgan 7 kishilik " +
+      "Rossiyadagi taksi kompaniyasi uchun avtopark boshqaruvi CRM tizimi Baza-Taxi’ni (avvalgi nomi " +
+        "TradeTaxi) yaratayotgan 7 kishilik " +
         "jamoadagi yagona frontend dasturchi; AI yordamida yozilgan va toʻxtab qolgan loyihani qabul " +
         "qilib, frontendning taxminan 70% qismini yozdim.",
       "Brauzer uslubidagi koʻp tabli ish maydonini loyihalashtirdim: har bir tab sahifa holati va " +
@@ -30,7 +31,7 @@ const translations: Record<string, Translation> = {
       "«Jarimalar» modulini (GIBDD va TsKAD jarimalari, toʻlov paketlari, eʼtirozlar) GIBDD va Yandex " +
         "integratsiyalariga bagʻishlangan birinchi reliz siklida topshirdim.",
       `Backend — PHP/Laravel, mobil ilova — Flutter. Platformadan 2${NB}000 ga yaqin haydovchi foydalanadi.`,
-      "Shuningdek, Hi Bro (hibro.am) — restoran menyusi boʻyicha AI-gid ustida ishlayman: mehmonlar " +
+      "Shuningdek, Itway’ning yana bir mahsuloti Hi Bro (hibro.am) — restoran menyusi boʻyicha AI-gid ustida ishlayman: mehmonlar " +
         "QR-kod yoki menyuni skanerlaydi, taomlar haqida soʻraydi va buyurtma yigʻadi. Next.js’da " +
         "mehmonlar ilovasini noldan yaratdim: kamera orqali QR-kod va menyuni skanerlash, AI-chat va " +
         "kategoriyalari suriladigan virtualizatsiyalangan menyu.",
