@@ -35,7 +35,7 @@ const translations: Record<string, Translation> = {
     description:
       "Кабинет для кредитных союзов, которые выдают займы через NestEgg; им пользуются 20+ кредиторов. " +
       "Создан с нуля в Softwhere: рассмотрение заявок с одобрением и отказом, таблицы MUI X Data Grid Pro " +
-      "с фильтрами, графики, отчёты и флаги LaunchDarkly.",
+      "с фильтрами, множество графиков и отчётов на Recharts и MUI X Charts, флаги LaunchDarkly.",
   },
   "lumex-client-sites": {
     title: "Клиентские сайты Lumex Agency",

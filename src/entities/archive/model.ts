@@ -151,7 +151,7 @@ export const archive: ArchiveEntry[] = [
     name: "NestEgg lender dashboard",
     description: "Dashboard for 20+ lenders: application review and decisions, data grids, charts and reports.",
     jobId: "softwhere",
-    stack: ["React", "TypeScript", "MUI X Data Grid Pro", "LaunchDarkly", "Vite"],
+    stack: ["React", "TypeScript", "MUI X Data Grid Pro", "Recharts", "MUI X Charts", "LaunchDarkly", "Vite"],
     link: "db2-testing.nestegg.ai",
   },
   {

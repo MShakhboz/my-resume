@@ -86,7 +86,7 @@ export const jobs: Job[] = [
       "Borrower app: the multi-step loan application, bank connection through TrueLayer open banking, " +
         "document upload, address lookup with Ideal Postcodes and application status tracking.",
       "Lender dashboard: application review with approve and decline decisions, filterable MUI X Data Grid " +
-        "Pro tables, and charts and reports.",
+        "Pro tables, and many charts and reports built with Recharts and MUI X Charts.",
       "Wrote unit and integration tests with Vitest, React Testing Library and MSW, and end-to-end tests " +
         "with Playwright.",
       "Migrated the build to Vite and shipped features behind LaunchDarkly feature flags.",
@@ -104,6 +104,8 @@ export const jobs: Job[] = [
       "TrueLayer",
       "Ideal Postcodes",
       "Intercom",
+      "Recharts",
+      "MUI X Charts",
       "LaunchDarkly",
       "Vite",
       "Vitest",

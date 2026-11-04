@@ -65,7 +65,7 @@ const translations: Record<string, Translation> = {
       "Mijozlar ilovasi: bosqichma-bosqich kredit arizasi, TrueLayer ochiq banking orqali bank hisobini " +
         "ulash, hujjatlarni yuklash, Ideal Postcodes orqali manzil qidirish va ariza holatini kuzatish.",
       "Kreditor kabineti: arizalarni koʻrib chiqish, tasdiqlash va rad etish, filtrli MUI X Data Grid Pro " +
-        "jadvallari, grafiklar va hisobotlar.",
+        "jadvallari, Recharts va MUI X Charts asosidagi koʻplab grafiklar va hisobotlar.",
       "Vitest, React Testing Library va MSW bilan unit va integratsion testlar, Playwright bilan end-to-end " +
         "testlar yozdim.",
       "Loyihani Vite’ga oʻtkazdim va funksiyalarni LaunchDarkly flaglari ortida chiqardim.",

@@ -46,8 +46,8 @@ export const projects: Project[] = [
     description:
       "Dashboard for the credit unions that lend through NestEgg, used by 20+ lenders. Built from scratch " +
       "at Softwhere: application review with approve and decline decisions, filterable MUI X Data Grid Pro " +
-      "tables, charts and reports, and LaunchDarkly feature flags.",
-    stack: ["React", "TypeScript", "Redux Toolkit", "RTK Query", "MUI X Data Grid Pro", "LaunchDarkly", "Vite"],
+      "tables, many charts and reports with Recharts and MUI X Charts, and LaunchDarkly feature flags.",
+    stack: ["React", "TypeScript", "Redux Toolkit", "RTK Query", "MUI X Data Grid Pro", "Recharts", "MUI X Charts", "LaunchDarkly", "Vite"],
     links: ["db2-testing.nestegg.ai"],
   },
   {

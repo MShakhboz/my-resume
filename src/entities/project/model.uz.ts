@@ -38,7 +38,7 @@ const translations: Record<string, Translation> = {
     description:
       "NestEgg orqali qarz beradigan kredit uyushmalari uchun kabinet; undan 20+ kreditor foydalanadi. " +
       "Softwhere’da noldan yaratilgan: arizalarni koʻrib chiqish, tasdiqlash va rad etish, filtrli MUI X " +
-      "Data Grid Pro jadvallari, grafiklar, hisobotlar va LaunchDarkly flaglari.",
+      "Data Grid Pro jadvallari, Recharts va MUI X Charts asosidagi koʻplab grafiklar va hisobotlar, LaunchDarkly flaglari.",
   },
   "lumex-client-sites": {
     title: "Lumex Agency mijoz saytlari",
