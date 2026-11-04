@@ -130,6 +130,19 @@ test("search engines and AI crawlers get a sitemap, robots.txt and llms.txt", as
   expect(await llms.text()).toContain("# Shaxboz Mirzomurotov");
 });
 
+for (const [path, image] of [["/", "/og/en"], ["/ru/projects", "/og/ru"], ["/uz", "/og/uz"]]) {
+  test(`shared links show the business-card preview (${path})`, async ({ page, request }) => {
+    await page.goto(path);
+    const ogImage = page.locator('meta[property="og:image"]');
+    await expect(ogImage).toHaveAttribute("content", new RegExp(`^https?://[^/]+${image}$`));
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+
+    const response = await request.get(image);
+    expect(response.ok()).toBe(true);
+    expect(response.headers()["content-type"]).toBe("image/png");
+  });
+}
+
 test("unknown paths are a 404", async ({ request }) => {
   for (const path of ["/de", "/projects/x", "/ru/de", "/projects/ru"]) {
     expect((await request.get(path)).status(), path).toBe(404);
