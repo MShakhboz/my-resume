@@ -10,7 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "logs:encrypt": "node --env-file=.env.local --experimental-strip-types --no-warnings scripts/encrypt-logs.mts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
