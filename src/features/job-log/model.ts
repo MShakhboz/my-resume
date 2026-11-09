@@ -35,11 +35,19 @@ export function weekStart(today: Date) {
 export const isFollowUpDue = (app: Application, today: string) =>
   app.status === "Sent" && app.followUp !== "" && app.followUp <= today && app.followedUpOn === "";
 
+/** The plan's daily target: 10 applications Monday to Friday, 5 on Saturday, Sunday off. */
+export function dailyTarget(today: Date) {
+  const day = today.getDay();
+  return day === 0 ? 0 : day === 6 ? 5 : 10;
+}
+
 export function summarize(apps: Application[], today: Date) {
   const day = isoDate(today);
   const monday = weekStart(today);
   return {
     total: apps.length,
+    today: apps.filter((a) => a.applied === day).length,
+    target: dailyTarget(today),
     thisWeek: apps.filter((a) => a.applied >= monday && a.applied <= day).length,
     inProgress: apps.filter((a) => ACTIVE.has(a.status)).length,
     followUpsDue: apps.filter((a) => isFollowUpDue(a, day)).length,
