@@ -44,7 +44,7 @@ test("resume PDFs are served", async ({ page, request }) => {
   }
 });
 
-for (const path of ["/", "/ru", "/uz", "/projects", "/ru/projects", "/uz/projects"]) {
+for (const path of ["/", "/ru", "/uz", "/projects", "/ru/projects", "/uz/projects", "/logs"]) {
   for (const colorScheme of ["dark", "light"] as const) {
     test(`has no detectable accessibility violations (${path}, ${colorScheme})`, async ({ page }) => {
       await page.goto(path);
@@ -90,7 +90,7 @@ test("the Uzbek page is in Uzbek", async ({ page }) => {
   await expect(page.locator('link[rel="alternate"][hreflang="ru"]')).toHaveAttribute("href", /\/ru$/);
 });
 
-for (const path of ["/", "/ru", "/uz", "/projects", "/ru/projects", "/uz/projects"]) {
+for (const path of ["/", "/ru", "/uz", "/projects", "/ru/projects", "/uz/projects", "/logs"]) {
   test(`fits a 320px screen without sideways scrolling (${path})`, async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 640 });
     await page.goto(path);
@@ -161,4 +161,15 @@ test("theme toggle overrides the system theme and persists", async ({ page }) =>
   await page.reload();
   await expect(html).toHaveAttribute("data-theme", "light");
   await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
+});
+
+test("the job log stays locked, unindexed and out of the sitemap", async ({ page, request }) => {
+  await page.goto("/logs");
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, nofollow");
+  await page.getByLabel("Password").fill("not the password");
+  await page.getByRole("button", { name: "Unlock" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "Wrong password." })).toBeVisible();
+  await expect(page.getByRole("list", { name: "Applications, newest first" })).toHaveCount(0);
+
+  expect(await (await request.get("/sitemap.xml")).text()).not.toContain("/logs");
 });
