@@ -1,10 +1,11 @@
-import { Download, MapPin } from "lucide-react";
+import { Download, FileText, MapPin } from "lucide-react";
 import { contactIcons, getProfile } from "@/entities/profile";
 import { LocaleSwitch } from "@/features/locale-switch";
 import { SectionNav } from "@/features/section-nav";
 import { ThemeToggle } from "@/features/theme-toggle";
 import { resumePdfs } from "@/shared/config";
 import { getDictionary, Locale } from "@/shared/i18n";
+import { tw } from "@/shared/lib/tw";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { Monogram } from "@/shared/ui/monogram";
 import { Title } from "@/shared/ui/title";
@@ -53,20 +54,48 @@ export function Hero({ locale }: { locale: Locale }) {
       </div>
 
       <div className="mt-8 space-y-6">
-        <ul aria-label={t.downloadResume} className="flex flex-wrap items-center gap-2">
-          {pdfs.map((pdf, i) => (
-            <li key={pdf.href}>
-              <ButtonLink
-                href={pdf.href}
-                download
-                hrefLang={"hrefLang" in pdf ? pdf.hrefLang : undefined}
-                variant={i === 0 ? "primary" : "secondary"}
-              >
-                <Download aria-hidden size={16} />
-                {t.pdf[pdf.id]}
-              </ButtonLink>
-            </li>
-          ))}
+        {/* Each PDF opens in the browser's viewer; the small button next to it downloads the file. */}
+        <ul aria-label={t.resumePdfs} className="flex flex-wrap items-center gap-2">
+          {pdfs.map((pdf, i) => {
+            const variant = i === 0 ? "primary" : "secondary";
+            const hrefLang = "hrefLang" in pdf ? pdf.hrefLang : undefined;
+            return (
+              <li key={pdf.href} className="flex">
+                <ButtonLink
+                  href={pdf.href}
+                  target="_blank"
+                  rel="noopener"
+                  hrefLang={hrefLang}
+                  variant={variant}
+                  className="rounded-r-none"
+                >
+                  <FileText aria-hidden size={16} />
+                  {t.pdf[pdf.id]}
+                  <span className="sr-only">{t.newTab}</span>
+                </ButtonLink>
+                <ButtonLink
+                  href={pdf.href}
+                  download
+                  hrefLang={hrefLang}
+                  variant={variant}
+                  aria-label={t.downloadPdf(t.pdf[pdf.id])}
+                  className={tw(
+                    "group/dl relative rounded-l-none border-l px-2.5",
+                    variant === "primary" ? "border-neutral-950/20" : "border-line"
+                  )}
+                >
+                  <Download aria-hidden size={16} />
+                  {/* Hover and keyboard-focus hint; screen readers get the aria-label instead. */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 translate-y-1 rounded-md bg-strong px-2 py-1 text-xs font-medium whitespace-nowrap text-background opacity-0 shadow-lg transition group-hover/dl:translate-y-0 group-hover/dl:opacity-100 group-focus-visible/dl:translate-y-0 group-focus-visible/dl:opacity-100 motion-reduce:transition-none"
+                  >
+                    {t.download}
+                  </span>
+                </ButtonLink>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="flex items-center gap-2">
