@@ -5,6 +5,9 @@ import { resumePdfs } from "@/shared/config";
 import { getDictionary, localePath, locales } from "@/shared/i18n";
 import { Hero } from "./ui";
 
+// The view link's name is the label plus the hidden "(opens in a new tab)" note.
+const startsWith = (label: string) => new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`);
+
 describe.each(locales)("Hero (%s)", (locale) => {
   const profile = getProfile(locale);
   const t = getDictionary(locale);
@@ -25,16 +28,22 @@ describe.each(locales)("Hero (%s)", (locale) => {
     }
   });
 
-  it("offers each PDF as a download, the page's own language first", () => {
+  it("opens each PDF in a new tab, with a separate download button, the page's own language first", () => {
     render(<Hero locale={locale} />);
-    const links = within(screen.getByRole("list", { name: t.downloadResume })).getAllByRole("link");
-    expect(links).toHaveLength(resumePdfs.length);
+    const list = screen.getByRole("list", { name: t.resumePdfs });
+    expect(within(list).getAllByRole("listitem")).toHaveLength(resumePdfs.length);
     for (const pdf of resumePdfs) {
-      const link = screen.getByRole("link", { name: t.pdf[pdf.id] });
-      expect(link).toHaveAttribute("href", pdf.href);
-      expect(link).toHaveAttribute("download");
+      const view = within(list).getByRole("link", { name: startsWith(t.pdf[pdf.id]) });
+      expect(view).toHaveAttribute("href", pdf.href);
+      expect(view).toHaveAttribute("target", "_blank");
+      expect(view).not.toHaveAttribute("download");
+
+      const download = within(list).getByRole("link", { name: t.downloadPdf(t.pdf[pdf.id]) });
+      expect(download).toHaveAttribute("href", pdf.href);
+      expect(download).toHaveAttribute("download");
     }
-    expect(links[0]).toHaveAccessibleName(locale === "ru" ? t.pdf.ru : t.pdf.a4);
+    const [first] = within(list).getAllByRole("link");
+    expect(first).toHaveAccessibleName(startsWith(locale === "ru" ? t.pdf.ru : t.pdf.a4));
   });
 
   it("links to every language", () => {

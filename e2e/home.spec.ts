@@ -35,8 +35,10 @@ test("View more reveals the other projects, with no accessibility violations", a
 });
 
 test("resume PDFs are served", async ({ page, request }) => {
-  const links = page.getByRole("list", { name: "Download resume" }).getByRole("link");
-  await expect(links).toHaveCount(3);
+  // Each PDF has a view link (new tab) and a download link.
+  const links = page.getByRole("list", { name: "Resume (PDF)" }).getByRole("link");
+  await expect(links).toHaveCount(6);
+  await expect(links.and(page.locator("[download]"))).toHaveCount(3);
   for (const href of await links.evaluateAll((els) => els.map((el) => el.getAttribute("href")))) {
     const response = await request.get(href!);
     expect(response.ok()).toBe(true);
