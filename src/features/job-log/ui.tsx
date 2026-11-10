@@ -1,6 +1,6 @@
 "use client";
 
-import { Lock, LockOpen, Search } from "lucide-react";
+import { FileText, Lock, LockOpen, Search } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { tw } from "@/shared/lib/tw";
 import { decryptJson, EncryptedPayload } from "./lib/crypto";
@@ -16,6 +16,10 @@ import {
 } from "./model";
 
 type Filter = Status | "All";
+
+// Draft of the reworked English resume (built by ../build_resume_v2.py), shown here for testing before it
+// replaces the public PDFs.
+const DRAFT_RESUME_PATH = "/resume/draft/Shaxboz-Mirzomurotov-Resume-v2.pdf";
 
 const formatDate = (iso: string) => {
   if (!iso) return "—";
@@ -254,14 +258,25 @@ function Dashboard({ apps, onLock }: { apps: Application[]; onLock: () => void }
             Target: 10 applications a day Mon–Fri, 5 on Saturday. Follow up 5–7 days after applying.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onLock}
-          className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-foreground hover:border-accent hover:text-accent"
-        >
-          <LockOpen aria-hidden size={16} />
-          Lock
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href={DRAFT_RESUME_PATH}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-foreground hover:border-accent hover:text-accent"
+          >
+            <FileText aria-hidden size={16} />
+            Draft resume v2 (PDF)
+          </a>
+          <button
+            type="button"
+            onClick={onLock}
+            className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-foreground hover:border-accent hover:text-accent"
+          >
+            <LockOpen aria-hidden size={16} />
+            Lock
+          </button>
+        </div>
       </header>
       <Stats apps={apps} />
       <FollowUps apps={apps} />
