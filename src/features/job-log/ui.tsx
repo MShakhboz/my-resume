@@ -17,11 +17,13 @@ import {
 
 type Filter = Status | "All";
 
-// Drafts of the reworked English resume (built by ../build_resume_v2.py and ../build_resume_v3.py), shown here
-// for comparing before one replaces the public PDFs.
+// Drafts of the reworked English resume (built by ../build_resume_v2.py, _v3.py and _v4.py), shown here for
+// comparing before one replaces the public PDFs.
 const DRAFT_RESUMES = [
   { label: "Draft resume v2 (PDF)", href: "/resume/draft/Shaxboz-Mirzomurotov-Resume-v2.pdf" },
   { label: "Draft resume v3 (PDF)", href: "/resume/draft/Shaxboz-Mirzomurotov-Resume-v3.pdf" },
+  { label: "Draft resume v4 (PDF)", href: "/resume/draft/Shaxboz-Mirzomurotov-Resume-v4-A4.pdf" },
+  { label: "Draft v4, US Letter (PDF)", href: "/resume/draft/Shaxboz-Mirzomurotov-Resume-v4-US-Letter.pdf" },
 ];
 
 const formatDate = (iso: string) => {
