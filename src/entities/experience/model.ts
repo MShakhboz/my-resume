@@ -69,6 +69,7 @@ export const jobs: Job[] = [
       "Solid.js",
       "TypeScript",
       "Redux Toolkit",
+      "Zod",
       "Tailwind CSS",
       "Framer Motion",
       "Payload CMS",
