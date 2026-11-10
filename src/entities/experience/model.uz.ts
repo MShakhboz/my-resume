@@ -24,11 +24,14 @@ const translations: Record<string, Translation> = {
         "skroll joylashuvini saqlaydi.",
       "WebSockets (Laravel Echo va Reverb yopiq kanallari) asosida haydovchilar uchun real vaqtli " +
         "qoʻllab-quvvatlash chatini yaratdim: xabarlarga javob, rasm yuborish, oʻqilmaganlar hisoblagichi va " +
-        "filtri, qayta yuborish va oldingi xabarlarni yuklash.",
+        "filtri, qayta yuborish va oldingi xabarlarni yuklash. Yangi xabarlar, tiket holatlari va " +
+        "oʻqilmaganlar soni qayta soʻrovsiz toʻgʻridan-toʻgʻri RTK Query keshiga yoziladi.",
       "«Haydovchilar» (roʻyxat, qoʻllab-quvvatlash, roʻyxatdan oʻtkazish, xabar tarqatish), «Transport " +
         "vositalari» va «Buyurtmalar» modullarini virtualizatsiyalangan jadvallar (TanStack Virtual), " +
         "qidiruv, filtrlar va skroll paytida yuklash bilan ishlab chiqdim; ular katta hajmda ham tez " +
-        `ishlaydi: 898${NB}868 buyurtma, 276${NB}957 jarima, 36${NB}000+ haydovchi va 5${NB}405 avtomobil.`,
+        `ishlaydi: 898${NB}868 buyurtma, 276${NB}957 jarima, 36${NB}000+ haydovchi va 5${NB}405 avtomobil. ` +
+        "Filtrlar RTK Query kesh kalitiga kiradi, har bir yangi sahifa esa bitta kesh yozuviga qoʻshiladi, " +
+        "shuning uchun skroll paytida yuklangan qatorlar qayta yuklanmaydi.",
       "«Jarimalar» modulini (GIBDD va TsKAD jarimalari, toʻlov paketlari, eʼtirozlar) GIBDD va Yandex " +
         "integratsiyalariga bagʻishlangan birinchi reliz siklida topshirdim.",
       "Shuningdek, Itway’ning yana bir mahsuloti Hi Bro (hibro.am) — restoran menyusi boʻyicha AI-gid ustida ishlayman: mehmonlar " +

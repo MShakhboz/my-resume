@@ -16,10 +16,13 @@ export const jobs: Job[] = [
         "taxi company; took over a stalled, AI-generated codebase and built about 70% of the frontend.",
       "Designed a browser-style multi-tab workspace that preserves each tab's page state and scroll position.",
       "Built the real-time driver support chat over WebSockets (Laravel Echo and Reverb private channels): " +
-        "replies, image sending, unread counts and filters, pending messages with retry, and loading earlier messages.",
+        "replies, image sending, unread counts and filters, pending messages with retry, and loading earlier messages. " +
+        "New messages, ticket changes and unread counts are written straight into the RTK Query cache, without refetching.",
       "Built the Drivers (driver list, support, registration, mass messages), Vehicles and Orders modules " +
         "with virtualized tables (TanStack Virtual), search, filters and load-on-scroll that stay fast on " +
-        "large datasets: 898,868 orders, 276,957 traffic fines, 36,000+ drivers and 5,405 vehicles.",
+        "large datasets: 898,868 orders, 276,957 traffic fines, 36,000+ drivers and 5,405 vehicles. Filters " +
+        "form the RTK Query cache key and each new page merges into one cache entry, so scrolling never " +
+        "re-downloads loaded rows.",
       "Delivered the Fines module (GIBDD traffic-police and TsKAD toll-road fines, payment batches, appeals) " +
         "in the first release cycle, which centered on GIBDD and Yandex integrations.",
       "Also built Hi Bro (hibro.am), another Itway product: an AI guide to restaurant menus: guests scan a QR code or a menu, ask " +
