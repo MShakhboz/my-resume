@@ -17,9 +17,12 @@ import {
 
 type Filter = Status | "All";
 
-// Draft of the reworked English resume (built by ../build_resume_v2.py), shown here for testing before it
-// replaces the public PDFs.
-const DRAFT_RESUME_PATH = "/resume/draft/Shaxboz-Mirzomurotov-Resume-v2.pdf";
+// Drafts of the reworked English resume (built by ../build_resume_v2.py and ../build_resume_v3.py), shown here
+// for comparing before one replaces the public PDFs.
+const DRAFT_RESUMES = [
+  { label: "Draft resume v2 (PDF)", href: "/resume/draft/Shaxboz-Mirzomurotov-Resume-v2.pdf" },
+  { label: "Draft resume v3 (PDF)", href: "/resume/draft/Shaxboz-Mirzomurotov-Resume-v3.pdf" },
+];
 
 const formatDate = (iso: string) => {
   if (!iso) return "—";
@@ -259,15 +262,18 @@ function Dashboard({ apps, onLock }: { apps: Application[]; onLock: () => void }
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <a
-            href={DRAFT_RESUME_PATH}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-foreground hover:border-accent hover:text-accent"
-          >
-            <FileText aria-hidden size={16} />
-            Draft resume v2 (PDF)
-          </a>
+          {DRAFT_RESUMES.map((draft) => (
+            <a
+              key={draft.href}
+              href={draft.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-sm font-semibold text-foreground hover:border-accent hover:text-accent"
+            >
+              <FileText aria-hidden size={16} />
+              {draft.label}
+            </a>
+          ))}
           <button
             type="button"
             onClick={onLock}
