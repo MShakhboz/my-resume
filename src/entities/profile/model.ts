@@ -5,7 +5,7 @@ import { ProfileType } from "./types";
 export const profile: ProfileType = {
   name: "Shaxboz Mirzomurotov",
   initials: "SM",
-  headline: "Senior Frontend Developer | React, Next.js, TypeScript",
+  headline: "Senior Frontend Developer | JavaScript, TypeScript, React, Next.js",
   location: "Tashkent, Uzbekistan (UTC+5)",
   availability: "Open to remote",
   summary:

@@ -7,7 +7,7 @@ const NB = " "; // keeps "898 868" on one line, as in the PDF
 export const profile: ProfileType = {
   name: "Шахбоз Мирзомуротов",
   initials: "ШМ",
-  headline: "Senior Frontend-разработчик | React, Next.js, TypeScript",
+  headline: "Senior Frontend-разработчик | JavaScript, TypeScript, React, Next.js",
   location: "Ташкент, Узбекистан (UTC+5)",
   availability: "Открыт к удалённой работе",
   summary:

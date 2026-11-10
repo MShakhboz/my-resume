@@ -9,7 +9,7 @@ export const skillGroups: SkillGroup[] = [
     items: [
       "JavaScript",
       "TypeScript",
-      "React",
+      "React.js",
       "Next.js",
       "React Native",
       "Solid.js",

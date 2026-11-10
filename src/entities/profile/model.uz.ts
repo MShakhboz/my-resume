@@ -7,7 +7,7 @@ const NB = " "; // keeps "898 868" on one line
 export const profile: ProfileType = {
   name: "Shaxboz Mirzomurotov",
   initials: "SM",
-  headline: "Senior Frontend dasturchi | React, Next.js, TypeScript",
+  headline: "Senior Frontend dasturchi | JavaScript, TypeScript, React, Next.js",
   location: "Toshkent, Oʻzbekiston (UTC+5)",
   availability: "Masofaviy ishga ochiq",
   summary:
