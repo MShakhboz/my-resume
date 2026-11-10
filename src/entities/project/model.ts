@@ -78,7 +78,8 @@ export const projects: Project[] = [
       "Project at COYOTE (Kazakhstan) that junior developers had left unfinished; completed it and " +
       "improved its code quality and performance.",
     stack: ["Next.js", "RTK Query", "Tailwind CSS", "Sass"],
-    links: ["qamqorshy.kz"],
+    // qamqorshy.kz has returned 502 since at least 3 Nov 2026.
+    links: [],
   },
   {
     id: "paybek-crm",

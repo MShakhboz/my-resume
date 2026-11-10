@@ -179,7 +179,7 @@ export const archive: ArchiveEntry[] = [
     description: "Project left unfinished by junior developers: completed, with better code and performance.",
     jobId: "coyote",
     stack: ["Next.js", "RTK Query", "Tailwind CSS", "Sass"],
-    link: "qamqorshy.kz",
+    status: "offline",
   },
   {
     id: "the-post-365",

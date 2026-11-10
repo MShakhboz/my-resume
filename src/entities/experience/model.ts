@@ -22,7 +22,7 @@ export const jobs: Job[] = [
         "large datasets: 898,868 orders, 276,957 traffic fines, 36,000+ drivers and 5,405 vehicles.",
       "Delivered the Fines module (GIBDD traffic-police and TsKAD toll-road fines, payment batches, appeals) " +
         "in the first release cycle, which centered on GIBDD and Yandex integrations.",
-      "Also build Hi Bro (hibro.am), another Itway product: an AI guide to restaurant menus: guests scan a QR code or a menu, ask " +
+      "Also built Hi Bro (hibro.am), another Itway product: an AI guide to restaurant menus: guests scan a QR code or a menu, ask " +
         "about dishes and build an order. Built the Next.js guest app from scratch: camera QR and menu " +
         "scanning, AI chat, and a virtualized menu with swipeable category chips.",
       "Built the Hi Bro admin panel (admin.hibro.am) on React, Vite and TanStack Router: sign-in, users, " +
@@ -154,7 +154,7 @@ export const jobs: Job[] = [
       "Sass",
       "Vite",
     ],
-    liveSites: ["qamqorshy.kz", "erp.cascompany.org"],
+    liveSites: ["erp.cascompany.org"],
   },
   {
     id: "paybek",
