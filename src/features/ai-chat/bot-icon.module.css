@@ -7,10 +7,12 @@
   animation: float 3.2s ease-in-out infinite;
 }
 
+/* Head gestures while idle: a curious tilt to each side, then a double nod. Desynced from the
+   6s wave so the two don't always move together. */
 .head {
   transform-box: view-box;
   transform-origin: 24px 33px;
-  transition: rotate 0.3s ease;
+  animation: gesture 7s ease-in-out infinite;
 }
 
 .eye {
@@ -34,7 +36,7 @@
 
 :global(.group):hover .head,
 :global(.group):focus-visible .head {
-  rotate: -8deg;
+  animation: listen 0.35s ease-out forwards;
 }
 
 :global(.group):hover .arm,
@@ -72,6 +74,42 @@
   50% {
     opacity: 0.45;
     scale: 0.8;
+  }
+}
+
+@keyframes gesture {
+  0%,
+  6%,
+  26%,
+  34%,
+  54%,
+  66%,
+  100% {
+    rotate: 0deg;
+    translate: 0 0;
+  }
+  12%,
+  20% {
+    rotate: 9deg;
+  }
+  40%,
+  48% {
+    rotate: -8deg;
+  }
+  72%,
+  84% {
+    translate: 0 1.6px;
+  }
+  78%,
+  90% {
+    translate: 0 0;
+  }
+}
+
+/* The "listening" tilt on hover. */
+@keyframes listen {
+  to {
+    rotate: -8deg;
   }
 }
 
@@ -122,14 +160,14 @@
 
 @media (prefers-reduced-motion: reduce) {
   .bubble,
+  .head,
+  :global(.group):hover .head,
+  :global(.group):focus-visible .head,
   .bot,
   .eye,
   .light,
   .arm,
   :global(.group):hover .arm {
     animation: none;
-  }
-  .head {
-    transition: none;
   }
 }
