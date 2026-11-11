@@ -34,10 +34,16 @@ export function BotIcon({ size, talking = false }: { size?: number; talking?: bo
           <stop offset="1" stopColor={BOTTOM} />
         </linearGradient>
       </defs>
-      {/* Capsule arms, drawn first so the body covers where they join it. The left one hangs and
-          sways; the right one is raised and waves from the shoulder. */}
-      <path d="M16 32 Q11.6 34.6 11.6 40.4" stroke={BODY} strokeWidth="5" fill="none" strokeLinecap="round" className={styles.restArm} />
-      <path d="M32 32 Q38.4 31.4 39.6 25" stroke={BODY} strokeWidth="5" fill="none" strokeLinecap="round" className={styles.arm} />
+      {/* Capsule arms with a shoulder and an elbow, drawn first so the body covers where they join
+          it. They hang straight down; the stylesheet lifts and bends them. */}
+      <g className={`${styles.arm} ${styles.left}`}>
+        <path d="M16 32 L13.2 37.2" stroke={BODY} strokeWidth="5" strokeLinecap="round" />
+        <path d="M13.2 37.2 L12.6 42" stroke={BODY} strokeWidth="5" strokeLinecap="round" className={styles.forearm} />
+      </g>
+      <g className={styles.arm}>
+        <path d="M32 32 L34.8 37.2" stroke={BODY} strokeWidth="5" strokeLinecap="round" />
+        <path d="M34.8 37.2 L35.4 42" stroke={BODY} strokeWidth="5" strokeLinecap="round" className={styles.forearm} />
+      </g>
       {/* Body with a glowing chest ring, and a band at each shoulder */}
       <rect x="20" y="25.5" width="8" height="4" rx="1.5" fill={DARK} />
       <rect x="14" y="28" width="20" height="17.5" rx="8.5" fill={fill} />

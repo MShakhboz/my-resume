@@ -1,6 +1,6 @@
 /* The chat launcher's robot: floats, blinks, pulses its chest ring, and waves now and then;
-   on hover it waves in bursts and tilts its head; while speaking it
-   gestures with its arms. Everything is still under reduced motion. */
+   on hover it waves in bursts and tilts its head; while speaking it gestures with its arms.
+   Everything is still under reduced motion. */
 
 .bot {
   overflow: visible;
@@ -9,7 +9,7 @@
 }
 
 /* Head gestures while idle: a curious tilt to each side, then a double nod. Desynced from the
-   6s wave so the two don't always move together. */
+   10s wave so the two don't always move together. */
 .head {
   transform-box: view-box;
   transform-origin: 24px 28px;
@@ -28,19 +28,42 @@
   animation: glow 1.8s ease-in-out infinite;
 }
 
-/* The raised arm waves from the shoulder: now and then on its own, and in short bursts with
-   pauses while hovered or greeting, so it never waves non-stop. */
-.arm {
+/* Each arm has a shoulder (.arm turns the whole arm) and an elbow (.forearm bends the lower half),
+   like a person's. They hang straight by the robot's sides and only lift to wave: now and then on
+   their own (taking turns), in short bursts with pauses while hovered or greeting, and to "talk
+   with their hands" while speaking. A raised arm bends at the elbow and waves from there. The
+   angles are written for the right arm; --dir: -1 mirrors them for the left one, and the lags keep
+   the two arms slightly out of step, as real arms are. */
+.arm,
+.forearm {
+  --dir: 1;
   transform-box: view-box;
-  transform-origin: 32px 32px;
-  animation: wave-sometimes 10s ease-in-out infinite;
 }
 
-/* The resting arm sways gently from the shoulder, in time with the float. */
-.restArm {
-  transform-box: view-box;
+.arm {
+  transform-origin: 32px 32px;
+  animation: arm-sometimes 10s ease-in-out var(--idle-lag, 0s) infinite;
+}
+
+.forearm {
+  transform-origin: 34.8px 37.2px;
+  animation: forearm-sometimes 10s ease-in-out var(--idle-lag, 0s) infinite;
+}
+
+.left,
+.left .forearm {
+  --dir: -1;
+  --idle-lag: -5s;
+  --burst-lag: 0.15s;
+  --explain-lag: -0.7s;
+}
+
+.left {
   transform-origin: 16px 32px;
-  animation: sway 3.2s ease-in-out infinite;
+}
+
+.left .forearm {
+  transform-origin: 13.2px 37.2px;
 }
 
 :global(.group):hover .head,
@@ -50,7 +73,12 @@
 
 :global(.group):hover .arm,
 :global(.group):focus-visible .arm {
-  animation: wave-burst 3.2s ease-in-out infinite;
+  animation: arm-burst 3.2s ease-in-out var(--burst-lag, 0s) infinite;
+}
+
+:global(.group):hover .forearm,
+:global(.group):focus-visible .forearm {
+  animation: forearm-burst 3.2s ease-in-out var(--burst-lag, 0s) infinite;
 }
 
 @keyframes float {
@@ -122,50 +150,6 @@
   }
 }
 
-/* A wave of two swings, then a rest of about two seconds. */
-@keyframes wave-burst {
-  0%,
-  44%,
-  100% {
-    rotate: 0deg;
-  }
-  6%,
-  28% {
-    rotate: 14deg;
-  }
-  17%,
-  39% {
-    rotate: -8deg;
-  }
-}
-
-/* The same two swings once every 10 seconds. */
-@keyframes wave-sometimes {
-  0%,
-  82%,
-  100% {
-    rotate: 0deg;
-  }
-  84%,
-  91% {
-    rotate: 14deg;
-  }
-  87.5%,
-  94.5% {
-    rotate: -8deg;
-  }
-}
-
-@keyframes sway {
-  0%,
-  100% {
-    rotate: 0deg;
-  }
-  50% {
-    rotate: 6deg;
-  }
-}
-
 /* Talking: the mouth opens and closes in an uneven, speech-like rhythm. */
 .mouth {
   transform-box: fill-box;
@@ -191,50 +175,120 @@
 
 /* Waves while greeting the visitor, in the same bursts as on hover. */
 :global(.group)[data-waving] .arm {
-  animation: wave-burst 3.2s ease-in-out infinite;
+  animation: arm-burst 3.2s ease-in-out var(--burst-lag, 0s) infinite;
 }
 
-/* Talking: the robot "talks with its hands" like a person explaining something, the raised arm
-   lifting and dropping, the other one opening out, and nods along. These come last so they win
+:global(.group)[data-waving] .forearm {
+  animation: forearm-burst 3.2s ease-in-out var(--burst-lag, 0s) infinite;
+}
+
+/* Talking: the robot "talks with its hands" like a person explaining something, each forearm
+   rising and falling in turn at chest height, and nods along. These come last so they win
    over the hover and greeting gestures while the voice plays. */
 .bot[data-talking] .arm {
-  animation: explain 1.4s ease-in-out infinite;
+  animation: arm-explain 1.4s ease-in-out var(--explain-lag, 0s) infinite;
 }
 
-.bot[data-talking] .restArm {
-  animation: explain-open 1.4s ease-in-out infinite;
+.bot[data-talking] .forearm {
+  animation: forearm-explain 1.4s ease-in-out var(--explain-lag, 0s) infinite;
 }
 
 .bot[data-talking] .head {
   animation: talk-nod 0.9s ease-in-out infinite;
 }
 
-@keyframes explain {
+/* Lift the arm out to the side, bend the elbow, wave the forearm twice, lower, then rest for about
+   a second and a half. */
+
+@keyframes arm-burst {
   0%,
+  58%,
   100% {
     rotate: 0deg;
   }
-  25% {
-    rotate: 22deg;
-  }
-  50% {
-    rotate: 6deg;
-  }
-  75% {
-    rotate: 16deg;
+  12%,
+  45% {
+    rotate: calc(-92deg * var(--dir));
   }
 }
 
-@keyframes explain-open {
+@keyframes forearm-burst {
   0%,
+  58%,
   100% {
     rotate: 0deg;
   }
-  35% {
-    rotate: 26deg;
+  12%,
+  45% {
+    rotate: calc(-50deg * var(--dir));
   }
-  65% {
-    rotate: 10deg;
+  20%,
+  36% {
+    rotate: calc(-66deg * var(--dir));
+  }
+  28% {
+    rotate: calc(-28deg * var(--dir));
+  }
+}
+
+/* The same wave once every 10 seconds. */
+
+@keyframes arm-sometimes {
+  0%,
+  76%,
+  100% {
+    rotate: 0deg;
+  }
+  80%,
+  93% {
+    rotate: calc(-92deg * var(--dir));
+  }
+}
+
+@keyframes forearm-sometimes {
+  0%,
+  76%,
+  100% {
+    rotate: 0deg;
+  }
+  80%,
+  93% {
+    rotate: calc(-50deg * var(--dir));
+  }
+  83%,
+  89% {
+    rotate: calc(-66deg * var(--dir));
+  }
+  86% {
+    rotate: calc(-28deg * var(--dir));
+  }
+}
+
+/* Talking with the hands: the arms lift a little and the forearms rise and fall at chest height. */
+
+@keyframes arm-explain {
+  0%,
+  100% {
+    rotate: calc(-30deg * var(--dir));
+  }
+  50% {
+    rotate: calc(-42deg * var(--dir));
+  }
+}
+
+@keyframes forearm-explain {
+  0%,
+  100% {
+    rotate: calc(-45deg * var(--dir));
+  }
+  25% {
+    rotate: calc(-80deg * var(--dir));
+  }
+  50% {
+    rotate: calc(-55deg * var(--dir));
+  }
+  75% {
+    rotate: calc(-75deg * var(--dir));
   }
 }
 
