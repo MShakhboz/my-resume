@@ -59,14 +59,17 @@ export function BotIcon({
       </g>
       {/* Body, with an AI badge */}
       <rect x="20" y="25.5" width="8" height="4" rx="1.5" fill={DARK} />
-      {/* An egg-shaped torso: gently rounded shoulders, a fuller rounded belly */}
-      <path d="M19 27.6 H29 Q34 27.6 34 33 V39.5 Q34 47.4 24 47.4 Q14 47.4 14 39.5 V33 Q14 27.6 19 27.6 Z" fill={fill} />
+      {/* The torso: wide, rounded shoulders narrowing into a rounded bottom, like an upside-down egg */}
+      <path
+        d="M18 27.6 H30 Q34.2 27.6 34 32 Q33.4 40 29.6 44.6 Q27.4 47.4 24 47.4 Q20.6 47.4 18.4 44.6 Q14.6 40 14 32 Q13.8 27.6 18 27.6 Z"
+        fill={fill}
+      />
       <path d="M17.4 31.6 Q18.6 29.9 21 29.6" stroke={LIGHT} strokeOpacity="0.55" strokeWidth="1.2" fill="none" strokeLinecap="round" />
       {/* An "AI" badge on the chest: a small screen like the face, lettered in the eyes' glow */}
-      <rect x="18.6" y="34.4" width="10.8" height="7.2" rx="2.6" fill={SCREEN} />
+      <rect x="18.6" y="33.2" width="10.8" height="7.2" rx="2.6" fill={SCREEN} />
       <text
         x="24"
-        y="39.9"
+        y="38.7"
         textAnchor="middle"
         fontSize="5.4"
         fontWeight="800"
