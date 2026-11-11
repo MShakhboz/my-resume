@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUp, Mail, Send, X } from "lucide-react";
+import { ArrowUp, ChevronRight, Mail, Send, X } from "lucide-react";
 import { BotIcon } from "./bot-icon";
 import styles from "./bot-icon.module.css";
 import { FormEvent, ReactNode, useEffect, useId, useRef, useState } from "react";
@@ -85,6 +85,8 @@ export function ChatWidget({ locale }: { locale: Locale }) {
   const [error, setError] = useState<ChatError | null>(null);
   const [hint, setHint] = useState(false);
   const greeting = useProactiveGreeting(open);
+  /** The home view (greeting and cards) until the first question; then the conversation. */
+  const home = messages.length === 0;
   const panelId = useId();
   const titleId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -247,53 +249,109 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           id={panelId}
           role="dialog"
           aria-labelledby={titleId}
-          className="fixed inset-x-3 bottom-3 z-50 flex max-h-[min(36rem,calc(100dvh-1.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl sm:inset-x-auto sm:right-6 sm:bottom-24 sm:w-[24rem]"
+          // About the size of a messenger panel (400 × up to 704px) on desktop; nearly full screen on phones.
+          className="fixed inset-2 z-50 flex flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl sm:inset-auto sm:right-6 sm:bottom-28 sm:h-[min(44rem,calc(100dvh-8.5rem))] sm:w-[25rem]"
         >
-          <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
-            <h2 id={titleId} className="inline-flex items-center gap-2 font-semibold text-strong">
-              <span className="text-accent">
-                <BotIcon size={22} />
-              </span>
-              {t.title}
-            </h2>
-            <button
-              type="button"
-              onClick={close}
-              aria-label={t.close}
-              className="rounded-full p-1.5 text-muted hover:bg-raised hover:text-strong"
-            >
-              <X aria-hidden size={18} />
-            </button>
-          </header>
-
-          <div ref={logRef} role="log" aria-live="polite" className="flex-1 space-y-3 overflow-y-auto px-4 py-4 text-sm">
-            <p className="leading-relaxed text-body">{t.intro}</p>
-            {messages.length === 0 && (
-              <ul aria-label={t.title} className="flex flex-wrap gap-2">
-                {t.suggestions.map((s) => (
-                  <li key={s}>
-                    <button
-                      type="button"
-                      onClick={() => void ask(s)}
-                      className="rounded-full border border-line bg-raised px-3 py-1.5 text-left text-foreground hover:border-accent hover:text-accent"
-                    >
-                      {s}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+          <button
+            type="button"
+            onClick={close}
+            aria-label={t.close}
+            className={tw(
+              "absolute top-3 right-3 z-10 rounded-full p-1.5",
+              home ? "text-neutral-950 hover:bg-neutral-950/10" : "text-muted hover:bg-raised hover:text-strong"
             )}
-            {messages.map((m, i) =>
-              m.role === "user" ? (
-                <p key={i} className="ml-8 rounded-2xl rounded-br-sm bg-accent-soft px-3 py-2 wrap-break-word text-strong">
-                  {m.content}
-                </p>
-              ) : (
-                <AssistantMessage key={i} content={m.content} locale={locale} />
-              )
+          >
+            <X aria-hidden size={20} />
+          </button>
+
+          <div ref={logRef} role="log" aria-live="polite" className="flex-1 overflow-y-auto">
+            {home ? (
+              <>
+                {/* Home: an orange header fading into the panel, with cards overlapping it. The top bar
+                    stays pinned while the greeting and cards scroll under it, like the chat header. */}
+                <header className="sticky top-0 z-5 bg-orange-500 px-6 pt-5 pb-3 text-neutral-950">
+                  <h2 id={titleId} className="flex items-center gap-2 pr-10 text-sm font-semibold">
+                    {/* On a light chip: an orange robot would vanish on the orange header. */}
+                    <span className="flex size-10 items-center justify-center rounded-full bg-white/90 shadow-sm">
+                      <span className="size-8">
+                        <BotIcon />
+                      </span>
+                    </span>
+                    {t.title}
+                  </h2>
+                </header>
+                <div className="bg-linear-to-b from-orange-500 via-orange-500 via-68% to-surface px-6 pt-7 pb-20 text-neutral-950">
+                  <p className="text-[28px] leading-tight font-bold tracking-tight">{t.homeHello}</p>
+                  <p className="text-[28px] leading-tight font-bold tracking-tight opacity-80">{t.homeQuestion}</p>
+                </div>
+
+                <div className="-mt-12 space-y-3 px-4 pb-4">
+                  <button
+                    type="button"
+                    onClick={() => inputRef.current?.focus()}
+                    className="flex w-full items-center justify-between gap-3 rounded-xl border border-line bg-surface px-4 py-3.5 text-left shadow-md transition hover:border-accent motion-reduce:transition-none"
+                  >
+                    <span>
+                      <span className="block text-[15px] font-semibold text-strong">{t.askTitle}</span>
+                      <span className="block text-sm text-muted">{t.askSubtitle}</span>
+                    </span>
+                    <Send aria-hidden size={18} className="shrink-0 text-accent" />
+                  </button>
+
+                  <div className="rounded-xl border border-line bg-surface py-2 shadow-md">
+                    <h3 className="px-4 pt-1 pb-1 text-xs font-semibold text-muted">{t.popular}</h3>
+                    <ul>
+                      {t.suggestions.map((s) => (
+                        <li key={s}>
+                          <button
+                            type="button"
+                            onClick={() => void ask(s)}
+                            className="flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-sm text-foreground transition hover:bg-raised hover:text-accent motion-reduce:transition-none"
+                          >
+                            {s}
+                            <ChevronRight aria-hidden size={16} className="shrink-0 text-muted" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="rounded-xl border border-line bg-surface px-4 py-3.5 shadow-md">
+                    <p className="text-[15px] font-semibold text-strong">{t.humanTitle}</p>
+                    <p className="text-sm text-muted">{t.humanSubtitle}</p>
+                    <ContactButtons locale={locale} label={t.contactHim} />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <header className="sticky top-0 z-5 flex items-center gap-2.5 border-b border-line bg-surface/95 px-4 py-3 pr-12 backdrop-blur">
+                  <span className="size-9 shrink-0">
+                    <BotIcon />
+                  </span>
+                  <span>
+                    <h2 id={titleId} className="text-[15px] leading-tight font-semibold text-strong">
+                      {t.title}
+                    </h2>
+                    <span className="block text-xs text-muted">{t.askSubtitle}</span>
+                  </span>
+                </header>
+                <div className="space-y-3 px-4 py-4 text-sm">
+                  <p className="leading-relaxed text-muted">{t.intro}</p>
+                  {messages.map((m, i) =>
+                    m.role === "user" ? (
+                      <p key={i} className="ml-10 rounded-2xl rounded-br-sm bg-accent-soft px-3.5 py-2.5 wrap-break-word text-strong">
+                        {m.content}
+                      </p>
+                    ) : (
+                      <AssistantMessage key={i} content={m.content} locale={locale} />
+                    )
+                  )}
+                </div>
+              </>
             )}
             {error && (
-              <p role="alert" className="rounded-lg border border-line px-3 py-2 text-foreground">
+              <p role="alert" className="mx-4 mb-4 rounded-lg border border-line px-3 py-2 text-sm text-foreground">
                 {t.errors[error]}
                 {(error === "daily_limit" || error === "unavailable") && (
                   <ContactButtons locale={locale} label={t.contactHim} />
@@ -315,13 +373,13 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                 maxLength={CHAT_LIMITS.maxQuestion}
                 placeholder={t.placeholder}
                 autoComplete="off"
-                className="min-w-0 flex-1 rounded-full border border-line bg-background px-4 py-2 text-sm text-foreground placeholder:text-muted"
+                className="min-w-0 flex-1 rounded-full border border-line bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted"
               />
               <button
                 type="submit"
                 disabled={busy || !input.trim()}
                 aria-label={t.send}
-                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-orange-500 text-neutral-950 hover:bg-orange-400 disabled:opacity-50"
+                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-orange-500 text-neutral-950 hover:bg-orange-400 disabled:opacity-50"
               >
                 <ArrowUp aria-hidden size={18} />
               </button>
