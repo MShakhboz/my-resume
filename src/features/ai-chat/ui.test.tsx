@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getDictionary } from "@/shared/i18n";
@@ -44,6 +44,22 @@ describe("ChatWidget", () => {
     expect(screen.getByText(t.suggestions[1])).toBeInTheDocument();
     const body = JSON.parse(fetchMock.mock.calls[0][1].body);
     expect(body).toEqual({ messages: [{ role: "user", content: t.suggestions[1] }], locale: "en" });
+  });
+
+  it("points to direct contacts when today's limit is used up", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ error: "daily_limit" }, { status: 429 })));
+    const user = userEvent.setup();
+    render(<ChatWidget locale="en" />);
+    await user.click(screen.getByRole("button", { name: t.open }));
+    await user.click(screen.getByRole("button", { name: t.suggestions[0] }));
+
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent(t.errors.daily_limit);
+    expect(within(alert).getByRole("link", { name: "mirzomurotovshaxboz@gmail.com" })).toHaveAttribute(
+      "href",
+      "mailto:mirzomurotovshaxboz@gmail.com"
+    );
+    expect(within(alert).getByRole("link", { name: "Telegram @nornof" })).toHaveAttribute("href", "https://t.me/nornof");
   });
 
   it("explains a rate limit and keeps the question", async () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildSystemPrompt, CHAT_LIMITS, createRateLimiter, validateMessages } from "./model";
+import { buildSystemPrompt, CHAT_LIMITS, createRateLimiter, isDailyLimit, validateMessages } from "./model";
 
 describe("resume chat rules", () => {
   it("grounds answers in the resume and sets the fallback language", () => {
@@ -29,16 +29,21 @@ describe("resume chat rules", () => {
     expect(validateMessages([{ role: "user", content: "hi" }, { role: "assistant", content: "hello" }])).toBeNull();
   });
 
-  it("limits each visitor per minute and per day", () => {
+  it("limits each visitor per minute and per day, and says which", () => {
     let now = 0;
-    const allow = createRateLimiter({ perMinute: 2, perDay: 3 }, () => now);
-    expect([allow("a"), allow("a"), allow("a")]).toEqual([true, true, false]);
-    expect(allow("b")).toBe(true);
+    const check = createRateLimiter({ perMinute: 2, perDay: 3 }, () => now);
+    expect([check("a"), check("a"), check("a")]).toEqual([null, null, "minute"]);
+    expect(check("b")).toBeNull();
     now += 61_000;
-    expect(allow("a")).toBe(true);
+    expect(check("a")).toBeNull();
     now += 61_000;
-    expect(allow("a")).toBe(false); // 3 a day
+    expect(check("a")).toBe("day");
     now += 86_400_000;
-    expect(allow("a")).toBe(true);
+    expect(check("a")).toBeNull();
+  });
+
+  it("recognizes OpenRouter's daily free-model limit", () => {
+    expect(isDailyLimit('{"error":{"message":"Rate limit exceeded: free-models-per-day"}}')).toBe(true);
+    expect(isDailyLimit('{"error":{"message":"Provider returned error","metadata":{"raw":"temporarily rate-limited upstream"}}}')).toBe(false);
   });
 });

@@ -67,10 +67,17 @@ describe("POST /api/chat", () => {
     expect(statuses.filter((s) => s === 429).length).toBeGreaterThan(0);
   });
 
-  it("passes on the model's rate limit", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("{}", { status: 429 })));
-    const response = await ask({ messages: [{ role: "user", content: "hi" }] }, "6.6.6.6");
+  it("tells a busy model apart from a used-up daily quota", async () => {
+    const busy = JSON.stringify({ error: { message: "Provider returned error", metadata: { raw: "temporarily rate-limited upstream" } } });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(busy, { status: 429 })));
+    let response = await ask({ messages: [{ role: "user", content: "hi" }] }, "6.6.6.6");
     expect(response.status).toBe(429);
+    expect(await response.json()).toEqual({ error: "rate_limited" });
+
+    const daily = JSON.stringify({ error: { message: "Rate limit exceeded: free-models-per-day" } });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(daily, { status: 429 })));
+    response = await ask({ messages: [{ role: "user", content: "hi" }] }, "6.6.6.7");
+    expect(await response.json()).toEqual({ error: "daily_limit" });
   });
 });
 
