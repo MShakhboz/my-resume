@@ -2,33 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// The robot greets each visitor once, on its own: phones have no hover, so without this most
-// mobile visitors would never learn what the robot does.
+// The robot greets the visitor every time the page loads, as soon as it shows: phones have no
+// hover, so without this most mobile visitors would never learn what the robot does.
 
-export const GREETING_DELAY_MS = 4_000;
-export const GREETING_VISIBLE_MS = 6_000;
-const STORAGE_KEY = "ai-chat-greeted";
-
-const alreadyGreeted = () => {
-  try {
-    return sessionStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    return false; // storage blocked: greet, but only once in this page view
-  }
-};
-
-const rememberGreeted = () => {
-  try {
-    sessionStorage.setItem(STORAGE_KEY, "1");
-  } catch {
-    // Storage can be blocked (private mode); the greeting then shows once per page view.
-  }
-};
+/** Just long enough after the first render for the bubble's pop-in animation to be seen. */
+export const GREETING_DELAY_MS = 600;
+export const GREETING_VISIBLE_MS = 8_000;
 
 /**
- * Shows the greeting GREETING_DELAY_MS after load, once per browser session, and hides it after
- * GREETING_VISIBLE_MS. While the visitor hovers or focuses it, it stays (WCAG 2.2.1). Opening the
- * chat hides it; call `dismiss` then so it doesn't come back when the chat closes.
+ * Shows the greeting right after each page load and hides it after GREETING_VISIBLE_MS. While the
+ * visitor hovers or focuses it, it stays (WCAG 2.2.1). Opening the chat hides it; call `dismiss`
+ * then so it doesn't come back when the chat closes.
  */
 export function useProactiveGreeting(chatOpen: boolean) {
   const [visible, setVisible] = useState(false);
@@ -43,9 +27,7 @@ export function useProactiveGreeting(chatOpen: boolean) {
   }, []);
 
   useEffect(() => {
-    if (alreadyGreeted()) return;
     const showTimer = setTimeout(() => {
-      rememberGreeted();
       setVisible(true);
       scheduleHide();
     }, GREETING_DELAY_MS);
@@ -57,10 +39,7 @@ export function useProactiveGreeting(chatOpen: boolean) {
 
   return {
     visible: visible && !chatOpen,
-    dismiss: () => {
-      rememberGreeted();
-      setVisible(false);
-    },
+    dismiss: () => setVisible(false),
     hold: () => {
       held.current = true;
     },
