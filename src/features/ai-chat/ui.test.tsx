@@ -32,6 +32,23 @@ describe("ChatWidget", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
+  it("shows a speech bubble on hover and hides it with Escape", async () => {
+    const user = userEvent.setup();
+    render(<ChatWidget locale="en" />);
+    const launcher = screen.getByRole("button", { name: t.open });
+    expect(screen.queryByText(t.open)).not.toBeInTheDocument();
+
+    await user.hover(launcher);
+    expect(screen.getByText(t.open)).toBeInTheDocument();
+    await user.unhover(launcher);
+    expect(screen.queryByText(t.open)).not.toBeInTheDocument();
+
+    await user.hover(launcher);
+    launcher.focus();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByText(t.open)).not.toBeInTheDocument();
+  });
+
   it("sends a suggested question and shows the streamed answer", async () => {
     const fetchMock = vi.fn().mockResolvedValue(streamOf("He built ", "a fleet CRM."));
     vi.stubGlobal("fetch", fetchMock);
