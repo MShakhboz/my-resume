@@ -281,7 +281,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           data-waving={greeting.visible || undefined}
           className={tw(
             "group relative flex touch-none items-center justify-center rounded-full transition select-none motion-reduce:transition-none",
-            "size-16 hover:scale-105 motion-reduce:hover:scale-100 sm:size-20",
+            "size-20 hover:scale-105 motion-reduce:hover:scale-100 sm:size-24",
             drag.dragging && "scale-110 cursor-grabbing motion-reduce:scale-100"
           )}
         >

@@ -8,8 +8,8 @@ import { EDGE_MARGIN_PX, Offset } from "./drag";
 
 /** Tailwind's `sm` breakpoint, from which the panel floats instead of filling the screen. */
 export const DESKTOP_MIN_WIDTH = 640;
-/** The robot on desktop: `size-20`, `right-6 bottom-6`. */
-export const LAUNCHER_SIZE = 80;
+/** The robot on desktop: `size-24`, `right-6 bottom-6`. */
+export const LAUNCHER_SIZE = 96;
 export const LAUNCHER_INSET = 24;
 /** The panel: 25rem wide, up to 44rem tall (about a messenger panel). */
 export const PANEL_WIDTH = 400;
