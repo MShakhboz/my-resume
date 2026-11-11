@@ -1,31 +1,70 @@
 "use client";
 
-import { ArrowUp, Sparkles, X } from "lucide-react";
+import { ArrowUp, Mail, Send, Sparkles, X } from "lucide-react";
 import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import { getJobs } from "@/entities/experience";
 import { getProfile } from "@/entities/profile";
+import { getProjects } from "@/entities/project";
 import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
+import { createLinkifier, Segment } from "./lib/linkify";
 import { CHAT_LIMITS, ChatError, ChatMessage } from "./model";
 
 const ERRORS: readonly ChatError[] = ["rate_limited", "daily_limit", "unavailable", "generic"];
 const toError = (code: unknown): ChatError => (ERRORS.includes(code as ChatError) ? (code as ChatError) : "generic");
 
-/** When the chat can't help today, the visitor gets the owner's email and Telegram right there. */
-function DirectContacts({ locale }: { locale: Locale }) {
-  const contacts = getProfile(locale).contacts.filter((c) => c.id === "email" || c.id === "telegram");
+const contacts = getProfile("en").contacts;
+const email = contacts.find((c) => c.id === "email")!;
+const telegram = contacts.find((c) => c.id === "telegram")!;
+
+/** The owner's own contacts and project sites: the only things an answer may turn into links. */
+const linkify = createLinkifier([
+  ...contacts.map((c) => ({ text: c.display, href: c.href })),
+  { text: telegram.href.replace("https://", ""), href: telegram.href },
+  ...[...getJobs("en").flatMap((j) => j.liveSites), ...getProjects("en").flatMap((p) => p.links)].map((site) => ({
+    text: site,
+    href: `https://${site}`,
+  })),
+]);
+
+const isExternal = (href: string) => href.startsWith("http");
+const linkClass = "font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent";
+
+/** One-tap ways to reach the owner, shown under an answer that mentions them and with "can't help" errors. */
+function ContactButtons({ locale, label }: { locale: Locale; label: string }) {
+  const t = getDictionary(locale).chat;
+  const button =
+    "inline-flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-surface px-3 text-sm font-medium text-foreground transition hover:border-accent hover:text-accent motion-reduce:transition-none";
   return (
-    <span className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
-      {contacts.map((c) => (
-        <a
-          key={c.id}
-          href={c.href}
-          {...(c.href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
-          className="font-medium text-accent underline underline-offset-4"
-        >
-          {c.id === "telegram" ? `Telegram ${c.display}` : c.display}
-        </a>
-      ))}
+    <span role="group" aria-label={label} className="mt-2 flex flex-wrap gap-2">
+      <a href={email.href} className={button} title={email.display}>
+        <Mail aria-hidden size={15} />
+        {t.emailButton}
+      </a>
+      <a href={telegram.href} target="_blank" rel="noopener noreferrer" className={button} title={telegram.display}>
+        <Send aria-hidden size={15} />
+        Telegram
+        <span className="sr-only">{getDictionary(locale).newTab}</span>
+      </a>
     </span>
+  );
+}
+
+/** An answer with the owner's contacts and sites made clickable. */
+function Answer({ segments }: { segments: Segment[] }) {
+  return segments.map((s, i) =>
+    s.href ? (
+      <a
+        key={i}
+        href={s.href}
+        className={linkClass}
+        {...(isExternal(s.href) && { target: "_blank", rel: "noopener noreferrer" })}
+      >
+        {s.text}
+      </a>
+    ) : (
+      s.text
+    )
   );
 }
 
@@ -176,18 +215,15 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                   {m.content}
                 </p>
               ) : (
-                <p
-                  key={i}
-                  className="mr-8 rounded-2xl rounded-bl-sm bg-raised px-3 py-2 leading-relaxed wrap-break-word whitespace-pre-line text-foreground"
-                >
-                  {m.content || <span className="text-muted">{t.thinking}</span>}
-                </p>
+                <AssistantMessage key={i} content={m.content} locale={locale} />
               )
             )}
             {error && (
               <p role="alert" className="rounded-lg border border-line px-3 py-2 text-foreground">
                 {t.errors[error]}
-                {(error === "daily_limit" || error === "unavailable") && <DirectContacts locale={locale} />}
+                {(error === "daily_limit" || error === "unavailable") && (
+                  <ContactButtons locale={locale} label={t.contactHim} />
+                )}
               </p>
             )}
           </div>
@@ -221,5 +257,19 @@ export function ChatWidget({ locale }: { locale: Locale }) {
         </section>
       )}
     </>
+  );
+}
+
+function AssistantMessage({ content, locale }: { content: string; locale: Locale }) {
+  const t = getDictionary(locale).chat;
+  const segments = linkify(content);
+  const mentionsContacts = segments.some((s) => s.href === email.href || s.href === telegram.href);
+  return (
+    <div className="mr-8">
+      <p className="rounded-2xl rounded-bl-sm bg-raised px-3 py-2 leading-relaxed wrap-break-word whitespace-pre-line text-foreground">
+        {content ? <Answer segments={segments} /> : <span className="text-muted">{t.thinking}</span>}
+      </p>
+      {mentionsContacts && <ContactButtons locale={locale} label={t.contactHim} />}
+    </div>
   );
 }

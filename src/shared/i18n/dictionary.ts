@@ -44,6 +44,8 @@ export const dictionaries = {
       ],
       placeholder: "Ask a question…",
       send: "Send",
+      emailButton: "Email",
+      contactHim: "Contact Shaxboz",
       thinking: "Thinking…",
       disclaimer: "AI can make mistakes. Don't share personal information.",
       errors: {
@@ -111,6 +113,8 @@ export const dictionaries = {
       ],
       placeholder: "Задайте вопрос…",
       send: "Отправить",
+      emailButton: "Почта",
+      contactHim: "Связаться с Шахбозом",
       thinking: "Думаю…",
       disclaimer: "ИИ может ошибаться. Не отправляйте личные данные.",
       errors: {
@@ -178,6 +182,8 @@ export const dictionaries = {
       ],
       placeholder: "Savol bering…",
       send: "Yuborish",
+      emailButton: "Pochta",
+      contactHim: "Shaxboz bilan bogʻlanish",
       thinking: "Oʻylayapman…",
       disclaimer: "AI xato qilishi mumkin. Shaxsiy maʼlumotlarni yubormang.",
       errors: {
