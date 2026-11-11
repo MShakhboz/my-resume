@@ -28,6 +28,46 @@
   animation: glow 1.8s ease-in-out infinite;
 }
 
+/* The antenna's halo glows softly when idle, pulses with the voice while speaking and blinks
+   while an answer is loading. */
+.antenna {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: antenna-glow 2.4s ease-in-out infinite;
+}
+
+.bot[data-talking] .antenna {
+  animation-duration: 0.5s;
+}
+
+.bot[data-thinking] .antenna {
+  animation: antenna-blink 0.9s steps(1, end) infinite;
+}
+
+@keyframes antenna-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+    scale: 0.7;
+  }
+  50% {
+    opacity: 0.9;
+    scale: 1;
+  }
+}
+
+@keyframes antenna-blink {
+  0%,
+  100% {
+    opacity: 0.9;
+    scale: 1;
+  }
+  50% {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
 /* Each arm has a shoulder (.arm turns the whole arm) and an elbow (.forearm bends the lower half),
    like a person's. They hang straight by the robot's sides and only lift to wave: now and then on
    their own (taking turns), in short bursts with pauses while hovered or greeting, and to "talk

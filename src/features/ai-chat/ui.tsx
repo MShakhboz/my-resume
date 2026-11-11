@@ -336,7 +336,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                       )}
                     >
                       <span className="size-8">
-                        <BotIcon talking={talking} stillArms />
+                        <BotIcon talking={talking} thinking={busy} stillArms />
                       </span>
                     </span>
                     {t.title}
@@ -394,7 +394,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                       talking && "mr-3 scale-135 motion-reduce:mr-0 motion-reduce:scale-100"
                     )}
                   >
-                    <BotIcon talking={talking} stillArms />
+                    <BotIcon talking={talking} thinking={busy} stillArms />
                   </span>
                   <span>
                     <h2 id={titleId} className="text-[15px] leading-tight font-semibold text-strong">

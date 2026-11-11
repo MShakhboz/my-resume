@@ -19,10 +19,13 @@ const LIGHT = "#fff7ed"; // orange-50, the chest light and the shine
 export function BotIcon({
   size,
   talking = false,
+  thinking = false,
   stillArms = false,
 }: {
   size?: number;
   talking?: boolean;
+  /** While an answer is loading: the antenna light blinks. */
+  thinking?: boolean;
   stillArms?: boolean;
 }) {
   // Several robots can be on the page at once, so each needs its own gradient id.
@@ -36,6 +39,7 @@ export function BotIcon({
       viewBox="0 0 48 48"
       className={styles.bot}
       data-talking={talking || undefined}
+      data-thinking={thinking || undefined}
       data-still-arms={stillArms || undefined}
     >
       <defs>
@@ -62,8 +66,12 @@ export function BotIcon({
       <rect x="30.6" y="29.4" width="4.4" height="6" rx="2.2" fill={DARK} />
       <circle cx="24" cy="37" r="3.3" fill="none" stroke={GLOW} strokeWidth="1.6" className={styles.light} />
       <circle cx="24" cy="37" r="1.3" fill={LIGHT} />
-      {/* Head: headphones with little fins, the shell with a shine, the face screen */}
+      {/* Head: an antenna with a glowing tip, headphones with little fins, the shell with a shine,
+          the face screen */}
       <g className={styles.head}>
+        <line x1="24" y1="4.5" x2="24" y2="1.6" stroke={DARK} strokeWidth="1.4" strokeLinecap="round" />
+        <circle cx="24" cy="0.4" r="2.6" fill={GLOW} className={styles.antenna} />
+        <circle cx="24" cy="0.4" r="1.5" fill={LIGHT} stroke={DARK} strokeWidth="0.7" />
         <path d="M7.6 10 L8.2 6.6 Q8.8 5.8 9.4 6.6 L10.4 10 Z" fill={DARK} />
         <path d="M40.4 10 L39.8 6.6 Q39.2 5.8 38.6 6.6 L37.6 10 Z" fill={DARK} />
         <rect x="6.4" y="9.4" width="4.8" height="12" rx="2.4" fill={DARK} />
