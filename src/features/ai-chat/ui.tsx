@@ -279,7 +279,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                 {/* Home: an orange header fading into the panel, with cards overlapping it. The top bar
                     stays pinned while the greeting and cards scroll under it, like the chat header. */}
                 <header className="sticky top-0 z-5 bg-orange-500 px-6 pt-5 pb-3 text-neutral-950">
-                  <h2 id={titleId} className="flex items-center gap-2 pr-10 text-sm font-semibold">
+                  <h2 id={titleId} className="flex items-center gap-2 pr-10 text-lg leading-tight font-semibold">
                     {/* On a light chip: an orange robot would vanish on the orange header. It grows
                         while talking. */}
                     <span
