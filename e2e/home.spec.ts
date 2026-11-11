@@ -227,11 +227,12 @@ test("the chat robot can be dragged, stays on screen and remembers its spot", as
   expect(moved.x).toBeLessThan(viewport.width / 2);
   await expect(page.getByRole("dialog")).toHaveCount(0);
 
-  // A plain click still opens the chat: next to the robot on desktop (here below it, lined up with
-  // its left edge), full screen on phones; on screen either way.
+  // A plain click still opens the chat: in the robot's place on desktop (here from its top-left
+  // corner, as it sits at the top), full screen on phones; on screen either way.
   await robot.click();
   const chat = page.getByRole("dialog", { name: "Ask about Shaxboz" });
   await expect(chat).toBeVisible();
+  await chat.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished))); // fully grown
   const panel = (await chat.boundingBox())!;
   expect(panel.x).toBeGreaterThanOrEqual(0);
   expect(panel.y).toBeGreaterThanOrEqual(0);
@@ -239,7 +240,7 @@ test("the chat robot can be dragged, stays on screen and remembers its spot", as
   expect(panel.y + panel.height).toBeLessThanOrEqual(viewport.height);
   if (viewport.width >= 640) {
     expect(Math.abs(panel.x - moved.x)).toBeLessThan(2);
-    expect(panel.y).toBeGreaterThan(moved.y + moved.height);
+    expect(Math.abs(panel.y - moved.y)).toBeLessThan(2);
   }
   await page.keyboard.press("Escape");
 

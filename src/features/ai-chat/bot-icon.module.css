@@ -371,6 +371,18 @@
   }
 }
 
+/* The chat panel grows out of the robot's spot (its transform-origin is set inline). */
+.panel {
+  animation: panel-open 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+
+@keyframes panel-open {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
 /* The speech bubble pops out from the robot's side. */
 .bubble {
   transform-origin: right center;
@@ -396,7 +408,8 @@
   .bot *,
   .bubble,
   .rise,
-  .riser {
+  .riser,
+  .panel {
     animation: none !important;
   }
   .mouth {

@@ -300,10 +300,13 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           id={panelId}
           role="dialog"
           aria-labelledby={titleId}
-          // About the size of a messenger panel (400 × up to 704px) on desktop, next to the robot;
-          // nearly full screen on phones.
+          // About the size of a messenger panel (400 × up to 704px) on desktop, opening in the
+          // robot's place; nearly full screen on phones.
           style={panelSpot}
-          className="fixed inset-2 z-50 flex flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl sm:inset-auto sm:right-6 sm:bottom-28 sm:h-[min(44rem,calc(100dvh-8.5rem))] sm:w-[25rem]"
+          className={tw(
+            styles.panel,
+            "fixed inset-2 z-50 flex flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl sm:inset-auto sm:right-6 sm:bottom-6 sm:h-[min(44rem,calc(100dvh-3rem))] sm:w-[25rem]"
+          )}
         >
           <button
             type="button"
