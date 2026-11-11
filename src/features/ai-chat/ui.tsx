@@ -165,7 +165,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
         {hint && !open && (
           <span
             aria-hidden
-            className="pointer-events-none absolute top-1/2 right-full mr-3 -translate-y-1/2 rounded-xl bg-strong px-3 py-2 text-sm font-semibold whitespace-nowrap text-background shadow-lg"
+            className="pointer-events-none absolute top-1/2 right-full mr-1 -translate-y-1/2 rounded-xl bg-strong px-3 py-2 text-sm font-semibold whitespace-nowrap text-background shadow-lg"
           >
             {t.open}
             {/* The bubble's tail, pointing at the robot. */}
@@ -191,16 +191,16 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           onFocus={(event) => setHint(event.currentTarget.matches(":focus-visible"))}
           onBlur={() => setHint(false)}
           onKeyDown={(event) => event.key === "Escape" && setHint(false)}
-          className="group relative flex size-14 items-center justify-center rounded-full bg-orange-500 text-neutral-950 shadow-lg shadow-orange-500/30 transition hover:scale-105 hover:bg-orange-400 motion-reduce:transition-none motion-reduce:hover:scale-100 sm:size-16"
-        >
-          {/* A soft ring pulses three times after the page loads, then stops. */}
-          {!open && (
-            <span
-              aria-hidden
-              className="absolute inset-0 animate-ping rounded-full bg-orange-500 opacity-40 [animation-iteration-count:3] motion-reduce:hidden"
-            />
+          // Just the robot, no circle: big enough to see it float, blink and wave. While the chat is
+          // open it turns into a round close button.
+          className={tw(
+            "group relative flex items-center justify-center rounded-full transition motion-reduce:transition-none",
+            open
+              ? "size-12 border border-line bg-surface text-foreground shadow-lg hover:text-accent"
+              : "size-16 hover:scale-105 motion-reduce:hover:scale-100 sm:size-20"
           )}
-          <span className="relative">{open ? <X aria-hidden size={26} /> : <BotIcon size={40} />}</span>
+        >
+          {open ? <X aria-hidden size={22} /> : <BotIcon />}
         </button>
       </div>
 

@@ -1,22 +1,40 @@
 import styles from "./bot-icon.module.css";
 
-/** A small friendly robot for the chat launcher. Decorative: the button carries the label. */
-export function BotIcon({ size = 28 }: { size?: number }) {
+// Fixed colours so the robot reads on both themes without a background circle.
+const BODY = "#f97316"; // orange-500
+const DARK = "#c2410c"; // orange-700, ears and arms
+const SCREEN = "#1c1917"; // stone-900
+const GLOW = "#fdba74"; // orange-300, eyes and smile
+const LIGHT = "#fff7ed"; // orange-50, antenna and chest lights
+
+/**
+ * A small friendly robot for the chat launcher. Decorative: the button carries the label. Without
+ * a size it fills its container, so one drawing works at every button size.
+ */
+export function BotIcon({ size }: { size?: number }) {
   return (
-    <svg aria-hidden width={size} height={size} viewBox="0 0 24 24" className={styles.bot}>
-      {/* Antenna */}
-      <line x1="12" y1="4.6" x2="12" y2="7.2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <circle cx="12" cy="3.4" r="1.6" fill="#fff7ed" className={styles.antenna} />
-      {/* Ears */}
-      <rect x="2.6" y="11.4" width="1.8" height="5" rx="0.9" fill="currentColor" />
-      <rect x="19.6" y="11.4" width="1.8" height="5" rx="0.9" fill="currentColor" />
-      {/* Head and face screen */}
-      <rect x="4.2" y="7.2" width="15.6" height="13.4" rx="5" fill="currentColor" />
-      <rect x="6.4" y="9.8" width="11.2" height="8" rx="3.6" fill="#7c2d12" />
-      {/* Eyes and smile */}
-      <circle cx="9.7" cy="13.2" r="1.35" fill="#fed7aa" className={styles.eye} />
-      <circle cx="14.3" cy="13.2" r="1.35" fill="#fed7aa" className={styles.eye} />
-      <path d="M10.3 15.6 Q12 16.9 13.7 15.6" stroke="#fed7aa" strokeWidth="1.1" fill="none" strokeLinecap="round" />
+    <svg aria-hidden width={size ?? "100%"} height={size ?? "100%"} viewBox="0 0 48 48" className={styles.bot}>
+      {/* Body, chest light and the resting left arm */}
+      <path d="M15.5 38 L10 42.5" stroke={DARK} strokeWidth="3.2" strokeLinecap="round" />
+      <rect x="15" y="34" width="18" height="11" rx="5" fill="#ea580c" />
+      <circle cx="24" cy="39.5" r="1.6" fill={LIGHT} className={styles.light} />
+      {/* The waving right arm, with a hand */}
+      <g className={styles.arm}>
+        <path d="M33 37.5 L39 31.5" stroke={DARK} strokeWidth="3.2" strokeLinecap="round" />
+        <circle cx="39.6" cy="30.6" r="2.2" fill={DARK} />
+      </g>
+      {/* Head: antenna, ears, face screen, eyes and smile */}
+      <g className={styles.head}>
+        <line x1="24" y1="7.6" x2="24" y2="11.5" stroke={DARK} strokeWidth="2" strokeLinecap="round" />
+        <circle cx="24" cy="5.6" r="2.6" fill={LIGHT} stroke={DARK} strokeWidth="1" className={styles.light} />
+        <rect x="5.6" y="17" width="3.6" height="9" rx="1.8" fill={DARK} />
+        <rect x="38.8" y="17" width="3.6" height="9" rx="1.8" fill={DARK} />
+        <rect x="9" y="11" width="30" height="22" rx="9" fill={BODY} />
+        <rect x="13" y="15" width="22" height="14" rx="6" fill={SCREEN} />
+        <circle cx="19" cy="21.6" r="2.6" fill={GLOW} className={styles.eye} />
+        <circle cx="29" cy="21.6" r="2.6" fill={GLOW} className={styles.eye} />
+        <path d="M20.4 25.2 Q24 28 27.6 25.2" stroke={GLOW} strokeWidth="1.6" fill="none" strokeLinecap="round" />
+      </g>
     </svg>
   );
 }

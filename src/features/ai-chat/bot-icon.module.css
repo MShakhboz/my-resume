@@ -1,14 +1,16 @@
-/* The chat launcher's robot: floats, blinks and pulses its antenna; all still under reduced motion. */
+/* The chat launcher's robot: floats, blinks, pulses its antenna and chest light, and waves now and
+   then; on hover it waves continuously and tilts its head. Everything is still under reduced motion. */
 
 .bot {
+  overflow: visible;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.25));
   animation: float 3.2s ease-in-out infinite;
-  transition: rotate 0.25s ease;
 }
 
-/* Tilts its head on hover, as if listening. */
-:global(.group):hover .bot,
-:global(.group):focus-visible .bot {
-  rotate: -10deg;
+.head {
+  transform-box: view-box;
+  transform-origin: 24px 33px;
+  transition: rotate 0.3s ease;
 }
 
 .eye {
@@ -17,10 +19,27 @@
   animation: blink 4.2s ease-in-out infinite;
 }
 
-.antenna {
+.light {
   transform-box: fill-box;
   transform-origin: center;
   animation: glow 1.8s ease-in-out infinite;
+}
+
+/* Rotates around the shoulder: an occasional wave, continuous while hovered. */
+.arm {
+  transform-box: view-box;
+  transform-origin: 34px 37.5px;
+  animation: wave-sometimes 6s ease-in-out infinite;
+}
+
+:global(.group):hover .head,
+:global(.group):focus-visible .head {
+  rotate: -8deg;
+}
+
+:global(.group):hover .arm,
+:global(.group):focus-visible .arm {
+  animation: wave 0.7s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -29,7 +48,7 @@
     translate: 0 0;
   }
   50% {
-    translate: 0 -2px;
+    translate: 0 -3px;
   }
 }
 
@@ -56,11 +75,41 @@
   }
 }
 
+@keyframes wave {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  50% {
+    rotate: -28deg;
+  }
+}
+
+@keyframes wave-sometimes {
+  0%,
+  70%,
+  100% {
+    rotate: 0deg;
+  }
+  76%,
+  88% {
+    rotate: -28deg;
+  }
+  82%,
+  94% {
+    rotate: 6deg;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bot,
   .eye,
-  .antenna {
+  .light,
+  .arm,
+  :global(.group):hover .arm {
     animation: none;
+  }
+  .head {
     transition: none;
   }
 }
