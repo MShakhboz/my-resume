@@ -1,11 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { greetOnce, resetSpeech, speakOnce } from "./speak";
+import { greet, GREETING_COOLDOWN_MS, resetSpeech, speak, SPEECH_START_TIMEOUT_MS } from "./speak";
 
 class FakeUtterance {
   lang = "";
   voice: unknown = null;
   rate = 1;
   pitch = 1;
+  onstart: (() => void) | null = null;
+  onend: (() => void) | null = null;
   onerror: ((e: { error: string }) => void) | null = null;
   constructor(public text: string) {}
 }
@@ -19,87 +21,76 @@ const voices = [
   { lang: "ru-RU", name: "Yuri" },
 ];
 
-describe("speakOnce", () => {
-  let speak: ReturnType<typeof vi.fn>;
-  beforeEach(() => {
-    resetSpeech();
-    speak = vi.fn();
-    vi.stubGlobal("SpeechSynthesisUtterance", FakeUtterance);
-    vi.stubGlobal("speechSynthesis", { getVoices: () => voices, speak, cancel: vi.fn() });
-  });
+let synthSpeak: ReturnType<typeof vi.fn>;
+const stubSpeech = (list: unknown[] = voices) => {
+  synthSpeak = vi.fn();
+  vi.stubGlobal("SpeechSynthesisUtterance", FakeUtterance);
+  vi.stubGlobal("speechSynthesis", { getVoices: () => list, speak: synthSpeak, cancel: vi.fn() });
+};
+const spoken = () => synthSpeak.mock.calls.map((c) => c[0] as FakeUtterance);
+
+describe("speak (the device's speech voices)", () => {
+  beforeEach(() => stubSpeech());
   afterEach(() => vi.unstubAllGlobals());
 
-  it("speaks once per page, with a voice for the page's language", () => {
-    expect(speakOnce("Спроси ИИ", "ru")).toBe(true);
-    expect(speakOnce("Спроси ИИ", "ru")).toBe(false);
-    expect(speak).toHaveBeenCalledTimes(1);
-    const utterance = speak.mock.calls[0][0] as FakeUtterance;
-    expect(utterance.text).toBe("Спроси ИИ");
-    expect(utterance.lang).toBe("ru-RU");
-    expect(utterance.voice).toEqual(voices[5]); // Yuri, a male Russian voice
-  });
+  it("prefers a natural male voice for the page's language, at a calm pitch", () => {
+    expect(speak("Hello!", "en")).toBe(true);
+    expect(spoken()[0].voice).toEqual(voices[2]); // Daniel, not the robotic novelty voice Fred
+    expect(spoken()[0].pitch).toBeLessThan(1);
 
-  it("prefers a male voice and a calm, slightly low pitch", () => {
-    speakOnce("Hello!", "en");
-    const utterance = speak.mock.calls[0][0] as FakeUtterance;
-    expect(utterance.voice).toEqual(voices[2]); // Daniel, not the robotic novelty voice Fred
-    expect(utterance.pitch).toBeLessThan(1);
+    speak("Здравствуйте!", "ru");
+    expect(spoken()[1].voice).toEqual(voices[5]); // Yuri
+    expect(spoken()[1].lang).toBe("ru-RU");
   });
 
   it("falls back to the language's default voice when no male voice exists", () => {
-    vi.stubGlobal("speechSynthesis", { getVoices: () => [{ lang: "ru-RU", name: "Milena" }], speak, cancel: vi.fn() });
-    speakOnce("Здравствуйте!", "ru");
-    expect((speak.mock.calls[0][0] as FakeUtterance).voice).toEqual({ lang: "ru-RU", name: "Milena" });
-  });
-
-  it("tries again on a later hover when the browser blocked it before the first click", () => {
-    speakOnce("Ask AI about me", "en");
-    (speak.mock.calls[0][0] as FakeUtterance).onerror?.({ error: "not-allowed" });
-    expect(speakOnce("Ask AI about me", "en")).toBe(true);
-    expect(speak).toHaveBeenCalledTimes(2);
+    stubSpeech([{ lang: "ru-RU", name: "Milena" }]);
+    speak("Здравствуйте!", "ru");
+    expect(spoken()[0].voice).toEqual({ lang: "ru-RU", name: "Milena" });
   });
 
   it("says the Uzbek greeting in Cyrillic with a Russian voice when there is no Uzbek voice", () => {
-    expect(speakOnce("Assalomu alaykum!", "uz")).toBe(true);
-    const utterance = speak.mock.calls[0][0] as FakeUtterance;
-    expect(utterance.lang).toBe("ru-RU");
-    expect(utterance.voice).toEqual(voices[5]); // Yuri
-    expect(utterance.text).toMatch(/^Ассалому алайкум!/);
-    expect(utterance.text).not.toMatch(/[ҳқўғ]/);
+    expect(speak("Assalomu alaykum!", "uz")).toBe(true);
+    expect(spoken()[0].lang).toBe("ru-RU");
+    expect(spoken()[0].voice).toEqual(voices[5]);
+    expect(spoken()[0].text).toMatch(/^Ассалому алайкум!/);
+    expect(spoken()[0].text).not.toMatch(/[ҳқўғ]/);
   });
 
   it("uses an Uzbek voice when the device has one", () => {
     const sardor = { lang: "uz-UZ", name: "Microsoft Sardor Online" };
-    vi.stubGlobal("speechSynthesis", { getVoices: () => [...voices, sardor], speak, cancel: vi.fn() });
-    speakOnce("Assalomu alaykum!", "uz");
-    const utterance = speak.mock.calls[0][0] as FakeUtterance;
-    expect(utterance.voice).toEqual(sardor);
-    expect(utterance.text).toBe("Assalomu alaykum!");
+    stubSpeech([...voices, sardor]);
+    speak("Assalomu alaykum!", "uz");
+    expect(spoken()[0].voice).toEqual(sardor);
+    expect(spoken()[0].text).toBe("Assalomu alaykum!");
   });
 
-  it("stays silent when there is no voice for the language at all", () => {
-    vi.stubGlobal("speechSynthesis", { getVoices: () => [{ lang: "en-US", name: "Daniel" }], speak, cancel: vi.fn() });
-    expect(speakOnce("Assalomu alaykum!", "uz")).toBe(false);
-    expect(speak).not.toHaveBeenCalled();
-  });
-
-  it("does nothing where speech isn't supported", () => {
+  it("stays silent when there is no voice for the language at all, or no speech support", () => {
+    stubSpeech([{ lang: "en-US", name: "Daniel" }]);
+    expect(speak("Assalomu alaykum!", "uz")).toBe(false);
     vi.unstubAllGlobals();
-    // jsdom has no speechSynthesis
-    expect(speakOnce("Ask AI about me", "en")).toBe(false);
+    expect(speak("Hello!", "en")).toBe(false); // jsdom has no speechSynthesis
   });
 });
 
-describe("greetOnce", () => {
+describe("greet (the recorded male voice)", () => {
   const played: string[] = [];
   let play: ReturnType<typeof vi.fn>;
+  let now = 0;
+  const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+
   beforeEach(() => {
     resetSpeech();
+    stubSpeech();
     played.length = 0;
+    now = 1_000_000;
+    vi.spyOn(Date, "now").mockImplementation(() => now);
     play = vi.fn(() => Promise.resolve());
     vi.stubGlobal(
       "Audio",
       class {
+        paused = false;
+        ended = true; // finishes at once, so only the pause limits repeats
         constructor(public src: string) {
           played.push(src);
         }
@@ -107,30 +98,85 @@ describe("greetOnce", () => {
       }
     );
   });
-  afterEach(() => vi.unstubAllGlobals());
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
 
-  it("plays the recorded male-voice greeting for the page's language, once", () => {
-    greetOnce("Здравствуйте!", "ru");
-    greetOnce("Здравствуйте!", "ru");
+  it("plays the file for the page's language", () => {
+    greet("Здравствуйте!", "ru");
     expect(played).toEqual(["/voice/greeting-ru.m4a"]);
+    expect(synthSpeak).not.toHaveBeenCalled();
   });
 
-  it("tries again on a later hover when the browser blocks sound before the first click", async () => {
+  it("waits 3 minutes after a greeting was heard", async () => {
+    expect(GREETING_COOLDOWN_MS).toBe(180_000);
+    greet("Hello!", "en");
+    await settle();
+    now += 60_000;
+    greet("Hello!", "en");
+    expect(played).toHaveLength(1);
+    now += GREETING_COOLDOWN_MS;
+    greet("Hello!", "en");
+    expect(played).toHaveLength(2);
+  });
+
+  it("greets again on the next page load, even within the pause", async () => {
+    greet("Hello!", "en");
+    await settle();
+    resetSpeech(); // a reload or a new page: module state starts fresh
+    greet("Hello!", "en");
+    expect(played).toHaveLength(2);
+  });
+
+  it("never talks over itself", async () => {
+    vi.stubGlobal(
+      "Audio",
+      class {
+        paused = false;
+        ended = false; // still playing
+        constructor(public src: string) {
+          played.push(src);
+        }
+        play = play;
+      }
+    );
+    greet("Hello!", "en");
+    greet("Hello!", "en");
+    expect(played).toHaveLength(1);
+  });
+
+  it("says it with the device voice when the file is blocked, and pauses once that is heard", async () => {
     play.mockReturnValueOnce(Promise.reject(new DOMException("blocked", "NotAllowedError")));
-    greetOnce("Hello!", "en");
-    await Promise.resolve();
-    await Promise.resolve();
-    greetOnce("Hello!", "en");
-    expect(played).toEqual(["/voice/greeting-en.m4a", "/voice/greeting-en.m4a"]);
+    greet("Hello!", "en");
+    await vi.waitFor(() => expect(synthSpeak).toHaveBeenCalledTimes(1));
+    expect(spoken()[0].voice).toEqual(voices[2]); // the male device voice
+    spoken()[0].onstart?.();
+    spoken()[0].onend?.();
+
+    now += 60_000;
+    greet("Hello!", "en");
+    expect(played).toHaveLength(1);
   });
 
-  it("falls back to the device voice when the file can't play", async () => {
-    const speak = vi.fn();
-    vi.stubGlobal("SpeechSynthesisUtterance", FakeUtterance);
-    vi.stubGlobal("speechSynthesis", { getVoices: () => voices, speak, cancel: vi.fn() });
-    play.mockReturnValueOnce(Promise.reject(new DOMException("missing", "NotSupportedError")));
-    greetOnce("Hello!", "en");
-    await vi.waitFor(() => expect(speak).toHaveBeenCalledTimes(1));
-    expect((speak.mock.calls[0][0] as FakeUtterance).text).toBe("Hello!");
+  it("counts nothing as heard when everything is blocked, so opening the chat greets", async () => {
+    play.mockReturnValueOnce(Promise.reject(new DOMException("blocked", "NotAllowedError")));
+    greet("Hello!", "en"); // the hover, before any click
+    await vi.waitFor(() => expect(synthSpeak).toHaveBeenCalledTimes(1));
+    spoken()[0].onerror?.({ error: "not-allowed" });
+
+    greet("Hello!", "en"); // the click that opens the chat
+    expect(played).toHaveLength(2);
+  });
+
+  it("treats a device voice that never starts as blocked", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    play.mockReturnValueOnce(Promise.reject(new DOMException("blocked", "NotAllowedError")));
+    greet("Hello!", "en");
+    await vi.waitFor(() => expect(synthSpeak).toHaveBeenCalledTimes(1));
+    vi.advanceTimersByTime(SPEECH_START_TIMEOUT_MS);
+    greet("Hello!", "en");
+    expect(played).toHaveLength(2);
   });
 });

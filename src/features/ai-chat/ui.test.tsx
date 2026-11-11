@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getDictionary } from "@/shared/i18n";
@@ -68,6 +68,25 @@ describe("ChatWidget", () => {
 
     expect(screen.getByText(t.open)).toBeInTheDocument();
     expect(played).toEqual(["/voice/greeting-en.m4a"]);
+  });
+
+  it("says hello when the chat opens, since that click unlocks sound", async () => {
+    resetSpeech();
+    const played: string[] = [];
+    vi.stubGlobal(
+      "Audio",
+      class {
+        paused = false;
+        ended = true;
+        constructor(src: string) {
+          played.push(src);
+        }
+        play = () => Promise.resolve();
+      }
+    );
+    render(<ChatWidget locale="uz" />);
+    fireEvent.click(screen.getByRole("button", { name: getDictionary("uz").chat.open }));
+    expect(played).toEqual(["/voice/greeting-uz.m4a"]);
   });
 
   it("sends a suggested question and shows the streamed answer", async () => {
