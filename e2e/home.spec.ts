@@ -175,3 +175,33 @@ test("the job log stays locked, unindexed and out of the sitemap", async ({ page
 
   expect(await (await request.get("/sitemap.xml")).text()).not.toContain("/logs");
 });
+
+for (const colorScheme of ["dark", "light"] as const) {
+  test(`the resume chat answers and stays accessible (${colorScheme})`, async ({ page }) => {
+    // The real model isn't called in tests.
+    await page.route("**/api/chat", (route) =>
+      route.fulfill({ status: 200, contentType: "text/plain", body: "He built the Baza-Taxi CRM frontend." })
+    );
+    await page.emulateMedia({ colorScheme });
+    await page.goto("/");
+    await page.getByRole("button", { name: "Ask AI about me" }).click();
+    const chat = page.getByRole("dialog", { name: "Ask about Shaxboz" });
+    await chat.getByRole("button", { name: "Tell me about the Baza-Taxi CRM" }).click();
+    await expect(chat.getByText("He built the Baza-Taxi CRM frontend.")).toBeVisible();
+
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+
+    const [scrollWidth, viewportWidth] = await page.evaluate(() => [
+      document.documentElement.scrollWidth,
+      window.innerWidth,
+    ]);
+    expect(scrollWidth).toBeLessThanOrEqual(viewportWidth);
+
+    await page.keyboard.press("Escape");
+    await expect(chat).toBeHidden();
+  });
+}
+
