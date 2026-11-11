@@ -55,11 +55,34 @@ describe("ChatWidget", () => {
 
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent(t.errors.daily_limit);
-    expect(within(alert).getByRole("link", { name: "mirzomurotovshaxboz@gmail.com" })).toHaveAttribute(
+    expect(within(alert).getByRole("link", { name: t.emailButton })).toHaveAttribute(
       "href",
       "mailto:mirzomurotovshaxboz@gmail.com"
     );
-    expect(within(alert).getByRole("link", { name: "Telegram @nornof" })).toHaveAttribute("href", "https://t.me/nornof");
+    expect(within(alert).getByRole("link", { name: /^Telegram/ })).toHaveAttribute("href", "https://t.me/nornof");
+  });
+
+  it("makes his contacts and sites clickable in answers, with contact buttons below", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        streamOf("He built hibro.am. Ask him at mirzomurotovshaxboz@gmail.com or Telegram @nornof, not at evil.example.")
+      )
+    );
+    const user = userEvent.setup();
+    render(<ChatWidget locale="en" />);
+    await user.click(screen.getByRole("button", { name: t.open }));
+    await user.click(screen.getByRole("button", { name: t.suggestions[0] }));
+
+    const email = await screen.findByRole("link", { name: "mirzomurotovshaxboz@gmail.com" });
+    expect(email).toHaveAttribute("href", "mailto:mirzomurotovshaxboz@gmail.com");
+    expect(screen.getByRole("link", { name: /^@nornof/ })).toHaveAttribute("href", "https://t.me/nornof");
+    expect(screen.getByRole("link", { name: /^hibro\.am/ })).toHaveAttribute("target", "_blank");
+    expect(screen.queryByRole("link", { name: /evil/ })).not.toBeInTheDocument();
+
+    const buttons = screen.getByRole("group", { name: t.contactHim });
+    expect(within(buttons).getByRole("link", { name: t.emailButton })).toHaveAttribute("href", "mailto:mirzomurotovshaxboz@gmail.com");
+    expect(within(buttons).getByRole("link", { name: /^Telegram/ })).toHaveAttribute("href", "https://t.me/nornof");
   });
 
   it("explains a rate limit and keeps the question", async () => {
