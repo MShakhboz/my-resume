@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { resetSpeech, speakOnce } from "./speak";
+import { greetOnce, resetSpeech, speakOnce } from "./speak";
 
 class FakeUtterance {
   lang = "";
@@ -87,5 +87,50 @@ describe("speakOnce", () => {
     vi.unstubAllGlobals();
     // jsdom has no speechSynthesis
     expect(speakOnce("Ask AI about me", "en")).toBe(false);
+  });
+});
+
+describe("greetOnce", () => {
+  const played: string[] = [];
+  let play: ReturnType<typeof vi.fn>;
+  beforeEach(() => {
+    resetSpeech();
+    played.length = 0;
+    play = vi.fn(() => Promise.resolve());
+    vi.stubGlobal(
+      "Audio",
+      class {
+        constructor(public src: string) {
+          played.push(src);
+        }
+        play = play;
+      }
+    );
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("plays the recorded male-voice greeting for the page's language, once", () => {
+    greetOnce("Здравствуйте!", "ru");
+    greetOnce("Здравствуйте!", "ru");
+    expect(played).toEqual(["/voice/greeting-ru.m4a"]);
+  });
+
+  it("tries again on a later hover when the browser blocks sound before the first click", async () => {
+    play.mockReturnValueOnce(Promise.reject(new DOMException("blocked", "NotAllowedError")));
+    greetOnce("Hello!", "en");
+    await Promise.resolve();
+    await Promise.resolve();
+    greetOnce("Hello!", "en");
+    expect(played).toEqual(["/voice/greeting-en.m4a", "/voice/greeting-en.m4a"]);
+  });
+
+  it("falls back to the device voice when the file can't play", async () => {
+    const speak = vi.fn();
+    vi.stubGlobal("SpeechSynthesisUtterance", FakeUtterance);
+    vi.stubGlobal("speechSynthesis", { getVoices: () => voices, speak, cancel: vi.fn() });
+    play.mockReturnValueOnce(Promise.reject(new DOMException("missing", "NotSupportedError")));
+    greetOnce("Hello!", "en");
+    await vi.waitFor(() => expect(speak).toHaveBeenCalledTimes(1));
+    expect((speak.mock.calls[0][0] as FakeUtterance).text).toBe("Hello!");
   });
 });

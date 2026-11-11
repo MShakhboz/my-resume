@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "logs:encrypt": "node --env-file=.env.local --experimental-strip-types --no-warnings scripts/encrypt-logs.mts"
+    "logs:encrypt": "node --env-file=.env.local --experimental-strip-types --no-warnings scripts/encrypt-logs.mts",
+    "voice:generate": "node --env-file=.env.local --experimental-strip-types --no-warnings scripts/generate-voice.mts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -1,6 +1,8 @@
 // The launcher robot says its line once per page visit, in the page's language, when the browser
-// allows it. Browsers block speech until the visitor has clicked or tapped the page; then nothing
-// is said and the speech bubble does the job.
+// allows it. The voice is a recorded file (public/voice, made with `pnpm voice:generate`), so every
+// visitor hears the same male voice; the device's own speech voices are only a fallback for when
+// the file can't play. Browsers block sound until the visitor has clicked or tapped the page; then
+// nothing is said and the speech bubble does the job.
 
 import type { Locale } from "@/shared/i18n";
 
@@ -41,7 +43,26 @@ function pickVoice(voices: SpeechSynthesisVoice[], locale: Locale) {
   return [...forLanguage].sort((a, b) => rank(a) - rank(b))[0];
 }
 
-/** Speaks `text` once per page load. Returns whether it tried. */
+let greeted = false;
+
+/**
+ * Plays the recorded greeting once per page load, falling back to the device voice (`speakOnce`)
+ * if the file can't be played for any reason other than the browser's "no sound before a click".
+ */
+export function greetOnce(text: string, locale: Locale) {
+  if (greeted || typeof Audio === "undefined") return;
+  greeted = true;
+  const audio = new Audio(`/voice/greeting-${locale}.m4a`);
+  audio.play()?.catch((error: unknown) => {
+    if (error instanceof DOMException && error.name === "NotAllowedError") {
+      greeted = false; // blocked before the first click: a later hover tries again
+    } else {
+      speakOnce(text, locale);
+    }
+  });
+}
+
+/** Speaks `text` once per page load with the device's speech voices. Returns whether it tried. */
 export function speakOnce(text: string, locale: Locale): boolean {
   if (spoken || typeof window === "undefined" || !("speechSynthesis" in window)) return false;
   const synth = window.speechSynthesis;
@@ -74,4 +95,5 @@ export function speakOnce(text: string, locale: Locale): boolean {
 /** For tests. */
 export function resetSpeech() {
   spoken = false;
+  greeted = false;
 }

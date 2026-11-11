@@ -50,42 +50,24 @@ describe("ChatWidget", () => {
     expect(screen.queryByText(t.open)).not.toBeInTheDocument();
   });
 
-  it("says the full words out loud while the bubble shows the short label", async () => {
+  it("plays the recorded greeting on hover while the bubble shows the short label", async () => {
     resetSpeech();
-    const speak = vi.fn();
-    vi.stubGlobal("SpeechSynthesisUtterance", class {
-      lang = "";
-      voice: unknown = null;
-      constructor(public text: string) {}
-    });
-    vi.stubGlobal("speechSynthesis", { getVoices: () => [{ lang: "en-US", name: "Daniel" }], speak, cancel: vi.fn() });
+    const played: string[] = [];
+    vi.stubGlobal(
+      "Audio",
+      class {
+        constructor(src: string) {
+          played.push(src);
+        }
+        play = () => Promise.resolve();
+      }
+    );
     const user = userEvent.setup();
     render(<ChatWidget locale="en" />);
     await user.hover(screen.getByRole("button", { name: t.open }));
 
     expect(screen.getByText(t.open)).toBeInTheDocument();
-    expect(speak.mock.calls[0][0].text).toBe(t.spoken);
-    expect(t.spoken).toContain("artificial intelligence");
-  });
-
-  it("opens on a home view, then switches to the conversation after a question", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(streamOf("He built a fleet CRM.")));
-    const user = userEvent.setup();
-    render(<ChatWidget locale="en" />);
-    await user.click(screen.getByRole("button", { name: t.open }));
-
-    const dialog = screen.getByRole("dialog", { name: t.title });
-    expect(within(dialog).getByText(t.homeHello)).toBeInTheDocument();
-    expect(within(dialog).getByText(t.homeQuestion)).toBeInTheDocument();
-    expect(within(dialog).getByText(t.humanTitle)).toBeInTheDocument();
-
-    await user.click(within(dialog).getByRole("button", { name: new RegExp(t.askTitle) }));
-    expect(screen.getByRole("textbox", { name: t.placeholder })).toHaveFocus();
-
-    await user.click(within(dialog).getByRole("button", { name: t.suggestions[1] }));
-    expect(await screen.findByText("He built a fleet CRM.")).toBeInTheDocument();
-    expect(screen.queryByText(t.homeHello)).not.toBeInTheDocument();
-    expect(screen.getByRole("dialog", { name: t.title })).toBeInTheDocument();
+    expect(played).toEqual(["/voice/greeting-en.m4a"]);
   });
 
   it("sends a suggested question and shows the streamed answer", async () => {

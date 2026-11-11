@@ -11,7 +11,7 @@ import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
 import { createLinkifier, Segment } from "./lib/linkify";
 import { useProactiveGreeting } from "./lib/greeting";
-import { speakOnce } from "./lib/speak";
+import { greetOnce } from "./lib/speak";
 import { CHAT_LIMITS, ChatError, ChatMessage } from "./model";
 
 const ERRORS: readonly ChatError[] = ["rate_limited", "daily_limit", "unavailable", "generic"];
@@ -223,7 +223,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           }}
           onMouseEnter={() => {
             setHint(true);
-            speakOnce(t.spoken, locale);
+            greetOnce(t.spoken, locale);
           }}
           onMouseLeave={() => setHint(false)}
           onFocus={(event) => setHint(event.currentTarget.matches(":focus-visible"))}
