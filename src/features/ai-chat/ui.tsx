@@ -11,7 +11,7 @@ import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
 import { createLinkifier, Segment } from "./lib/linkify";
 import { useProactiveGreeting } from "./lib/greeting";
-import { greetOnce } from "./lib/speak";
+import { greet } from "./lib/speak";
 import { CHAT_LIMITS, ChatError, ChatMessage } from "./model";
 
 const ERRORS: readonly ChatError[] = ["rate_limited", "daily_limit", "unavailable", "generic"];
@@ -112,6 +112,13 @@ export function ChatWidget({ locale }: { locale: Locale }) {
     if (log) log.scrollTop = log.scrollHeight;
   }, [messages, busy, error]);
 
+  // Opening the chat is a click, which unlocks sound: the robot says hello here if it hasn't been
+  // heard yet (on a fresh visit a hover can't play anything).
+  function openChat() {
+    setOpen(true);
+    greet(t.spoken, locale);
+  }
+
   function close() {
     setOpen(false);
     toggleRef.current?.focus();
@@ -183,7 +190,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                 type="button"
                 onClick={() => {
                   greeting.dismiss();
-                  setOpen(true);
+                  openChat();
                 }}
                 className="mt-0.5 block text-left text-[15px] leading-snug font-semibold text-strong hover:text-accent"
               >
@@ -219,11 +226,11 @@ export function ChatWidget({ locale }: { locale: Locale }) {
             setHint(false);
             greeting.dismiss();
             if (open) close();
-            else setOpen(true);
+            else openChat();
           }}
           onMouseEnter={() => {
             setHint(true);
-            greetOnce(t.spoken, locale);
+            greet(t.spoken, locale);
           }}
           onMouseLeave={() => setHint(false)}
           onFocus={(event) => setHint(event.currentTarget.matches(":focus-visible"))}
