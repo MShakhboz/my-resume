@@ -11,8 +11,12 @@ class FakeUtterance {
 }
 
 const voices = [
-  { lang: "en-US", name: "English" },
-  { lang: "ru-RU", name: "Russian" },
+  { lang: "en-US", name: "Fred" },
+  { lang: "en-US", name: "Samantha" },
+  { lang: "en-GB", name: "Daniel" },
+  { lang: "en-US", name: "Google US English" },
+  { lang: "ru-RU", name: "Milena" },
+  { lang: "ru-RU", name: "Yuri" },
 ];
 
 describe("speakOnce", () => {
@@ -32,7 +36,20 @@ describe("speakOnce", () => {
     const utterance = speak.mock.calls[0][0] as FakeUtterance;
     expect(utterance.text).toBe("Спроси ИИ");
     expect(utterance.lang).toBe("ru-RU");
-    expect(utterance.voice).toEqual(voices[1]);
+    expect(utterance.voice).toEqual(voices[5]); // Yuri, a male Russian voice
+  });
+
+  it("prefers a male voice and a calm, slightly low pitch", () => {
+    speakOnce("Hello!", "en");
+    const utterance = speak.mock.calls[0][0] as FakeUtterance;
+    expect(utterance.voice).toEqual(voices[2]); // Daniel, not the robotic novelty voice Fred
+    expect(utterance.pitch).toBeLessThan(1);
+  });
+
+  it("falls back to the language's default voice when no male voice exists", () => {
+    vi.stubGlobal("speechSynthesis", { getVoices: () => [{ lang: "ru-RU", name: "Milena" }], speak, cancel: vi.fn() });
+    speakOnce("Здравствуйте!", "ru");
+    expect((speak.mock.calls[0][0] as FakeUtterance).voice).toEqual({ lang: "ru-RU", name: "Milena" });
   });
 
   it("tries again on a later hover when the browser blocked it before the first click", () => {

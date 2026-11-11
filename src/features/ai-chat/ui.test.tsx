@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getDictionary } from "@/shared/i18n";
+import { resetSpeech } from "./lib/speak";
 import { ChatWidget } from "./ui";
 
 const t = getDictionary("en").chat;
@@ -47,6 +48,24 @@ describe("ChatWidget", () => {
     launcher.focus();
     await user.keyboard("{Escape}");
     expect(screen.queryByText(t.open)).not.toBeInTheDocument();
+  });
+
+  it("says the full words out loud while the bubble shows the short label", async () => {
+    resetSpeech();
+    const speak = vi.fn();
+    vi.stubGlobal("SpeechSynthesisUtterance", class {
+      lang = "";
+      voice: unknown = null;
+      constructor(public text: string) {}
+    });
+    vi.stubGlobal("speechSynthesis", { getVoices: () => [{ lang: "en-US", name: "Daniel" }], speak, cancel: vi.fn() });
+    const user = userEvent.setup();
+    render(<ChatWidget locale="en" />);
+    await user.hover(screen.getByRole("button", { name: t.open }));
+
+    expect(screen.getByText(t.open)).toBeInTheDocument();
+    expect(speak.mock.calls[0][0].text).toBe(t.spoken);
+    expect(t.spoken).toContain("artificial intelligence");
   });
 
   it("sends a suggested question and shows the streamed answer", async () => {
