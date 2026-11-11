@@ -205,3 +205,44 @@ for (const colorScheme of ["dark", "light"] as const) {
   });
 }
 
+
+test("the chat robot can be dragged, stays on screen and remembers its spot", async ({ page }) => {
+  await page.goto("/");
+  const robot = page.getByRole("button", { name: "Ask AI about me" });
+  const before = (await robot.boundingBox())!;
+  const viewport = page.viewportSize()!;
+
+  // Drag it far past the top-left corner: it stops at the edge, and the drag doesn't open the chat.
+  await page.mouse.move(before.x + before.width / 2, before.y + before.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(before.x - 40, before.y - 60, { steps: 5 });
+  await page.mouse.move(-500, -500, { steps: 5 });
+  await page.mouse.up();
+  // Measure once the hover zoom has settled.
+  await page.mouse.move(viewport.width / 2, viewport.height / 2);
+  await expect.poll(async () => (await robot.boundingBox())!.width).toBe(before.width);
+  const moved = (await robot.boundingBox())!;
+  expect(moved.x).toBeGreaterThanOrEqual(0);
+  expect(moved.y).toBeGreaterThanOrEqual(0);
+  expect(moved.x).toBeLessThan(viewport.width / 2);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+
+  // A plain click still opens the chat: next to the robot on desktop (here below it, lined up with
+  // its left edge), full screen on phones; on screen either way.
+  await robot.click();
+  const chat = page.getByRole("dialog", { name: "Ask about Shaxboz" });
+  await expect(chat).toBeVisible();
+  const panel = (await chat.boundingBox())!;
+  expect(panel.x).toBeGreaterThanOrEqual(0);
+  expect(panel.y).toBeGreaterThanOrEqual(0);
+  expect(panel.x + panel.width).toBeLessThanOrEqual(viewport.width);
+  expect(panel.y + panel.height).toBeLessThanOrEqual(viewport.height);
+  if (viewport.width >= 640) {
+    expect(Math.abs(panel.x - moved.x)).toBeLessThan(2);
+    expect(panel.y).toBeGreaterThan(moved.y + moved.height);
+  }
+  await page.keyboard.press("Escape");
+
+  await page.reload();
+  await expect.poll(async () => (await robot.boundingBox())!.x).toBeLessThan(viewport.width / 2);
+});

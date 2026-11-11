@@ -10,7 +10,9 @@ import { getProjects } from "@/entities/project";
 import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
 import { createLinkifier, Segment } from "./lib/linkify";
+import { useDraggable } from "./lib/drag";
 import { useProactiveGreeting } from "./lib/greeting";
+import { DESKTOP_MIN_WIDTH, placePanel, useViewport } from "./lib/placement";
 import { greet, speaking } from "./lib/speak";
 import { CHAT_LIMITS, ChatError, ChatMessage } from "./model";
 
@@ -85,6 +87,12 @@ export function ChatWidget({ locale }: { locale: Locale }) {
   const [error, setError] = useState<ChatError | null>(null);
   const [hint, setHint] = useState(false);
   const greeting = useProactiveGreeting(open);
+  /** The robot can be dragged anywhere on screen; its bubbles open towards the free side. */
+  const drag = useDraggable<HTMLDivElement>();
+  const bubbleSide = drag.onLeftSide ? "left-full ml-2" : "right-full mr-2";
+  /** On desktop the panel opens next to the robot; on phones it fills the screen. */
+  const viewport = useViewport();
+  const panelSpot = viewport && viewport.width >= DESKTOP_MIN_WIDTH ? placePanel(drag.offset, viewport) : undefined;
   /** True while the robot's greeting plays: its icons move their mouth, and the chat header zooms. */
   const talking = useSyncExternalStore(speaking.subscribe, speaking.get, () => false);
   /** The home view (greeting and cards) until the first question; then the conversation. */
@@ -175,19 +183,23 @@ export function ChatWidget({ locale }: { locale: Locale }) {
         label, and on the first hover the robot also says it out loud when the browser allows;
         the bubble works on its own when sound is off, blocked or unsupported.
       */}
-      <div className={tw("fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6", open && "hidden sm:block")}>
+      <div
+        ref={drag.ref}
+        style={{ translate: `${drag.offset.x}px ${drag.offset.y}px` }}
+        className={tw("fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6", open && "hidden sm:block")}
+      >
         {greeting.visible ? (
           // The proactive greeting: a real control (click to open the chat, ✕ to dismiss), so it
           // isn't hidden from assistive tech; announced once, politely.
           <div
             role="status"
-            className="absolute top-1/2 right-full mr-2 -translate-y-1/2"
+            className={tw("absolute top-1/2 -translate-y-1/2", bubbleSide)}
             onMouseEnter={greeting.hold}
             onMouseLeave={greeting.release}
             onFocus={greeting.hold}
             onBlur={greeting.release}
           >
-            <Bubble title={t.bubbleTitle} wide>
+            <Bubble title={t.bubbleTitle} wide flip={drag.onLeftSide}>
               <button
                 type="button"
                 onClick={() => {
@@ -202,7 +214,10 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                 type="button"
                 onClick={greeting.dismiss}
                 aria-label={t.dismissGreeting}
-                className="absolute -top-2.5 -left-2.5 flex size-7 items-center justify-center rounded-full border border-line bg-surface text-muted shadow hover:text-strong"
+                className={tw(
+                  "absolute -top-2.5 flex size-7 items-center justify-center rounded-full border border-line bg-surface text-muted shadow hover:text-strong",
+                  drag.onLeftSide ? "-right-2.5" : "-left-2.5"
+                )}
               >
                 <X aria-hidden size={14} />
               </button>
@@ -210,9 +225,10 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           </div>
         ) : (
           hint &&
-          !open && (
-            <span aria-hidden className="pointer-events-none absolute top-1/2 right-full mr-2 -translate-y-1/2">
-              <Bubble title={t.bubbleTitle}>
+          !open &&
+          !drag.dragging && (
+            <span aria-hidden className={tw("pointer-events-none absolute top-1/2 -translate-y-1/2", bubbleSide)}>
+              <Bubble title={t.bubbleTitle} flip={drag.onLeftSide}>
                 <span className="mt-0.5 block text-[15px] font-semibold whitespace-nowrap text-strong">{t.open}</span>
               </Bubble>
             </span>
@@ -224,7 +240,10 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           aria-expanded={open}
           aria-controls={panelId}
           aria-label={open ? t.close : t.open}
+          // Press and move to drag the robot; a press without moving is a normal click.
+          {...drag.handlers}
           onClick={() => {
+            if (drag.consumeDrag()) return;
             setHint(false);
             greeting.dismiss();
             if (open) close();
@@ -243,7 +262,8 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           // data-waving makes the robot wave while it greets (bot-icon.module.css).
           data-waving={greeting.visible || undefined}
           className={tw(
-            "group relative flex items-center justify-center rounded-full transition motion-reduce:transition-none",
+            "group relative flex touch-none items-center justify-center rounded-full transition select-none motion-reduce:transition-none",
+            drag.dragging && "scale-110 cursor-grabbing motion-reduce:scale-100",
             open
               ? "size-12 border border-line bg-surface text-foreground shadow-lg hover:text-accent"
               : "size-16 hover:scale-105 motion-reduce:hover:scale-100 sm:size-20"
@@ -258,7 +278,9 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           id={panelId}
           role="dialog"
           aria-labelledby={titleId}
-          // About the size of a messenger panel (400 × up to 704px) on desktop; nearly full screen on phones.
+          // About the size of a messenger panel (400 × up to 704px) on desktop, next to the robot;
+          // nearly full screen on phones.
+          style={panelSpot}
           className="fixed inset-2 z-50 flex flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl sm:inset-auto sm:right-6 sm:bottom-28 sm:h-[min(44rem,calc(100dvh-8.5rem))] sm:w-[25rem]"
         >
           <button
@@ -427,11 +449,13 @@ function AssistantMessage({ content, locale }: { content: string; locale: Locale
 }
 
 /** The robot's speech bubble: a small card with an "online" label and a tail pointing at the robot. */
-function Bubble({ title, wide, children }: { title: string; wide?: boolean; children: ReactNode }) {
+/** A speech bubble beside the robot; `flip` puts it on the robot's right, with the tail on its left. */
+function Bubble({ title, wide, flip, children }: { title: string; wide?: boolean; flip?: boolean; children: ReactNode }) {
   return (
     <span
       className={tw(
         styles.bubble,
+        flip && styles.flip,
         "relative block rounded-2xl border border-line bg-surface px-4 py-2.5 shadow-xl",
         wide && "w-[min(17rem,calc(100vw-7rem))]"
       )}
@@ -445,7 +469,12 @@ function Bubble({ title, wide, children }: { title: string; wide?: boolean; chil
       </span>
       {children}
       {/* The tail, pointing at the robot: a rotated square sharing the card's border. */}
-      <span className="absolute top-1/2 -right-[7px] size-3 -translate-y-1/2 rotate-45 rounded-[3px] border-t border-r border-line bg-surface" />
+      <span
+        className={tw(
+          "absolute top-1/2 size-3 -translate-y-1/2 rotate-45 rounded-[3px] border-line bg-surface",
+          flip ? "-left-[7px] border-b border-l" : "-right-[7px] border-t border-r"
+        )}
+      />
     </span>
   );
 }
