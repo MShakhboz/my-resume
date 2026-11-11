@@ -93,6 +93,14 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* Tailwind v4 dropped the pointer cursor on buttons; every clickable button should show it. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+}
+
 .spotlight {
   background: radial-gradient(
     600px circle at var(--spot-x, 50%) var(--spot-y, 50%),
