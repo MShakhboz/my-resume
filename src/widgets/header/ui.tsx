@@ -13,7 +13,7 @@ export function Header({ locale, className }: { locale: Locale; className?: stri
         className
       )}
     >
-      <div className="mx-auto flex max-w-6xl items-center gap-1 px-3 py-2 sm:px-8">
+      <div className="mx-auto flex max-w-[86rem] items-center gap-1 px-3 py-2 sm:px-8">
         <SectionNav variant="bar" locale={locale} className="min-w-0 flex-1" />
         <ThemeToggle locale={locale} />
       </div>

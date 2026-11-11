@@ -14,7 +14,7 @@ export default async function Page({ params }: PageProps<"/[[...locale]]">) {
 
   if (page === "projects") {
     return (
-      <div className="mx-auto max-w-6xl px-4 sm:px-10 lg:px-12">
+      <div className="mx-auto max-w-[86rem] px-4 sm:px-10 lg:px-12">
         <ProjectArchive locale={locale} />
         <Footer locale={locale} />
       </div>
@@ -23,7 +23,7 @@ export default async function Page({ params }: PageProps<"/[[...locale]]">) {
 
   return (
     // Two columns on desktop: the sticky Hero on the left, the sections scrolling on the right.
-    <div className="mx-auto max-w-6xl px-4 sm:px-10 lg:flex lg:justify-between lg:gap-16 lg:px-12">
+    <div className="mx-auto max-w-[86rem] px-4 sm:px-10 lg:flex lg:justify-between lg:gap-16 lg:px-12">
       <Hero locale={locale} />
       <div className="lg:min-w-0 lg:flex-1">
         <main id="main" className="space-y-24 pt-16 pb-24 lg:space-y-32 lg:pt-16">
