@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { getDictionary } from "@/shared/i18n";
 import { resetSpeech } from "./lib/speak";
 import { ChatWidget } from "./ui";
@@ -19,7 +19,6 @@ const streamOf = (...chunks: string[]) =>
   );
 
 describe("ChatWidget", () => {
-  beforeEach(() => sessionStorage.setItem("ai-chat-greeted", "1")); // the greeting has its own tests
   afterEach(() => vi.unstubAllGlobals());
 
   it("opens with suggested questions and closes with Escape", async () => {

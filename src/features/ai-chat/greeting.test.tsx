@@ -9,12 +9,11 @@ const advance = (ms: number) => act(() => vi.advanceTimersByTime(ms));
 
 describe("the robot's proactive greeting", () => {
   beforeEach(() => {
-    sessionStorage.clear();
     vi.useFakeTimers();
   });
   afterEach(() => vi.useRealTimers());
 
-  it("appears on its own after a few seconds, then hides itself", () => {
+  it("appears on its own right after the page renders, then hides itself", () => {
     render(<ChatWidget locale="en" />);
     expect(screen.queryByText(t.greeting)).not.toBeInTheDocument();
 
@@ -37,16 +36,16 @@ describe("the robot's proactive greeting", () => {
     expect(screen.queryByText(t.greeting)).not.toBeInTheDocument();
   });
 
-  it("can be dismissed, and doesn't come back in the same visit", () => {
+  it("can be dismissed, and greets again on the next page load", () => {
     const { unmount } = render(<ChatWidget locale="en" />);
     advance(GREETING_DELAY_MS);
     fireEvent.click(screen.getByRole("button", { name: t.dismissGreeting }));
     expect(screen.queryByText(t.greeting)).not.toBeInTheDocument();
 
     unmount();
-    render(<ChatWidget locale="en" />); // another page in the same visit
-    advance(GREETING_DELAY_MS + GREETING_VISIBLE_MS);
-    expect(screen.queryByText(t.greeting)).not.toBeInTheDocument();
+    render(<ChatWidget locale="en" />); // the next page load
+    advance(GREETING_DELAY_MS);
+    expect(screen.getByText(t.greeting)).toBeInTheDocument();
   });
 
   it("opens the chat when clicked", () => {
