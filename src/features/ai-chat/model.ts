@@ -18,17 +18,6 @@ export const CHAT_LIMITS = {
   perDay: 40,
 };
 
-/**
- * Free OpenRouter models, tried in order when one is busy (free models are often rate-limited
- * upstream); override the first with OPENROUTER_MODEL. Each must allow turning reasoning off
- * (checked Nov 2026), or it spends the token budget thinking and returns no answer.
- */
-export const DEFAULT_MODELS = [
-  "nvidia/nemotron-3.5-super-vl:free",
-  "nvidia/nemotron-3.5-lightning:free",
-  "google/gemma-4-31b-it:free",
-];
-
 const LANGUAGE = { en: "English", ru: "Russian", uz: "Uzbek (Latin script)" } as const;
 
 /**
@@ -42,7 +31,7 @@ export function buildSystemPrompt(resume: string, locale: keyof typeof LANGUAGE)
     "Rules:",
     "- Answer only with facts from the resume below. Never invent or estimate facts, dates, numbers, companies or skills.",
     "- Link a fact to a company only if the resume says it under that company's job; the summary is general. For example, his team leadership was at Lumex Agency (2 developers) and Paybek (3 developers); at Itway he works as the only frontend developer.",
-    "- If the resume doesn't answer the question, say you don't know and suggest contacting Shaxboz directly (email or Telegram, from the resume).",
+    "- If the resume doesn't answer the question, say you don't know and suggest contacting Shaxboz directly (email or Telegram, from the resume). Write them plainly as mirzomurotovshaxboz@gmail.com and Telegram @nornof, without \"mailto:\" or links, and only when relevant.",
     "- Don't discuss salary expectations, notice period, personal life or anything unrelated to his work; suggest contacting him instead.",
     `- Reply in the language of the question. If unsure, use ${LANGUAGE[locale]}. Keep technology names in English.`,
     "- Answer only what was asked, without unrelated projects or full tech lists. Talk about him in the third person.",
