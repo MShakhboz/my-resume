@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getDictionary } from "@/shared/i18n";
@@ -87,6 +87,33 @@ describe("ChatWidget", () => {
     render(<ChatWidget locale="uz" />);
     fireEvent.click(screen.getByRole("button", { name: getDictionary("uz").chat.open }));
     expect(played).toEqual(["/voice/greeting-uz.m4a"]);
+  });
+
+  it("moves the robot's mouth and zooms the header robot only while it speaks", async () => {
+    resetSpeech();
+    const handlers: Record<string, () => void> = {};
+    vi.stubGlobal(
+      "Audio",
+      class {
+        paused = false;
+        ended = false;
+        addEventListener(type: string, handler: () => void) {
+          handlers[type] = handler;
+        }
+        play = () => Promise.resolve();
+      }
+    );
+    const { container } = render(<ChatWidget locale="en" />);
+    fireEvent.click(screen.getByRole("button", { name: t.open }));
+    const dialog = screen.getByRole("dialog", { name: t.title });
+    expect(dialog.querySelector("svg[data-talking]")).toBeNull();
+
+    act(() => handlers.playing());
+    expect(dialog.querySelector("svg[data-talking]")).not.toBeNull();
+    expect(dialog.querySelector("svg[data-talking]")!.closest(".scale-135")).not.toBeNull();
+
+    act(() => handlers.ended());
+    expect(container.querySelector("svg[data-talking]")).toBeNull();
   });
 
   it("sends a suggested question and shows the streamed answer", async () => {

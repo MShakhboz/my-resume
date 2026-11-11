@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { greet, GREETING_COOLDOWN_MS, resetSpeech, speak, SPEECH_START_TIMEOUT_MS } from "./speak";
+import { greet, GREETING_COOLDOWN_MS, resetSpeech, speak, speaking, SPEECH_START_TIMEOUT_MS } from "./speak";
 
 class FakeUtterance {
   lang = "";
@@ -180,3 +180,43 @@ describe("greet (the recorded male voice)", () => {
     expect(played).toHaveLength(2);
   });
 });
+
+describe("speaking (drives the talking mouth and the header zoom)", () => {
+  beforeEach(() => resetSpeech());
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("is true while the recording plays", () => {
+    const handlers: Record<string, () => void> = {};
+    vi.stubGlobal(
+      "Audio",
+      class {
+        paused = false;
+        ended = false;
+        addEventListener(type: string, handler: () => void) {
+          handlers[type] = handler;
+        }
+        play = () => Promise.resolve();
+      }
+    );
+    const changes = vi.fn();
+    const unsubscribe = speaking.subscribe(changes);
+    greet("Hello!", "en");
+    expect(speaking.get()).toBe(false);
+    handlers.playing();
+    expect(speaking.get()).toBe(true);
+    handlers.ended();
+    expect(speaking.get()).toBe(false);
+    expect(changes).toHaveBeenCalledTimes(2);
+    unsubscribe();
+  });
+
+  it("is true while the device voice speaks", () => {
+    stubSpeech();
+    speak("Hello!", "en");
+    spoken()[0].onstart?.();
+    expect(speaking.get()).toBe(true);
+    spoken()[0].onend?.();
+    expect(speaking.get()).toBe(false);
+  });
+});
+
