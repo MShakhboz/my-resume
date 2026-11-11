@@ -14,11 +14,7 @@ const GREETINGS: Record<string, string> = {
   uz: 'Assalomu alaykum! Men haqimda sunʼiy intellekt yordamchimdan soʻrashingiz mumkin.',
 }
 
-// const STYLE: Record<string, string> = {
-//   en: 'Say warmly and politely, in a calm, friendly voice:',
-//   ru: 'Скажи тепло и вежливо, спокойным дружелюбным голосом:',
-//   uz: 'Iliq va xushmuomala, sokin va samimiy ovozda oʻzbek tilida ayting:',
-// }
+// Only the greeting is sent: a spoken style instruction ("Say warmly: …") gets read out too.
 
 const key = process.env.GEMINI_API_KEY
 if (!key) {
