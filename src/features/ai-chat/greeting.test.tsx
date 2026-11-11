@@ -79,7 +79,9 @@ describe("the robot's proactive greeting", () => {
   it("opens the chat when clicked", () => {
     render(<ChatWidget locale="en" />);
     advance(GREETING_DELAY_MS);
-    fireEvent.click(screen.getByRole("button", { name: t.greeting }));
+    expect(screen.getByText(t.clickHint)).toBeInTheDocument();
+    // The button reads the greeting, then the "Click me to start a chat" hint.
+    fireEvent.click(screen.getByRole("button", { name: (name) => name.startsWith(t.greeting) }));
     expect(screen.getByRole("dialog", { name: t.title })).toBeInTheDocument();
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });

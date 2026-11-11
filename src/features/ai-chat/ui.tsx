@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUp, ChevronRight, Mail, Send, X } from "lucide-react";
+import { ArrowUp, ChevronRight, Mail, MousePointerClick, Send, X } from "lucide-react";
 import { BotIcon } from "./bot-icon";
 import styles from "./bot-icon.module.css";
 import { FormEvent, ReactNode, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
@@ -228,6 +228,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                 className="mt-0.5 block text-left text-[15px] leading-snug font-semibold text-strong hover:text-accent"
               >
                 {t.greeting}
+                <ClickHint click={t.clickHint} tap={t.tapHint} />
               </button>
               <button
                 type="button"
@@ -249,6 +250,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
             <span aria-hidden className={tw("pointer-events-none absolute top-1/2 -translate-y-1/2", bubbleSide)}>
               <Bubble title={t.bubbleTitle} flip={drag.onLeftSide}>
                 <span className="mt-0.5 block text-[15px] font-semibold whitespace-nowrap text-strong">{t.open}</span>
+                <ClickHint click={t.clickHint} tap={t.tapHint} nowrap />
               </Bubble>
             </span>
           )
@@ -474,6 +476,17 @@ function AssistantMessage({ content, locale }: { content: string; locale: Locale
 }
 
 /** The robot's speech bubble: a small card with an "online" label and a tail pointing at the robot. */
+/** "Click me to start a chat" (or "Tap me…" on touch screens) under a bubble's text. */
+function ClickHint({ click, tap, nowrap }: { click: string; tap: string; nowrap?: boolean }) {
+  return (
+    <span className={tw("mt-1.5 flex items-start gap-1.5 text-xs font-medium text-muted", nowrap && "whitespace-nowrap")}>
+      <MousePointerClick aria-hidden size={14} className="mt-px shrink-0 text-accent" />
+      <span className="pointer-coarse:hidden">{click}</span>
+      <span className="hidden pointer-coarse:inline">{tap}</span>
+    </span>
+  );
+}
+
 /** A speech bubble beside the robot; `flip` puts it on the robot's right, with the tail on its left. */
 function Bubble({ title, wide, flip, children }: { title: string; wide?: boolean; flip?: boolean; children: ReactNode }) {
   return (
