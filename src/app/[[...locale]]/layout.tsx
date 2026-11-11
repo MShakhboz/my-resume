@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { getProfile } from "@/entities/profile";
 import { getSkillGroups } from "@/entities/skill";
+import { ChatWidget } from "@/features/ai-chat";
 import { themeInitScript } from "@/features/theme-toggle";
 import { siteUrl } from "@/shared/config";
 import { getDictionary, locales, pagePath, routeSegments, toRoute } from "@/shared/i18n";
@@ -109,6 +110,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[[.
         {/* The mobile section bar links to anchors that exist only on the home page. */}
         {page === "home" && <Header locale={locale} />}
         {children}
+        <ChatWidget locale={locale} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
