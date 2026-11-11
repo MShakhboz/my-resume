@@ -1,5 +1,6 @@
-/* The chat launcher's robot: floats, blinks, pulses its antenna and chest light, and waves now and
-   then; on hover it waves continuously and tilts its head. Everything is still under reduced motion. */
+/* The chat launcher's robot: floats, blinks, pulses its chest ring, and waves now and then;
+   on hover it waves in bursts and tilts its head; while speaking it
+   gestures with its arms. Everything is still under reduced motion. */
 
 .bot {
   overflow: visible;
@@ -11,7 +12,7 @@
    6s wave so the two don't always move together. */
 .head {
   transform-box: view-box;
-  transform-origin: 24px 33px;
+  transform-origin: 24px 28px;
   animation: gesture 7s ease-in-out infinite;
 }
 
@@ -27,11 +28,19 @@
   animation: glow 1.8s ease-in-out infinite;
 }
 
-/* Rotates around the shoulder: an occasional wave, continuous while hovered. */
+/* The raised arm waves from the shoulder: now and then on its own, and in short bursts with
+   pauses while hovered or greeting, so it never waves non-stop. */
 .arm {
   transform-box: view-box;
-  transform-origin: 34px 37.5px;
-  animation: wave-sometimes 6s ease-in-out infinite;
+  transform-origin: 32px 32px;
+  animation: wave-sometimes 10s ease-in-out infinite;
+}
+
+/* The resting arm sways gently from the shoulder, in time with the float. */
+.restArm {
+  transform-box: view-box;
+  transform-origin: 16px 32px;
+  animation: sway 3.2s ease-in-out infinite;
 }
 
 :global(.group):hover .head,
@@ -41,7 +50,7 @@
 
 :global(.group):hover .arm,
 :global(.group):focus-visible .arm {
-  animation: wave 0.7s ease-in-out infinite;
+  animation: wave-burst 3.2s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -113,28 +122,46 @@
   }
 }
 
-@keyframes wave {
+/* A wave of two swings, then a rest of about two seconds. */
+@keyframes wave-burst {
+  0%,
+  44%,
+  100% {
+    rotate: 0deg;
+  }
+  6%,
+  28% {
+    rotate: 14deg;
+  }
+  17%,
+  39% {
+    rotate: -8deg;
+  }
+}
+
+/* The same two swings once every 10 seconds. */
+@keyframes wave-sometimes {
+  0%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+  84%,
+  91% {
+    rotate: 14deg;
+  }
+  87.5%,
+  94.5% {
+    rotate: -8deg;
+  }
+}
+
+@keyframes sway {
   0%,
   100% {
     rotate: 0deg;
   }
   50% {
-    rotate: -28deg;
-  }
-}
-
-@keyframes wave-sometimes {
-  0%,
-  70%,
-  100% {
-    rotate: 0deg;
-  }
-  76%,
-  88% {
-    rotate: -28deg;
-  }
-  82%,
-  94% {
     rotate: 6deg;
   }
 }
@@ -162,9 +189,69 @@
   }
 }
 
-/* Waves while greeting the visitor. */
+/* Waves while greeting the visitor, in the same bursts as on hover. */
 :global(.group)[data-waving] .arm {
-  animation: wave 0.7s ease-in-out infinite;
+  animation: wave-burst 3.2s ease-in-out infinite;
+}
+
+/* Talking: the robot "talks with its hands" like a person explaining something, the raised arm
+   lifting and dropping, the other one opening out, and nods along. These come last so they win
+   over the hover and greeting gestures while the voice plays. */
+.bot[data-talking] .arm {
+  animation: explain 1.4s ease-in-out infinite;
+}
+
+.bot[data-talking] .restArm {
+  animation: explain-open 1.4s ease-in-out infinite;
+}
+
+.bot[data-talking] .head {
+  animation: talk-nod 0.9s ease-in-out infinite;
+}
+
+@keyframes explain {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  25% {
+    rotate: 22deg;
+  }
+  50% {
+    rotate: 6deg;
+  }
+  75% {
+    rotate: 16deg;
+  }
+}
+
+@keyframes explain-open {
+  0%,
+  100% {
+    rotate: 0deg;
+  }
+  35% {
+    rotate: 26deg;
+  }
+  65% {
+    rotate: 10deg;
+  }
+}
+
+@keyframes talk-nod {
+  0%,
+  100% {
+    rotate: 0deg;
+    translate: 0 0;
+  }
+  30% {
+    rotate: -3deg;
+    translate: 0 0.6px;
+  }
+  65% {
+    rotate: 2.5deg;
+    translate: 0 0;
+  }
 }
 
 /* The speech bubble pops out from the robot's side. */
@@ -182,19 +269,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mouth {
-    animation: none;
-    scale: 1 0.7;
-  }
-  .bubble,
-  .head,
-  :global(.group):hover .head,
-  :global(.group):focus-visible .head,
   .bot,
-  .eye,
-  .light,
-  .arm,
-  :global(.group):hover .arm {
-    animation: none;
+  .bot *,
+  .bubble {
+    animation: none !important;
+  }
+  .mouth {
+    scale: 1 0.7;
   }
 }
