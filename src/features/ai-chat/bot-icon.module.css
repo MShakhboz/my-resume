@@ -1,0 +1,66 @@
+/* The chat launcher's robot: floats, blinks and pulses its antenna; all still under reduced motion. */
+
+.bot {
+  animation: float 3.2s ease-in-out infinite;
+  transition: rotate 0.25s ease;
+}
+
+/* Tilts its head on hover, as if listening. */
+:global(.group):hover .bot,
+:global(.group):focus-visible .bot {
+  rotate: -10deg;
+}
+
+.eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: blink 4.2s ease-in-out infinite;
+}
+
+.antenna {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: glow 1.8s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -2px;
+  }
+}
+
+@keyframes blink {
+  0%,
+  90%,
+  100% {
+    scale: 1 1;
+  }
+  94% {
+    scale: 1 0.1;
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+  50% {
+    opacity: 0.45;
+    scale: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bot,
+  .eye,
+  .antenna {
+    animation: none;
+    transition: none;
+  }
+}

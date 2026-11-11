@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowUp, Mail, Send, Sparkles, X } from "lucide-react";
+import { ArrowUp, Mail, Send, X } from "lucide-react";
+import { BotIcon } from "./bot-icon";
 import { FormEvent, useEffect, useId, useRef, useState } from "react";
 import { getJobs } from "@/entities/experience";
 import { getProfile } from "@/entities/profile";
@@ -8,6 +9,7 @@ import { getProjects } from "@/entities/project";
 import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
 import { createLinkifier, Segment } from "./lib/linkify";
+import { speakOnce } from "./lib/speak";
 import { CHAT_LIMITS, ChatError, ChatMessage } from "./model";
 
 const ERRORS: readonly ChatError[] = ["rate_limited", "daily_limit", "unavailable", "generic"];
@@ -79,6 +81,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<ChatError | null>(null);
+  const [hint, setHint] = useState(false);
   const panelId = useId();
   const titleId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -153,33 +156,66 @@ export function ChatWidget({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <button
-        ref={toggleRef}
-        type="button"
-        aria-expanded={open}
-        aria-controls={panelId}
-        onClick={() => (open ? close() : setOpen(true))}
-        // On phones a round icon button (52px), so it doesn't cover the text being read; the label
-        // shows from sm up and stays available to screen readers at every size.
-        className={tw(
-          "fixed right-4 bottom-4 z-50 inline-flex size-13 items-center justify-center gap-2 rounded-full bg-orange-500 text-sm font-semibold text-neutral-950 shadow-lg transition hover:bg-orange-400 motion-reduce:transition-none sm:right-6 sm:bottom-6 sm:size-auto sm:px-4 sm:py-3",
-          open && "hidden sm:inline-flex"
+      {/*
+        One big round robot button. Hovering (or keyboard focus) shows a speech bubble with the
+        label, and on the first hover the robot also says it out loud when the browser allows;
+        the bubble works on its own when sound is off, blocked or unsupported.
+      */}
+      <div className={tw("fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6", open && "hidden sm:block")}>
+        {hint && !open && (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute top-1/2 right-full mr-3 -translate-y-1/2 rounded-xl bg-strong px-3 py-2 text-sm font-semibold whitespace-nowrap text-background shadow-lg"
+          >
+            {t.open}
+            {/* The bubble's tail, pointing at the robot. */}
+            <span className="absolute top-1/2 -right-1 size-2.5 -translate-y-1/2 rotate-45 bg-strong" />
+          </span>
         )}
-      >
-        {open ? <X aria-hidden size={20} /> : <Sparkles aria-hidden size={20} />}
-        <span className="sr-only sm:not-sr-only">{open ? t.close : t.open}</span>
-      </button>
+        <button
+          ref={toggleRef}
+          type="button"
+          aria-expanded={open}
+          aria-controls={panelId}
+          aria-label={open ? t.close : t.open}
+          onClick={() => {
+            setHint(false);
+            if (open) close();
+            else setOpen(true);
+          }}
+          onMouseEnter={() => {
+            setHint(true);
+            speakOnce(t.open, locale);
+          }}
+          onMouseLeave={() => setHint(false)}
+          onFocus={(event) => setHint(event.currentTarget.matches(":focus-visible"))}
+          onBlur={() => setHint(false)}
+          onKeyDown={(event) => event.key === "Escape" && setHint(false)}
+          className="group relative flex size-14 items-center justify-center rounded-full bg-orange-500 text-neutral-950 shadow-lg shadow-orange-500/30 transition hover:scale-105 hover:bg-orange-400 motion-reduce:transition-none motion-reduce:hover:scale-100 sm:size-16"
+        >
+          {/* A soft ring pulses three times after the page loads, then stops. */}
+          {!open && (
+            <span
+              aria-hidden
+              className="absolute inset-0 animate-ping rounded-full bg-orange-500 opacity-40 [animation-iteration-count:3] motion-reduce:hidden"
+            />
+          )}
+          <span className="relative">{open ? <X aria-hidden size={26} /> : <BotIcon size={40} />}</span>
+        </button>
+      </div>
 
       {open && (
         <section
           id={panelId}
           role="dialog"
           aria-labelledby={titleId}
-          className="fixed inset-x-3 bottom-3 z-50 flex max-h-[min(36rem,calc(100dvh-1.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl sm:inset-x-auto sm:right-6 sm:bottom-22 sm:w-[24rem]"
+          className="fixed inset-x-3 bottom-3 z-50 flex max-h-[min(36rem,calc(100dvh-1.5rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl sm:inset-x-auto sm:right-6 sm:bottom-24 sm:w-[24rem]"
         >
           <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
             <h2 id={titleId} className="inline-flex items-center gap-2 font-semibold text-strong">
-              <Sparkles aria-hidden size={16} className="text-accent" />
+              <span className="text-accent">
+                <BotIcon size={22} />
+              </span>
               {t.title}
             </h2>
             <button
