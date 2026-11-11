@@ -68,6 +68,26 @@ describe("ChatWidget", () => {
     expect(t.spoken).toContain("artificial intelligence");
   });
 
+  it("opens on a home view, then switches to the conversation after a question", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(streamOf("He built a fleet CRM.")));
+    const user = userEvent.setup();
+    render(<ChatWidget locale="en" />);
+    await user.click(screen.getByRole("button", { name: t.open }));
+
+    const dialog = screen.getByRole("dialog", { name: t.title });
+    expect(within(dialog).getByText(t.homeHello)).toBeInTheDocument();
+    expect(within(dialog).getByText(t.homeQuestion)).toBeInTheDocument();
+    expect(within(dialog).getByText(t.humanTitle)).toBeInTheDocument();
+
+    await user.click(within(dialog).getByRole("button", { name: new RegExp(t.askTitle) }));
+    expect(screen.getByRole("textbox", { name: t.placeholder })).toHaveFocus();
+
+    await user.click(within(dialog).getByRole("button", { name: t.suggestions[1] }));
+    expect(await screen.findByText("He built a fleet CRM.")).toBeInTheDocument();
+    expect(screen.queryByText(t.homeHello)).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: t.title })).toBeInTheDocument();
+  });
+
   it("sends a suggested question and shows the streamed answer", async () => {
     const fetchMock = vi.fn().mockResolvedValue(streamOf("He built ", "a fleet CRM."));
     vi.stubGlobal("fetch", fetchMock);
