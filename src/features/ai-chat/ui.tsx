@@ -120,13 +120,15 @@ export function ChatWidget({ locale }: { locale: Locale }) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => (open ? close() : setOpen(true))}
+        // On phones a round icon button (52px), so it doesn't cover the text being read; the label
+        // shows from sm up and stays available to screen readers at every size.
         className={tw(
-          "fixed right-4 bottom-4 z-50 inline-flex items-center gap-2 rounded-full bg-orange-500 px-4 py-3 text-sm font-semibold text-neutral-950 shadow-lg transition hover:bg-orange-400 motion-reduce:transition-none sm:right-6 sm:bottom-6",
+          "fixed right-4 bottom-4 z-50 inline-flex size-13 items-center justify-center gap-2 rounded-full bg-orange-500 text-sm font-semibold text-neutral-950 shadow-lg transition hover:bg-orange-400 motion-reduce:transition-none sm:right-6 sm:bottom-6 sm:size-auto sm:px-4 sm:py-3",
           open && "hidden sm:inline-flex"
         )}
       >
-        {open ? <X aria-hidden size={18} /> : <Sparkles aria-hidden size={18} />}
-        <span>{open ? t.close : t.open}</span>
+        {open ? <X aria-hidden size={20} /> : <Sparkles aria-hidden size={20} />}
+        <span className="sr-only sm:not-sr-only">{open ? t.close : t.open}</span>
       </button>
 
       {open && (
