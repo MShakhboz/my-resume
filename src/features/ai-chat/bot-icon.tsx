@@ -7,8 +7,8 @@ const BODY = "#f97316"; // orange-500, shell and arms
 const BOTTOM = "#ea580c"; // orange-600, the shaded bottom of the shell
 const DARK = "#c2410c"; // orange-700, headphones, neck and shoulder bands
 const SCREEN = "#1c1917"; // stone-900
-const GLOW = "#fdba74"; // orange-300, eyes, smile and chest ring
-const LIGHT = "#fff7ed"; // orange-50, the chest light and the shine
+const GLOW = "#fdba74"; // orange-300, eyes, smile, the AI badge and the antenna glow
+const LIGHT = "#fff7ed"; // orange-50, the antenna tip and the shine
 
 /**
  * A small friendly robot for the chat launcher: a glossy rounded shell with headphones, a face
@@ -58,14 +58,27 @@ export function BotIcon({
         <path d="M32 32 L34.8 37.2" stroke={BODY} strokeWidth="5" strokeLinecap="round" />
         <path d="M34.8 37.2 L35.4 42" stroke={BODY} strokeWidth="5" strokeLinecap="round" className={styles.forearm} />
       </g>
-      {/* Body with a glowing chest ring, and a band at each shoulder */}
+      {/* Body, with a band at each shoulder and an AI badge */}
       <rect x="20" y="25.5" width="8" height="4" rx="1.5" fill={DARK} />
-      <rect x="14" y="28" width="20" height="17.5" rx="8.5" fill={fill} />
-      <path d="M17.6 31.4 Q19 30 21.2 29.8" stroke={LIGHT} strokeOpacity="0.55" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+      {/* An egg-shaped torso: gently rounded shoulders, a fuller rounded belly */}
+      <path d="M19 27.6 H29 Q34 27.6 34 33 V39.5 Q34 47.4 24 47.4 Q14 47.4 14 39.5 V33 Q14 27.6 19 27.6 Z" fill={fill} />
+      <path d="M17.4 31.6 Q18.6 29.9 21 29.6" stroke={LIGHT} strokeOpacity="0.55" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+      {/* An "AI" badge on the chest: a small screen like the face, lettered in the eyes' glow */}
+      <rect x="18.6" y="34.4" width="10.8" height="7.2" rx="2.6" fill={SCREEN} />
+      <text
+        x="24"
+        y="39.9"
+        textAnchor="middle"
+        fontSize="5.4"
+        fontWeight="800"
+        letterSpacing="0.3"
+        fill={GLOW}
+        fontFamily="inherit"
+      >
+        AI
+      </text>
       <rect x="13" y="29.4" width="4.4" height="6" rx="2.2" fill={DARK} />
       <rect x="30.6" y="29.4" width="4.4" height="6" rx="2.2" fill={DARK} />
-      <circle cx="24" cy="37" r="3.3" fill="none" stroke={GLOW} strokeWidth="1.6" className={styles.light} />
-      <circle cx="24" cy="37" r="1.3" fill={LIGHT} />
       {/* Head: an antenna with a glowing tip, headphones with little fins, the shell with a shine,
           the face screen */}
       <g className={styles.head}>

@@ -1,4 +1,4 @@
-/* The chat launcher's robot: floats, blinks, pulses its chest ring, and waves now and then;
+/* The chat launcher's robot: floats, blinks, and waves now and then;
    on hover it waves in bursts and tilts its head; while speaking it gestures with its arms.
    Everything is still under reduced motion. */
 
@@ -20,12 +20,6 @@
   transform-box: fill-box;
   transform-origin: center;
   animation: blink 4.2s ease-in-out infinite;
-}
-
-.light {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: glow 1.8s ease-in-out infinite;
 }
 
 /* The antenna's halo glows softly when idle, pulses with the voice while speaking and blinks
@@ -139,18 +133,6 @@
   }
   94% {
     scale: 1 0.1;
-  }
-}
-
-@keyframes glow {
-  0%,
-  100% {
-    opacity: 1;
-    scale: 1;
-  }
-  50% {
-    opacity: 0.45;
-    scale: 0.8;
   }
 }
 
