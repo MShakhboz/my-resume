@@ -2,13 +2,15 @@
 
 import { ArrowUp, Mail, Send, X } from "lucide-react";
 import { BotIcon } from "./bot-icon";
-import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import styles from "./bot-icon.module.css";
+import { FormEvent, ReactNode, useEffect, useId, useRef, useState } from "react";
 import { getJobs } from "@/entities/experience";
 import { getProfile } from "@/entities/profile";
 import { getProjects } from "@/entities/project";
 import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
 import { createLinkifier, Segment } from "./lib/linkify";
+import { useProactiveGreeting } from "./lib/greeting";
 import { speakOnce } from "./lib/speak";
 import { CHAT_LIMITS, ChatError, ChatMessage } from "./model";
 
@@ -82,6 +84,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<ChatError | null>(null);
   const [hint, setHint] = useState(false);
+  const greeting = useProactiveGreeting(open);
   const panelId = useId();
   const titleId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -162,15 +165,47 @@ export function ChatWidget({ locale }: { locale: Locale }) {
         the bubble works on its own when sound is off, blocked or unsupported.
       */}
       <div className={tw("fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6", open && "hidden sm:block")}>
-        {hint && !open && (
-          <span
-            aria-hidden
-            className="pointer-events-none absolute top-1/2 right-full mr-1 -translate-y-1/2 rounded-xl bg-strong px-3 py-2 text-sm font-semibold whitespace-nowrap text-background shadow-lg"
+        {greeting.visible ? (
+          // The proactive greeting: a real control (click to open the chat, ✕ to dismiss), so it
+          // isn't hidden from assistive tech; announced once, politely.
+          <div
+            role="status"
+            className="absolute top-1/2 right-full mr-2 -translate-y-1/2"
+            onMouseEnter={greeting.hold}
+            onMouseLeave={greeting.release}
+            onFocus={greeting.hold}
+            onBlur={greeting.release}
           >
-            {t.open}
-            {/* The bubble's tail, pointing at the robot. */}
-            <span className="absolute top-1/2 -right-1 size-2.5 -translate-y-1/2 rotate-45 bg-strong" />
-          </span>
+            <Bubble title={t.bubbleTitle} wide>
+              <button
+                type="button"
+                onClick={() => {
+                  greeting.dismiss();
+                  setOpen(true);
+                }}
+                className="mt-0.5 block text-left text-[15px] leading-snug font-semibold text-strong hover:text-accent"
+              >
+                {t.greeting}
+              </button>
+              <button
+                type="button"
+                onClick={greeting.dismiss}
+                aria-label={t.dismissGreeting}
+                className="absolute -top-2.5 -left-2.5 flex size-7 items-center justify-center rounded-full border border-line bg-surface text-muted shadow hover:text-strong"
+              >
+                <X aria-hidden size={14} />
+              </button>
+            </Bubble>
+          </div>
+        ) : (
+          hint &&
+          !open && (
+            <span aria-hidden className="pointer-events-none absolute top-1/2 right-full mr-2 -translate-y-1/2">
+              <Bubble title={t.bubbleTitle}>
+                <span className="mt-0.5 block text-[15px] font-semibold whitespace-nowrap text-strong">{t.open}</span>
+              </Bubble>
+            </span>
+          )
         )}
         <button
           ref={toggleRef}
@@ -180,6 +215,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           aria-label={open ? t.close : t.open}
           onClick={() => {
             setHint(false);
+            greeting.dismiss();
             if (open) close();
             else setOpen(true);
           }}
@@ -193,6 +229,8 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           onKeyDown={(event) => event.key === "Escape" && setHint(false)}
           // Just the robot, no circle: big enough to see it float, blink and wave. While the chat is
           // open it turns into a round close button.
+          // data-waving makes the robot wave while it greets (bot-icon.module.css).
+          data-waving={greeting.visible || undefined}
           className={tw(
             "group relative flex items-center justify-center rounded-full transition motion-reduce:transition-none",
             open
@@ -307,5 +345,29 @@ function AssistantMessage({ content, locale }: { content: string; locale: Locale
       </p>
       {mentionsContacts && <ContactButtons locale={locale} label={t.contactHim} />}
     </div>
+  );
+}
+
+/** The robot's speech bubble: a small card with an "online" label and a tail pointing at the robot. */
+function Bubble({ title, wide, children }: { title: string; wide?: boolean; children: ReactNode }) {
+  return (
+    <span
+      className={tw(
+        styles.bubble,
+        "relative block rounded-2xl border border-line bg-surface px-4 py-2.5 shadow-xl",
+        wide && "w-[min(17rem,calc(100vw-7rem))]"
+      )}
+    >
+      <span className="flex items-center gap-1.5 text-xs font-semibold text-accent">
+        <span className="relative flex size-1.5">
+          <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70 motion-reduce:hidden" />
+          <span className="relative inline-flex size-1.5 rounded-full bg-accent" />
+        </span>
+        {title}
+      </span>
+      {children}
+      {/* The tail, pointing at the robot: a rotated square sharing the card's border. */}
+      <span className="absolute top-1/2 -right-[7px] size-3 -translate-y-1/2 rotate-45 rounded-[3px] border-t border-r border-line bg-surface" />
+    </span>
   );
 }
