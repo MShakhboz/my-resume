@@ -1,6 +1,6 @@
 // The launcher robot says its line once per page visit, in the page's language, when the browser
-// allows it. Browsers block speech until the visitor has clicked or tapped the page, and many
-// devices have no Uzbek voice; in both cases nothing is said and the speech bubble does the job.
+// allows it. Browsers block speech until the visitor has clicked or tapped the page; then nothing
+// is said and the speech bubble does the job.
 
 import type { Locale } from "@/shared/i18n";
 
@@ -22,6 +22,13 @@ const MALE_VOICES = [
   "sardor",
 ];
 
+/**
+ * Most devices have no Uzbek voice (macOS and most Windows and Android setups don't). Nearly all
+ * have a Russian one, which reads Uzbek written in Cyrillic as recognisable Uzbek. The letters
+ * Russian voices can't say (ҳ қ ў ғ) are swapped for their nearest Russian ones so none are skipped.
+ */
+const UZBEK_VIA_RUSSIAN = "Ассалому алайкум! Мен хакимда сунъий интеллект ёрдамчимдан сурашингиз мумкин.";
+
 let spoken = false;
 
 function pickVoice(voices: SpeechSynthesisVoice[], locale: Locale) {
@@ -39,13 +46,18 @@ export function speakOnce(text: string, locale: Locale): boolean {
   if (spoken || typeof window === "undefined" || !("speechSynthesis" in window)) return false;
   const synth = window.speechSynthesis;
   const voices = synth.getVoices();
-  const voice = pickVoice(voices, locale);
-  // Voices load late in some browsers; English and Russian then fall back to the browser's choice
-  // for the language, but Uzbek never gets read by some other language's voice.
-  if (!voice && (voices.length > 0 || locale === "uz")) return false;
+  let voice = pickVoice(voices, locale);
+  let lang = LANG[locale];
+  if (!voice && locale === "uz") {
+    voice = pickVoice(voices, "ru");
+    lang = LANG.ru;
+    text = UZBEK_VIA_RUSSIAN;
+  }
+  // Voices load late in some browsers: then the browser picks one for the language itself.
+  if (!voice && voices.length > 0) return false;
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = LANG[locale];
+  utterance.lang = lang;
   if (voice) utterance.voice = voice;
   utterance.rate = 0.95;
   utterance.pitch = 0.85;
