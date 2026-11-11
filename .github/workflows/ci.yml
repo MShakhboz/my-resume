@@ -20,7 +20,17 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
-      - run: pnpm exec playwright install --with-deps chromium
+      # The runner sometimes can't reach Ubuntu's package mirrors for a few seconds; retry instead
+      # of failing the whole run.
+      - name: Install Chromium for e2e
+        run: |
+          for attempt in 1 2 3; do
+            pnpm exec playwright install --with-deps chromium && exit 0
+            echo "Attempt $attempt failed; retrying in 20 seconds"
+            sleep 20
+            sudo apt-get update || true
+          done
+          exit 1
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
