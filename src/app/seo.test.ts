@@ -2,7 +2,8 @@
 import { describe, expect, it } from "vitest";
 import { getJobs } from "@/entities/experience";
 import { siteUrl } from "@/shared/config";
-import { buildLlmsTxt, GET } from "./llms.txt/route";
+import { buildLlmsTxt } from "./_lib/resume-markdown";
+import { GET } from "./llms.txt/route";
 import robots from "./robots";
 import sitemap from "./sitemap";
 
