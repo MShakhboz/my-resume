@@ -139,6 +139,29 @@
   }
 }
 
+/* Talking: the mouth opens and closes in an uneven, speech-like rhythm. */
+.mouth {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: talk 0.5s ease-in-out infinite;
+}
+
+@keyframes talk {
+  0%,
+  100% {
+    scale: 1 0.35;
+  }
+  20% {
+    scale: 0.9 1;
+  }
+  45% {
+    scale: 1 0.55;
+  }
+  70% {
+    scale: 0.85 0.95;
+  }
+}
+
 /* Waves while greeting the visitor. */
 :global(.group)[data-waving] .arm {
   animation: wave 0.7s ease-in-out infinite;
@@ -159,6 +182,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .mouth {
+    animation: none;
+    scale: 1 0.7;
+  }
   .bubble,
   .head,
   :global(.group):hover .head,

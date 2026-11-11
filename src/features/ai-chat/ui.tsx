@@ -3,7 +3,7 @@
 import { ArrowUp, ChevronRight, Mail, Send, X } from "lucide-react";
 import { BotIcon } from "./bot-icon";
 import styles from "./bot-icon.module.css";
-import { FormEvent, ReactNode, useEffect, useId, useRef, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { getJobs } from "@/entities/experience";
 import { getProfile } from "@/entities/profile";
 import { getProjects } from "@/entities/project";
@@ -11,7 +11,7 @@ import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
 import { createLinkifier, Segment } from "./lib/linkify";
 import { useProactiveGreeting } from "./lib/greeting";
-import { greet } from "./lib/speak";
+import { greet, speaking } from "./lib/speak";
 import { CHAT_LIMITS, ChatError, ChatMessage } from "./model";
 
 const ERRORS: readonly ChatError[] = ["rate_limited", "daily_limit", "unavailable", "generic"];
@@ -85,6 +85,8 @@ export function ChatWidget({ locale }: { locale: Locale }) {
   const [error, setError] = useState<ChatError | null>(null);
   const [hint, setHint] = useState(false);
   const greeting = useProactiveGreeting(open);
+  /** True while the robot's greeting plays: its icons move their mouth, and the chat header zooms. */
+  const talking = useSyncExternalStore(speaking.subscribe, speaking.get, () => false);
   /** The home view (greeting and cards) until the first question; then the conversation. */
   const home = messages.length === 0;
   const panelId = useId();
@@ -247,7 +249,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
               : "size-16 hover:scale-105 motion-reduce:hover:scale-100 sm:size-20"
           )}
         >
-          {open ? <X aria-hidden size={22} /> : <BotIcon />}
+          {open ? <X aria-hidden size={22} /> : <BotIcon talking={talking} />}
         </button>
       </div>
 
@@ -278,10 +280,16 @@ export function ChatWidget({ locale }: { locale: Locale }) {
                     stays pinned while the greeting and cards scroll under it, like the chat header. */}
                 <header className="sticky top-0 z-5 bg-orange-500 px-6 pt-5 pb-3 text-neutral-950">
                   <h2 id={titleId} className="flex items-center gap-2 pr-10 text-sm font-semibold">
-                    {/* On a light chip: an orange robot would vanish on the orange header. */}
-                    <span className="flex size-10 items-center justify-center rounded-full bg-white/90 shadow-sm">
+                    {/* On a light chip: an orange robot would vanish on the orange header. It grows
+                        while talking. */}
+                    <span
+                      className={tw(
+                        "flex size-10 origin-left items-center justify-center rounded-full bg-white/90 shadow-sm transition-[scale,margin] duration-300 motion-reduce:transition-none",
+                        talking && "mr-3.5 scale-135 motion-reduce:mr-0 motion-reduce:scale-100"
+                      )}
+                    >
                       <span className="size-8">
-                        <BotIcon />
+                        <BotIcon talking={talking} />
                       </span>
                     </span>
                     {t.title}
@@ -333,8 +341,13 @@ export function ChatWidget({ locale }: { locale: Locale }) {
             ) : (
               <>
                 <header className="sticky top-0 z-5 flex items-center gap-2.5 border-b border-line bg-surface/95 px-4 py-3 pr-12 backdrop-blur">
-                  <span className="size-9 shrink-0">
-                    <BotIcon />
+                  <span
+                    className={tw(
+                      "size-9 shrink-0 origin-left transition-[scale,margin] duration-300 motion-reduce:transition-none",
+                      talking && "mr-3 scale-135 motion-reduce:mr-0 motion-reduce:scale-100"
+                    )}
+                  >
+                    <BotIcon talking={talking} />
                   </span>
                   <span>
                     <h2 id={titleId} className="text-[15px] leading-tight font-semibold text-strong">

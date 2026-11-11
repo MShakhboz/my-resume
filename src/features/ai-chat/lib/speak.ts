@@ -51,6 +51,26 @@ export const GREETING_COOLDOWN_MS = 3 * 60_000;
 /** How long the device voice gets to start before it counts as blocked (some browsers stay silent). */
 export const SPEECH_START_TIMEOUT_MS = 1_500;
 
+/** Whether the robot is talking right now, so its icons can move their mouth and zoom in. */
+let speakingNow = false;
+const speakingListeners = new Set<() => void>();
+const setSpeaking = (value: boolean) => {
+  if (speakingNow === value) return;
+  speakingNow = value;
+  speakingListeners.forEach((listener) => listener());
+};
+
+/** For `useSyncExternalStore`: true while a greeting is playing. */
+export const speaking = {
+  subscribe(listener: () => void) {
+    speakingListeners.add(listener);
+    return () => {
+      speakingListeners.delete(listener);
+    };
+  },
+  get: () => speakingNow,
+};
+
 /** When a greeting was last actually heard: the pause counts from real playback, not attempts. */
 let lastHeardAt = -Infinity;
 /** A greeting is starting (file or device voice); further calls wait for the outcome. */
@@ -70,6 +90,8 @@ export function greet(text: string, locale: Locale) {
   attempting = true;
   const audio = new Audio(`/voice/greeting-${locale}.m4a`);
   current = audio;
+  audio.addEventListener?.("playing", () => setSpeaking(true));
+  for (const stop of ["ended", "pause", "error"]) audio.addEventListener?.(stop, () => setSpeaking(false));
   const playing = audio.play();
   if (!playing) {
     attempting = false; // environments without media playback
@@ -129,6 +151,7 @@ export function speak(text: string, locale: Locale, { onStart, onDone }: SpeechC
     if (done) return;
     done = true;
     clearTimeout(timeout);
+    setSpeaking(false);
     onDone?.();
   };
   // Some browsers neither start nor report an error when speech is blocked.
@@ -140,6 +163,7 @@ export function speak(text: string, locale: Locale, { onStart, onDone }: SpeechC
   }, SPEECH_START_TIMEOUT_MS);
   utterance.onstart = () => {
     started = true;
+    setSpeaking(true);
     onStart?.();
   };
   utterance.onend = finish;
@@ -152,6 +176,7 @@ export function speak(text: string, locale: Locale, { onStart, onDone }: SpeechC
 
 /** For tests. */
 export function resetSpeech() {
+  setSpeaking(false);
   lastHeardAt = -Infinity;
   attempting = false;
   current = null;
