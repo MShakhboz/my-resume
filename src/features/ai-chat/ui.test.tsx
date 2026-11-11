@@ -33,6 +33,36 @@ describe("ChatWidget", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
+  it("closes when the visitor clicks outside it, but not inside it", async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <p>Page text</p>
+        <ChatWidget locale="en" />
+      </>
+    );
+    await user.click(screen.getByRole("button", { name: t.open }));
+    const dialog = screen.getByRole("dialog", { name: t.title });
+    await user.click(within(dialog).getByRole("textbox", { name: t.placeholder }));
+    expect(dialog).toBeInTheDocument();
+
+    await user.click(screen.getByText("Page text"));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("hides the robot while open and brings focus back to it when the ✕ closes the chat", async () => {
+    const user = userEvent.setup();
+    render(<ChatWidget locale="en" />);
+    await user.click(screen.getByRole("button", { name: t.open }));
+    const dialog = screen.getByRole("dialog", { name: t.title });
+    expect(screen.queryByRole("button", { name: t.open })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { expanded: true })).not.toBeInTheDocument();
+
+    await user.click(within(dialog).getByRole("button", { name: t.close }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: t.open })).toHaveFocus();
+  });
+
   it("shows a speech bubble on hover and hides it with Escape", async () => {
     const user = userEvent.setup();
     render(<ChatWidget locale="en" />);

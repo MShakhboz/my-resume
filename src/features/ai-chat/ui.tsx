@@ -102,19 +102,34 @@ export function ChatWidget({ locale }: { locale: Locale }) {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const logRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  /** Set when the ✕ or Escape closes the chat: focus then goes back to the robot. */
+  const returnFocus = useRef(false);
 
   useEffect(() => {
+    if (!open && returnFocus.current) {
+      returnFocus.current = false;
+      toggleRef.current?.focus();
+    }
     if (!open) return;
     inputRef.current?.focus();
     // Escape closes the chat wherever focus is, e.g. after a suggestion button disappears.
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        returnFocus.current = true;
         setOpen(false);
-        toggleRef.current?.focus();
       }
     };
+    // A press anywhere outside the panel closes it, leaving focus where the visitor clicked.
+    const onPress = (event: PointerEvent) => {
+      if (!panelRef.current?.contains(event.target as Node)) setOpen(false);
+    };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPress);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPress);
+    };
   }, [open]);
 
   useEffect(() => {
@@ -129,9 +144,10 @@ export function ChatWidget({ locale }: { locale: Locale }) {
     greet(t.spoken, locale);
   }
 
+  /** Closes the chat and puts focus back on the robot once it is shown again. */
   function close() {
+    returnFocus.current = true;
     setOpen(false);
-    toggleRef.current?.focus();
   }
 
   async function ask(question: string) {
@@ -186,7 +202,9 @@ export function ChatWidget({ locale }: { locale: Locale }) {
       <div
         ref={drag.ref}
         style={{ translate: `${drag.offset.x}px ${drag.offset.y}px` }}
-        className={tw("fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6", open && "hidden sm:block")}
+        // Hidden while the chat is open: the panel's ✕, Escape or a click outside close it.
+        hidden={open}
+        className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6"
       >
         {greeting.visible ? (
           // The proactive greeting: a real control (click to open the chat, ✕ to dismiss), so it
@@ -257,24 +275,22 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           onFocus={(event) => setHint(event.currentTarget.matches(":focus-visible"))}
           onBlur={() => setHint(false)}
           onKeyDown={(event) => event.key === "Escape" && setHint(false)}
-          // Just the robot, no circle: big enough to see it float, blink and wave. While the chat is
-          // open it turns into a round close button.
+          // Just the robot, no circle: big enough to see it float, blink and wave.
           // data-waving makes the robot wave while it greets (bot-icon.module.css).
           data-waving={greeting.visible || undefined}
           className={tw(
             "group relative flex touch-none items-center justify-center rounded-full transition select-none motion-reduce:transition-none",
-            drag.dragging && "scale-110 cursor-grabbing motion-reduce:scale-100",
-            open
-              ? "size-12 border border-line bg-surface text-foreground shadow-lg hover:text-accent"
-              : "size-16 hover:scale-105 motion-reduce:hover:scale-100 sm:size-20"
+            "size-16 hover:scale-105 motion-reduce:hover:scale-100 sm:size-20",
+            drag.dragging && "scale-110 cursor-grabbing motion-reduce:scale-100"
           )}
         >
-          {open ? <X aria-hidden size={22} /> : <BotIcon talking={talking} />}
+          <BotIcon talking={talking} />
         </button>
       </div>
 
       {open && (
         <section
+          ref={panelRef}
           id={panelId}
           role="dialog"
           aria-labelledby={titleId}
