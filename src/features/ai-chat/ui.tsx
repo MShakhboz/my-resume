@@ -204,7 +204,8 @@ export function ChatWidget({ locale }: { locale: Locale }) {
         style={{ translate: `${drag.offset.x}px ${drag.offset.y}px` }}
         // Hidden while the chat is open: the panel's ✕, Escape or a click outside close it.
         hidden={open}
-        className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6"
+        // Invisible until its stored spot is restored; then the robot rises out of a hole there.
+        className={tw("fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6", !drag.ready && "invisible")}
       >
         {greeting.visible ? (
           // The proactive greeting: a real control (click to open the chat, ✕ to dismiss), so it
@@ -284,7 +285,12 @@ export function ChatWidget({ locale }: { locale: Locale }) {
             drag.dragging && "scale-110 cursor-grabbing motion-reduce:scale-100"
           )}
         >
-          <BotIcon talking={talking} />
+          {drag.ready && <span aria-hidden className={styles.hole} />}
+          <span className={tw("size-full", drag.ready && styles.rise)}>
+            <span className={tw("block size-full", drag.ready && styles.riser)}>
+              <BotIcon talking={talking} />
+            </span>
+          </span>
         </button>
       </div>
 

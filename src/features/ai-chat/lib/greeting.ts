@@ -5,8 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 // The robot greets the visitor every time the page loads, as soon as it shows: phones have no
 // hover, so without this most mobile visitors would never learn what the robot does.
 
-/** Just long enough after the first render for the bubble's pop-in animation to be seen. */
-export const GREETING_DELAY_MS = 600;
+/** Once the robot has risen out of its hole (bot-icon.module.css), so the bubble pops in after it. */
+export const GREETING_DELAY_MS = 1_000;
 export const GREETING_VISIBLE_MS = 8_000;
 
 /**

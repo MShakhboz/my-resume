@@ -57,6 +57,9 @@ export function useDraggable<T extends HTMLElement>() {
   const [offset, setOffset] = useState<Offset>({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [onLeftSide, setOnLeftSide] = useState(false);
+  /** False until the stored spot is restored: keep the element hidden till then, so it doesn't
+      show in the corner first and then jump. */
+  const [ready, setReady] = useState(false);
   const gesture = useRef<{ id: number; startX: number; startY: number; from: Offset; home: Rect } | null>(null);
   const dragged = useRef(false);
   /** The latest offset, for saving it when a drag ends. */
@@ -88,7 +91,10 @@ export function useDraggable<T extends HTMLElement>() {
   // Restore the stored spot after the first render (the server can't know it), and keep the robot
   // on screen when the window is resized or a phone is rotated.
   useEffect(() => {
-    const frame = requestAnimationFrame(() => place(readStored(), homeRect({ x: 0, y: 0 })));
+    const frame = requestAnimationFrame(() => {
+      place(readStored(), homeRect({ x: 0, y: 0 }));
+      setReady(true);
+    });
     const onResize = () => place(latest.current, homeRect(latest.current));
     addEventListener("resize", onResize);
     return () => {
@@ -139,5 +145,5 @@ export function useDraggable<T extends HTMLElement>() {
     return was;
   };
 
-  return { ref, offset, dragging, onLeftSide, handlers, consumeDrag };
+  return { ref, offset, dragging, onLeftSide, ready, handlers, consumeDrag };
 }
