@@ -13,9 +13,18 @@ const LIGHT = "#fff7ed"; // orange-50, the chest light and the shine
 /**
  * A small friendly robot for the chat launcher: a glossy rounded shell with headphones, a face
  * screen and soft capsule arms. Decorative: the button carries the label. Without a size it fills
- * its container, so one drawing works at every button size.
+ * its container, so one drawing works at every button size. `stillArms` keeps the arms down, for
+ * the small robot in the chat header, where waving would distract from reading.
  */
-export function BotIcon({ size, talking = false }: { size?: number; talking?: boolean }) {
+export function BotIcon({
+  size,
+  talking = false,
+  stillArms = false,
+}: {
+  size?: number;
+  talking?: boolean;
+  stillArms?: boolean;
+}) {
   // Several robots can be on the page at once, so each needs its own gradient id.
   const shell = `bot-shell-${useId().replace(/:/g, "")}`;
   const fill = `url(#${shell})`;
@@ -27,6 +36,7 @@ export function BotIcon({ size, talking = false }: { size?: number; talking?: bo
       viewBox="0 0 48 48"
       className={styles.bot}
       data-talking={talking || undefined}
+      data-still-arms={stillArms || undefined}
     >
       <defs>
         <linearGradient id={shell} x1="0" y1="0" x2="0" y2="1">

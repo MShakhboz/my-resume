@@ -111,6 +111,8 @@ describe("ChatWidget", () => {
     act(() => handlers.playing());
     expect(dialog.querySelector("svg[data-talking]")).not.toBeNull();
     expect(dialog.querySelector("svg[data-talking]")!.closest(".scale-135")).not.toBeNull();
+    // The header's robot talks with its mouth only: its arms stay down so they don't distract.
+    expect(dialog.querySelector("svg[data-talking]")!.hasAttribute("data-still-arms")).toBe(true);
 
     act(() => handlers.ended());
     expect(container.querySelector("svg[data-talking]")).toBeNull();

@@ -308,6 +308,12 @@
   }
 }
 
+/* The chat header's robot keeps its arms down, even while speaking. Last, so it wins. */
+.bot[data-still-arms] .arm,
+.bot[data-still-arms] .forearm {
+  animation: none;
+}
+
 /* The speech bubble pops out from the robot's side. */
 .bubble {
   transform-origin: right center;
