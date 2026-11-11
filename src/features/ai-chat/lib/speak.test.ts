@@ -59,8 +59,27 @@ describe("speakOnce", () => {
     expect(speak).toHaveBeenCalledTimes(2);
   });
 
-  it("stays silent when there is no voice for the language", () => {
-    expect(speakOnce("Men haqimda soʻrang", "uz")).toBe(false);
+  it("says the Uzbek greeting in Cyrillic with a Russian voice when there is no Uzbek voice", () => {
+    expect(speakOnce("Assalomu alaykum!", "uz")).toBe(true);
+    const utterance = speak.mock.calls[0][0] as FakeUtterance;
+    expect(utterance.lang).toBe("ru-RU");
+    expect(utterance.voice).toEqual(voices[5]); // Yuri
+    expect(utterance.text).toMatch(/^Ассалому алайкум!/);
+    expect(utterance.text).not.toMatch(/[ҳқўғ]/);
+  });
+
+  it("uses an Uzbek voice when the device has one", () => {
+    const sardor = { lang: "uz-UZ", name: "Microsoft Sardor Online" };
+    vi.stubGlobal("speechSynthesis", { getVoices: () => [...voices, sardor], speak, cancel: vi.fn() });
+    speakOnce("Assalomu alaykum!", "uz");
+    const utterance = speak.mock.calls[0][0] as FakeUtterance;
+    expect(utterance.voice).toEqual(sardor);
+    expect(utterance.text).toBe("Assalomu alaykum!");
+  });
+
+  it("stays silent when there is no voice for the language at all", () => {
+    vi.stubGlobal("speechSynthesis", { getVoices: () => [{ lang: "en-US", name: "Daniel" }], speak, cancel: vi.fn() });
+    expect(speakOnce("Assalomu alaykum!", "uz")).toBe(false);
     expect(speak).not.toHaveBeenCalled();
   });
 
