@@ -20,7 +20,7 @@ export function ThemeToggle({ locale }: { locale: Locale }) {
       onClick={() => setTheme(next)}
       aria-label={label}
       title={label}
-      className="flex size-9 cursor-pointer items-center justify-center rounded-lg text-muted transition hover:bg-raised hover:text-strong"
+      className="flex size-11 cursor-pointer items-center justify-center lg:size-9 rounded-lg text-muted transition hover:bg-raised hover:text-strong"
     >
       <Icon aria-hidden size={18} />
     </button>

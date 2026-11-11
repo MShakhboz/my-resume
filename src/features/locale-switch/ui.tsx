@@ -26,7 +26,7 @@ export function LocaleSwitch({ locale, page = "home", className }: LocaleSwitchP
               title={getDictionary(target).languageName}
               aria-current={current ? "page" : undefined}
               className={tw(
-                "block rounded-md px-2 py-1 text-xs font-semibold uppercase tracking-wide transition",
+                "flex min-h-10 min-w-11 items-center justify-center rounded-md px-2 text-xs font-semibold uppercase tracking-wide transition lg:min-h-0 lg:min-w-0 lg:py-1",
                 current ? "bg-surface text-strong shadow-sm" : "text-muted hover:text-strong"
               )}
             >

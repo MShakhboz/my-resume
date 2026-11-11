@@ -67,7 +67,7 @@ export function Hero({ locale }: { locale: Locale }) {
                   rel="noopener"
                   hrefLang={hrefLang}
                   variant={variant}
-                  className="rounded-r-none"
+                  className="min-h-11 rounded-r-none lg:min-h-0"
                 >
                   <FileText aria-hidden size={16} />
                   {t.pdf[pdf.id]}
@@ -80,7 +80,7 @@ export function Hero({ locale }: { locale: Locale }) {
                   variant={variant}
                   aria-label={t.downloadPdf(t.pdf[pdf.id])}
                   className={tw(
-                    "group/dl relative rounded-l-none border-l px-2.5",
+                    "group/dl relative min-h-11 min-w-11 justify-center rounded-l-none border-l px-2.5 lg:min-h-0 lg:min-w-0",
                     variant === "primary" ? "border-neutral-950/20" : "border-line"
                   )}
                 >
@@ -110,7 +110,7 @@ export function Hero({ locale }: { locale: Locale }) {
                     aria-label={contact.label}
                     title={contact.label}
                     {...(external && { target: "_blank", rel: "noopener noreferrer" })}
-                    className="flex size-10 items-center justify-center rounded-full bg-raised text-body transition hover:-translate-y-0.5 hover:bg-raised-hover hover:text-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                    className="flex size-11 items-center justify-center rounded-full lg:size-10 bg-raised text-body transition hover:-translate-y-0.5 hover:bg-raised-hover hover:text-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                   >
                     <Icon aria-hidden size={18} />
                   </a>
