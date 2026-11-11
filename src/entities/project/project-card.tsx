@@ -44,10 +44,10 @@ export function ProjectCard({ project, locale }: Props) {
           )}
         </h3>
 
-        <p className="text-sm leading-relaxed text-body">{project.description}</p>
+        <p className="text-base leading-relaxed text-body lg:text-[15px]">{project.description}</p>
 
         {project.links.length > 0 && (
-          <p className="relative z-10 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
+          <p className="relative z-10 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
             <span>{project.links.length === 1 ? t.live.one : t.live.many}</span>
             {project.links.map((site) => (
               <a
@@ -55,7 +55,7 @@ export function ProjectCard({ project, locale }: Props) {
                 href={`https://${site}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-0.5 font-medium text-foreground underline decoration-subtle underline-offset-4 hover:text-accent hover:decoration-accent"
+                className="inline-flex min-h-6 items-center gap-0.5 py-1 font-medium text-foreground underline decoration-subtle underline-offset-4 hover:text-accent hover:decoration-accent"
               >
                 {site}
                 <ArrowUpRight aria-hidden size={14} />

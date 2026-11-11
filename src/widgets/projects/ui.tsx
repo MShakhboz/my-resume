@@ -35,7 +35,7 @@ export function Projects({ locale }: { locale: Locale }) {
         <p className="mt-8">
           <a
             href={pagePath(locale, "projects")}
-            className="group inline-flex items-center gap-2 text-sm font-semibold text-accent"
+            className="group inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent lg:min-h-0 lg:py-1"
           >
             {t.archive.viewAll(getArchive(locale).length)}
             <ArrowRight

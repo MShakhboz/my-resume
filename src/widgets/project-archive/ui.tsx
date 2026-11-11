@@ -15,7 +15,7 @@ function LinkCell({ entry, t }: { entry: ArchiveEntry; t: Dictionary }) {
         href={`https://${entry.link}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="group/link inline-flex items-center gap-0.5 font-medium text-foreground underline decoration-subtle underline-offset-4 hover:text-accent hover:decoration-accent"
+        className="group/link inline-flex min-h-6 items-center gap-0.5 py-1 font-medium text-foreground underline decoration-subtle underline-offset-4 hover:text-accent hover:decoration-accent"
       >
         {entry.link}
         <ArrowUpRight
@@ -44,7 +44,7 @@ export function ProjectArchive({ locale }: { locale: Locale }) {
 
   return (
     <main id="main" className="pt-8 pb-24 lg:pt-16">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
         <a
           href={localePath(locale)}
           className="group inline-flex items-center gap-2 text-sm font-semibold text-accent"
@@ -97,7 +97,7 @@ export function ProjectArchive({ locale }: { locale: Locale }) {
                 <td className="py-5 pr-4 align-top text-sm text-muted tabular-nums sm:pr-6">{entry.year}</td>
                 <td className="py-5 pr-4 align-top sm:pr-6">
                   <p className="leading-snug font-semibold text-strong">{entry.name}</p>
-                  <p className="mt-1 max-w-md text-sm leading-relaxed text-body">{entry.description}</p>
+                  <p className="mt-1 max-w-md text-base leading-relaxed text-body lg:text-sm">{entry.description}</p>
                   {/* Columns hidden on small screens move under the description. */}
                   <p className="mt-2 text-xs text-muted lg:hidden">{company}</p>
                   <div className="mt-2 text-sm sm:hidden">

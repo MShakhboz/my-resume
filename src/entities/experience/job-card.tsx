@@ -36,7 +36,7 @@ export function JobCard({ job, locale }: Props) {
           <p className="text-sm text-accent">{job.title}</p>
         </header>
 
-        <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-body marker:text-accent">
+        <ul className="list-disc space-y-2 pl-5 text-base leading-relaxed text-body marker:text-accent lg:text-[15px]">
           {job.bullets.map((bullet) => (
             <li key={bullet}>{bullet}</li>
           ))}
@@ -51,7 +51,7 @@ export function JobCard({ job, locale }: Props) {
         </ul>
 
         {job.liveSites.length > 0 && (
-          <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
+          <p className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
             <span>{job.liveSites.length === 1 ? t.live.one : t.live.many}</span>
             {job.liveSites.map((site) => (
               <a
@@ -59,7 +59,7 @@ export function JobCard({ job, locale }: Props) {
                 href={`https://${site}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/link inline-flex items-center gap-0.5 font-medium text-foreground underline decoration-subtle underline-offset-4 hover:text-accent hover:decoration-accent"
+                className="group/link inline-flex min-h-6 items-center gap-0.5 py-1 font-medium text-foreground underline decoration-subtle underline-offset-4 hover:text-accent hover:decoration-accent"
               >
                 {site}
                 <ArrowUpRight
