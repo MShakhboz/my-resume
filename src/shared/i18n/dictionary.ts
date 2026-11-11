@@ -33,6 +33,8 @@ export const dictionaries = {
     newTab: "(opens in a new tab)",
     chat: {
       open: "Ask AI about me",
+      /** What the robot says on hover: "AI" in full, since voices read the abbreviation oddly. */
+      spoken: "Hello! Feel free to ask my artificial intelligence assistant about me.",
       title: "Ask about Shaxboz",
       close: "Close chat",
       intro: "I answer questions about Shaxboz's experience and skills, using only his resume.",
@@ -102,6 +104,7 @@ export const dictionaries = {
     newTab: "(откроется в новой вкладке)",
     chat: {
       open: "Спросить ИИ обо мне",
+      spoken: "Здравствуйте! Вы можете задать вопросы обо мне моему помощнику с искусственным интеллектом.",
       title: "Вопросы о Шахбозе",
       close: "Закрыть чат",
       intro: "Отвечаю на вопросы об опыте и навыках Шахбоза — только по его резюме.",
@@ -171,6 +174,7 @@ export const dictionaries = {
     newTab: "(yangi oynada ochiladi)",
     chat: {
       open: "Men haqimda AIʼdan soʻrang",
+      spoken: "Assalomu alaykum! Men haqimda sunʼiy intellekt yordamchimdan soʻrashingiz mumkin.",
       title: "Shaxboz haqida savollar",
       close: "Chatni yopish",
       intro: "Shaxbozning tajribasi va koʻnikmalari haqidagi savollarga faqat uning rezyumesi asosida javob beraman.",

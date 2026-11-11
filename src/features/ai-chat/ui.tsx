@@ -185,7 +185,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
           }}
           onMouseEnter={() => {
             setHint(true);
-            speakOnce(t.open, locale);
+            speakOnce(t.spoken, locale);
           }}
           onMouseLeave={() => setHint(false)}
           onFocus={(event) => setHint(event.currentTarget.matches(":focus-visible"))}
