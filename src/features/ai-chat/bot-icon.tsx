@@ -3,9 +3,8 @@ import styles from "./bot-icon.module.css";
 
 // Fixed colours so the robot reads on both themes without a background circle.
 const TOP = "#fb923c"; // orange-400, the lit top of the shell
-const BODY = "#f97316"; // orange-500, shell and arms
-const BOTTOM = "#ea580c"; // orange-600, the shaded bottom of the shell
-const DARK = "#c2410c"; // orange-700, headphones, neck and shoulder bands
+const BOTTOM = "#ea580c"; // orange-600, the shaded bottom of the shell, and the arms
+const DARK = "#c2410c"; // orange-700, headphones, neck and antenna
 const SCREEN = "#1c1917"; // stone-900
 const GLOW = "#fdba74"; // orange-300, eyes, smile, the AI badge and the antenna glow
 const LIGHT = "#fff7ed"; // orange-50, the antenna tip and the shine
@@ -51,14 +50,14 @@ export function BotIcon({
       {/* Capsule arms with a shoulder and an elbow, drawn first so the body covers where they join
           it. They hang straight down; the stylesheet lifts and bends them. */}
       <g className={`${styles.arm} ${styles.left}`}>
-        <path d="M16 32 L13.2 37.2" stroke={BODY} strokeWidth="5" strokeLinecap="round" />
-        <path d="M13.2 37.2 L12.6 42" stroke={BODY} strokeWidth="5" strokeLinecap="round" className={styles.forearm} />
+        <path d="M16 32 L13.2 37.2" stroke={BOTTOM} strokeWidth="5" strokeLinecap="round" />
+        <path d="M13.2 37.2 L12.6 42" stroke={BOTTOM} strokeWidth="5" strokeLinecap="round" className={styles.forearm} />
       </g>
       <g className={styles.arm}>
-        <path d="M32 32 L34.8 37.2" stroke={BODY} strokeWidth="5" strokeLinecap="round" />
-        <path d="M34.8 37.2 L35.4 42" stroke={BODY} strokeWidth="5" strokeLinecap="round" className={styles.forearm} />
+        <path d="M32 32 L34.8 37.2" stroke={BOTTOM} strokeWidth="5" strokeLinecap="round" />
+        <path d="M34.8 37.2 L35.4 42" stroke={BOTTOM} strokeWidth="5" strokeLinecap="round" className={styles.forearm} />
       </g>
-      {/* Body, with a band at each shoulder and an AI badge */}
+      {/* Body, with an AI badge */}
       <rect x="20" y="25.5" width="8" height="4" rx="1.5" fill={DARK} />
       {/* An egg-shaped torso: gently rounded shoulders, a fuller rounded belly */}
       <path d="M19 27.6 H29 Q34 27.6 34 33 V39.5 Q34 47.4 24 47.4 Q14 47.4 14 39.5 V33 Q14 27.6 19 27.6 Z" fill={fill} />
@@ -77,8 +76,6 @@ export function BotIcon({
       >
         AI
       </text>
-      <rect x="13" y="29.4" width="4.4" height="6" rx="2.2" fill={DARK} />
-      <rect x="30.6" y="29.4" width="4.4" height="6" rx="2.2" fill={DARK} />
       {/* Head: an antenna with a glowing tip, headphones with little fins, the shell with a shine,
           the face screen */}
       <g className={styles.head}>
