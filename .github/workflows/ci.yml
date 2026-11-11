@@ -20,15 +20,15 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
-      # The runner sometimes can't reach Ubuntu's package mirrors for a few seconds; retry instead
-      # of failing the whole run.
+      # Only the browser, from Playwright's own download servers. The runner image already has the
+      # system libraries Chromium needs (it ships Google Chrome), and `--with-deps` broke CI whenever
+      # the runner couldn't reach Ubuntu's package mirrors.
       - name: Install Chromium for e2e
         run: |
           for attempt in 1 2 3; do
-            pnpm exec playwright install --with-deps chromium && exit 0
+            pnpm exec playwright install chromium && exit 0
             echo "Attempt $attempt failed; retrying in 20 seconds"
             sleep 20
-            sudo apt-get update || true
           done
           exit 1
       - run: pnpm test:e2e
