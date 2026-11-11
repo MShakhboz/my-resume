@@ -48,7 +48,8 @@ export const dictionaries = {
       disclaimer: "AI can make mistakes. Don't share personal information.",
       errors: {
         rate_limited: "Too many questions right now. Please try again in a minute.",
-        unavailable: "The chat is offline right now. Please email or message Shaxboz directly.",
+        daily_limit: "The chat has reached today's limit. Please contact Shaxboz directly:",
+        unavailable: "The chat is offline right now. Please contact Shaxboz directly:",
         generic: "Something went wrong. Please try again, or contact Shaxboz directly.",
       },
     },
@@ -114,7 +115,8 @@ export const dictionaries = {
       disclaimer: "ИИ может ошибаться. Не отправляйте личные данные.",
       errors: {
         rate_limited: "Слишком много вопросов. Попробуйте через минуту.",
-        unavailable: "Чат сейчас недоступен. Напишите Шахбозу напрямую.",
+        daily_limit: "Чат исчерпал лимит вопросов на сегодня. Напишите Шахбозу напрямую:",
+        unavailable: "Чат сейчас недоступен. Напишите Шахбозу напрямую:",
         generic: "Что-то пошло не так. Попробуйте ещё раз или напишите Шахбозу напрямую.",
       },
     },
@@ -180,7 +182,8 @@ export const dictionaries = {
       disclaimer: "AI xato qilishi mumkin. Shaxsiy maʼlumotlarni yubormang.",
       errors: {
         rate_limited: "Savollar juda koʻp. Bir daqiqadan soʻng qayta urinib koʻring.",
-        unavailable: "Chat hozir ishlamayapti. Shaxbozga toʻgʻridan-toʻgʻri yozing.",
+        daily_limit: "Chat bugungi savollar limitiga yetdi. Shaxbozga toʻgʻridan-toʻgʻri yozing:",
+        unavailable: "Chat hozir ishlamayapti. Shaxbozga toʻgʻridan-toʻgʻri yozing:",
         generic: "Nimadir xato ketdi. Qayta urinib koʻring yoki Shaxbozga toʻgʻridan-toʻgʻri yozing.",
       },
     },

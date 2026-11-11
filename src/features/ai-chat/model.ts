@@ -2,6 +2,12 @@
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
 
+/**
+ * Why a question got no answer. `daily_limit`: the visitor's or the free model account's quota for
+ * today is used up, so the widget points to the owner's contacts instead of "try again".
+ */
+export type ChatError = "rate_limited" | "daily_limit" | "unavailable" | "generic";
+
 export const CHAT_LIMITS = {
   /** Longest question a visitor can send. */
   maxQuestion: 600,
@@ -65,20 +71,23 @@ export function validateMessages(input: unknown): ChatMessage[] | null {
   return messages.slice(-(CHAT_LIMITS.maxHistory + 1));
 }
 
-/** A fixed-window limiter in server memory. Best effort: each server instance counts on its own. */
+/**
+ * A fixed-window limiter in server memory. Best effort: each server instance counts on its own.
+ * Returns null when the request may go ahead, otherwise which limit it hit.
+ */
 export function createRateLimiter(limits: { perMinute: number; perDay: number }, now = () => Date.now()) {
   const hits = new Map<string, number[]>();
-  return function allow(key: string) {
+  return function check(key: string): "minute" | "day" | null {
     const t = now();
     const recent = (hits.get(key) ?? []).filter((at) => t - at < 86_400_000);
-    const lastMinute = recent.filter((at) => t - at < 60_000).length;
-    if (lastMinute >= limits.perMinute || recent.length >= limits.perDay) {
-      hits.set(key, recent);
-      return false;
-    }
-    recent.push(t);
     hits.set(key, recent);
+    if (recent.length >= limits.perDay) return "day";
+    if (recent.filter((at) => t - at < 60_000).length >= limits.perMinute) return "minute";
+    recent.push(t);
     if (hits.size > 5000) hits.delete(hits.keys().next().value!);
-    return true;
+    return null;
   };
 }
+
+/** OpenRouter's 429 says which limit it hit; its free tier has a daily cap per account. */
+export const isDailyLimit = (errorBody: string) => /per[-_ ]?day|daily/i.test(errorBody);

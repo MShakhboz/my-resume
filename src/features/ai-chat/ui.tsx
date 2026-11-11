@@ -2,11 +2,32 @@
 
 import { ArrowUp, Sparkles, X } from "lucide-react";
 import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import { getProfile } from "@/entities/profile";
 import { getDictionary, Locale } from "@/shared/i18n";
 import { tw } from "@/shared/lib/tw";
-import { CHAT_LIMITS, ChatMessage } from "./model";
+import { CHAT_LIMITS, ChatError, ChatMessage } from "./model";
 
-type ErrorKey = "rate_limited" | "unavailable" | "generic";
+const ERRORS: readonly ChatError[] = ["rate_limited", "daily_limit", "unavailable", "generic"];
+const toError = (code: unknown): ChatError => (ERRORS.includes(code as ChatError) ? (code as ChatError) : "generic");
+
+/** When the chat can't help today, the visitor gets the owner's email and Telegram right there. */
+function DirectContacts({ locale }: { locale: Locale }) {
+  const contacts = getProfile(locale).contacts.filter((c) => c.id === "email" || c.id === "telegram");
+  return (
+    <span className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+      {contacts.map((c) => (
+        <a
+          key={c.id}
+          href={c.href}
+          {...(c.href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
+          className="font-medium text-accent underline underline-offset-4"
+        >
+          {c.id === "telegram" ? `Telegram ${c.display}` : c.display}
+        </a>
+      ))}
+    </span>
+  );
+}
 
 /**
  * "Ask AI about me": a small chat in the corner that answers from the resume through /api/chat.
@@ -18,7 +39,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<ErrorKey | null>(null);
+  const [error, setError] = useState<ChatError | null>(null);
   const panelId = useId();
   const titleId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -66,8 +87,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
         body: JSON.stringify({ messages: history, locale }),
       });
       if (!response.ok || !response.body) {
-        const code = (await response.json().catch(() => ({}))).error;
-        throw new Error(code === "rate_limited" || code === "unavailable" ? code : "generic");
+        throw new Error(toError((await response.json().catch(() => ({}))).error));
       }
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -81,7 +101,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
       if (!answer.trim()) throw new Error("generic");
     } catch (e) {
       setMessages(history);
-      setError(e instanceof Error && (e.message === "rate_limited" || e.message === "unavailable") ? e.message : "generic");
+      setError(e instanceof Error ? toError(e.message) : "generic");
     } finally {
       setBusy(false);
     }
@@ -165,6 +185,7 @@ export function ChatWidget({ locale }: { locale: Locale }) {
             {error && (
               <p role="alert" className="rounded-lg border border-line px-3 py-2 text-foreground">
                 {t.errors[error]}
+                {(error === "daily_limit" || error === "unavailable") && <DirectContacts locale={locale} />}
               </p>
             )}
           </div>

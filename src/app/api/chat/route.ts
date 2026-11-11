@@ -3,8 +3,10 @@ import {
   CHAT_LIMITS,
   createRateLimiter,
   DEFAULT_MODELS,
+  isDailyLimit,
   validateMessages,
 } from "@/features/ai-chat/server";
+import type { ChatError } from "@/features/ai-chat/server";
 import { siteUrl } from "@/shared/config";
 import { toLocale } from "@/shared/i18n";
 import { buildLlmsTxt } from "../../_lib/resume-markdown";
@@ -13,17 +15,18 @@ import { buildLlmsTxt } from "../../_lib/resume-markdown";
 // back as plain text.
 export const dynamic = "force-dynamic";
 
-const allow = createRateLimiter(CHAT_LIMITS);
+const checkLimit = createRateLimiter(CHAT_LIMITS);
 const resume = buildLlmsTxt();
 
-const json = (status: number, error: string) => Response.json({ error }, { status });
+const json = (status: number, error: ChatError | "bad_request") => Response.json({ error }, { status });
 
 export async function POST(request: Request) {
   const key = process.env.OPENROUTER_API_KEY;
   if (!key) return json(503, "unavailable");
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() || "local";
-  if (!allow(ip)) return json(429, "rate_limited");
+  const limited = checkLimit(ip);
+  if (limited) return json(429, limited === "day" ? "daily_limit" : "rate_limited");
 
   let body: { messages?: unknown; locale?: unknown };
   try {
@@ -60,7 +63,11 @@ export async function POST(request: Request) {
   }).catch(() => null);
 
   if (!upstream?.ok || !upstream.body) {
-    return json(upstream?.status === 429 ? 429 : 502, upstream?.status === 429 ? "rate_limited" : "upstream");
+    if (upstream?.status === 429) {
+      // A busy free model is worth retrying in a minute; a used-up daily quota is not.
+      return json(429, isDailyLimit(await upstream.text().catch(() => "")) ? "daily_limit" : "rate_limited");
+    }
+    return json(502, "generic");
   }
   return new Response(toTextStream(upstream.body), {
     headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" },
