@@ -49,9 +49,9 @@ test("resume PDFs are served", async ({ page, request }) => {
 for (const path of ["/", "/ru", "/uz", "/projects", "/ru/projects", "/uz/projects", "/logs"]) {
   for (const colorScheme of ["dark", "light"] as const) {
     test(`has no detectable accessibility violations (${path}, ${colorScheme})`, async ({ page }) => {
+      // The theme comes from the visitor's stored choice, not the system setting.
+      await page.addInitScript((theme) => localStorage.setItem("theme", theme), colorScheme);
       await page.goto(path);
-      await page.emulateMedia({ colorScheme });
-      await page.reload();
       await expect(page.locator("html")).toHaveAttribute("data-theme", colorScheme);
       // Guards against unstyled pages, which axe would happily pass.
       await expect(page.locator("body")).toHaveCSS(
@@ -151,18 +151,18 @@ test("unknown paths are a 404", async ({ request }) => {
   }
 });
 
-test("theme toggle overrides the system theme and persists", async ({ page }) => {
+test("the page starts light even on a dark system, and the dark choice persists", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.reload();
   const html = page.locator("html");
+  await expect(html).toHaveAttribute("data-theme", "light");
+
+  await page.getByRole("button", { name: "Switch to dark theme" }).click();
   await expect(html).toHaveAttribute("data-theme", "dark");
 
-  await page.getByRole("button", { name: "Switch to light theme" }).click();
-  await expect(html).toHaveAttribute("data-theme", "light");
-
   await page.reload();
-  await expect(html).toHaveAttribute("data-theme", "light");
-  await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
+  await expect(html).toHaveAttribute("data-theme", "dark");
+  await expect(page.getByRole("button", { name: "Switch to light theme" })).toBeVisible();
 });
 
 test("the job log stays locked, unindexed and out of the sitemap", async ({ page, request }) => {
@@ -182,7 +182,7 @@ for (const colorScheme of ["dark", "light"] as const) {
     await page.route("**/api/chat", (route) =>
       route.fulfill({ status: 200, contentType: "text/plain", body: "He built the Baza-Taxi CRM frontend." })
     );
-    await page.emulateMedia({ colorScheme });
+    await page.addInitScript((theme) => localStorage.setItem("theme", theme), colorScheme);
     await page.goto("/");
     await page.getByRole("button", { name: "Ask AI about me" }).click();
     const chat = page.getByRole("dialog", { name: "Ask about Shaxboz" });

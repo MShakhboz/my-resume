@@ -67,11 +67,9 @@ export async function generateMetadata({ params }: LayoutProps<"/[[...locale]]">
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#111110" },
-    { media: "(prefers-color-scheme: light)", color: "#f9f9f8" },
-  ],
-  colorScheme: "dark light",
+  // Light is the default theme for everyone, whatever the system prefers.
+  themeColor: "#f9f9f8",
+  colorScheme: "light dark",
 };
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[[...locale]]">) {

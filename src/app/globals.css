@@ -1,30 +1,13 @@
 @import "tailwindcss";
 
-/* Theme tokens. Dark is the default; light applies when the visitor picks it
-   (data-theme="light") or, before any choice, when their system prefers it.
+/* Theme tokens. Light is the default for every visitor; dark applies only when they pick it
+   (data-theme="dark"). The system preference is deliberately ignored.
    Palette: Radix Colors "sand" (a warm gray) for neutrals and "orange" for the accent.
    No pure black or white: off-black and off-white text limit glare (halation) in dark
    mode, and paper-toned surfaces cut glare in light mode.
    Keep text tokens at WCAG AA contrast on both --background and --surface;
    --accent text must also pass on --accent-soft (the tech-stack pills). */
 :root {
-  --background: #111110;
-  --surface: #191918;
-  --raised: #222221;
-  --raised-hover: #2a2a28;
-  --line: #31312e;
-  --strong: #eeeeec;
-  --foreground: #e2e1de;
-  --body: #c8c6c0;
-  --muted: #a9a7a0;
-  --subtle: #62605b;
-  --accent: #ffa057;
-  --accent-soft: #331e0b;
-  --glow: rgb(255 160 87 / 0.06);
-  color-scheme: dark;
-}
-
-:root[data-theme="light"] {
   --background: #f9f9f8;
   --surface: #fdfdfc;
   --raised: #f1f0ef;
@@ -41,23 +24,21 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --background: #f9f9f8;
-    --surface: #fdfdfc;
-    --raised: #f1f0ef;
-    --raised-hover: #e9e8e6;
-    --line: #e2e1de;
-    --strong: #21201c;
-    --foreground: #2b2a26;
-    --body: #4b4a45;
-    --muted: #63635e;
-    --subtle: #bcbbb5;
-    --accent: #ad4400;
-    --accent-soft: #fff7ed;
-    --glow: rgb(247 107 21 / 0.06);
-    color-scheme: light;
-  }
+:root[data-theme="dark"] {
+  --background: #111110;
+  --surface: #191918;
+  --raised: #222221;
+  --raised-hover: #2a2a28;
+  --line: #31312e;
+  --strong: #eeeeec;
+  --foreground: #e2e1de;
+  --body: #c8c6c0;
+  --muted: #a9a7a0;
+  --subtle: #62605b;
+  --accent: #ffa057;
+  --accent-soft: #331e0b;
+  --glow: rgb(255 160 87 / 0.06);
+  color-scheme: dark;
 }
 
 @theme inline {
