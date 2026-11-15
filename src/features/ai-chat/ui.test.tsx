@@ -182,7 +182,9 @@ describe("ChatWidget", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(
-        streamOf("He built hibro.am. Ask him at mirzomurotovshaxboz@gmail.com or Telegram @nornof, not at evil.example.")
+        streamOf(
+          "He built hibro.am. Ask him at mirzomurotovshaxboz@gmail.com, mir.shahboz@yandex.com or Telegram @nornof, not at evil.example."
+        )
       )
     );
     const user = userEvent.setup();
@@ -192,6 +194,7 @@ describe("ChatWidget", () => {
 
     const email = await screen.findByRole("link", { name: "mirzomurotovshaxboz@gmail.com" });
     expect(email).toHaveAttribute("href", "mailto:mirzomurotovshaxboz@gmail.com");
+    expect(screen.getByRole("link", { name: "mir.shahboz@yandex.com" })).toHaveAttribute("href", "mailto:mir.shahboz@yandex.com");
     expect(screen.getByRole("link", { name: /^@nornof/ })).toHaveAttribute("href", "https://t.me/nornof");
     expect(screen.getByRole("link", { name: /^hibro\.am/ })).toHaveAttribute("target", "_blank");
     expect(screen.queryByRole("link", { name: /evil/ })).not.toBeInTheDocument();

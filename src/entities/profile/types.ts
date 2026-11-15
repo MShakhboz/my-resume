@@ -1,5 +1,5 @@
 export type ContactLink = {
-  id: "email" | "linkedin" | "github" | "telegram";
+  id: "email" | "email-yandex" | "linkedin" | "github" | "telegram";
   label: string;
   /** Text shown on the page; the PDF resume also shows URLs as text. */
   display: string;

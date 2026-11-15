@@ -4,6 +4,7 @@ import { ContactLink } from "./types";
 
 export const contactIcons: Record<ContactLink["id"], LucideIcon> = {
   email: Mail,
+  "email-yandex": Mail,
   linkedin: Linkedin,
   github: Github,
   telegram: Send,
