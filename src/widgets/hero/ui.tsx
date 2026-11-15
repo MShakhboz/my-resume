@@ -100,8 +100,7 @@ export function Hero({ locale }: { locale: Locale }) {
 
         <div className="flex items-center gap-2">
           <ul aria-label={t.contactLinks} className="flex items-center gap-2">
-            {/* One envelope only: the second email is in the Contact section, not a second icon. */}
-            {profile.contacts.filter((contact) => contact.id !== "email-yandex").map((contact) => {
+            {profile.contacts.map((contact) => {
               const Icon = contactIcons[contact.id];
               const external = contact.href.startsWith("http");
               return (

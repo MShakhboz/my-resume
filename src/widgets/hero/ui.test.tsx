@@ -17,11 +17,10 @@ describe.each(locales)("Hero (%s)", (locale) => {
     expect(screen.getByRole("heading", { level: 1, name: profile.name })).toBeInTheDocument();
   });
 
-  it("links every contact channel, with one email icon", () => {
+  it("links every contact channel", () => {
     render(<Hero locale={locale} />);
     const list = screen.getByRole("list", { name: t.contactLinks });
-    expect(within(list).queryByRole("link", { name: "Email (Yandex)" })).not.toBeInTheDocument();
-    for (const contact of profile.contacts.filter((c) => c.id !== "email-yandex")) {
+    for (const contact of profile.contacts) {
       expect(within(list).getByRole("link", { name: contact.label })).toHaveAttribute(
         "href",
         contact.href

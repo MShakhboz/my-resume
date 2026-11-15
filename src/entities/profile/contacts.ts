@@ -8,7 +8,7 @@ export const contacts: ContactLink[] = [
     display: "mirzomurotovshaxboz@gmail.com",
     href: "mailto:mirzomurotovshaxboz@gmail.com",
   },
-  // A second address, listed in the Contact section and the PDFs; Gmail stays the main one.
+  // A second address, with its own Yandex icon; Gmail stays the main one (Email me, link previews).
   {
     id: "email-yandex",
     label: "Email (Yandex)",
