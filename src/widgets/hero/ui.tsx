@@ -100,20 +100,39 @@ export function Hero({ locale }: { locale: Locale }) {
 
         <div className="flex items-center gap-2">
           <ul aria-label={t.contactLinks} className="flex items-center gap-2">
-            {profile.contacts.map((contact) => {
+            {profile.contacts.map((contact, i) => {
               const Icon = contactIcons[contact.id];
               const external = contact.href.startsWith("http");
+              const label = contact.id === "telegram" ? t.messengers : contact.label;
+              // The first and last tooltips line up with their icon's outer edge, so they stay on
+              // screen at 320px; the others are centred.
+              const align =
+                i === 0 ? "left-0" : i === profile.contacts.length - 1 ? "right-0" : "left-1/2 -translate-x-1/2";
+              const arrow =
+                i === 0 ? "left-4" : i === profile.contacts.length - 1 ? "right-4" : "left-1/2 -translate-x-1/2";
               return (
-                <li key={contact.id}>
+                <li key={contact.id} className="group/contact relative">
                   <a
                     href={contact.href}
-                    aria-label={contact.label}
-                    title={contact.label}
+                    aria-label={label}
                     {...(external && { target: "_blank", rel: "noopener noreferrer" })}
                     className="flex size-11 items-center justify-center rounded-full lg:size-10 bg-raised text-body transition hover:-translate-y-0.5 hover:bg-raised-hover hover:text-accent motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                   >
                     <Icon aria-hidden size={18} />
                   </a>
+                  {/* Hover and keyboard-focus tooltip: the channel and the address. Screen readers
+                      get the aria-label instead. */}
+                  <span
+                    aria-hidden
+                    className={tw(
+                      "pointer-events-none absolute bottom-full z-10 mb-2.5 translate-y-1 rounded-lg bg-strong px-3 py-1.5 text-left whitespace-nowrap text-background opacity-0 shadow-lg transition group-hover/contact:translate-y-0 group-hover/contact:opacity-100 group-has-focus-visible/contact:translate-y-0 group-has-focus-visible/contact:opacity-100 motion-reduce:transition-none",
+                      align
+                    )}
+                  >
+                    <span className="block text-[11px] font-medium opacity-70">{label}</span>
+                    <span className="block text-xs font-semibold">{contact.display}</span>
+                    <span className={tw("absolute top-full -mt-1 size-2 rotate-45 bg-strong", arrow)} />
+                  </span>
                 </li>
               );
             })}

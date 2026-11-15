@@ -21,7 +21,8 @@ describe.each(locales)("Hero (%s)", (locale) => {
     render(<Hero locale={locale} />);
     const list = screen.getByRole("list", { name: t.contactLinks });
     for (const contact of profile.contacts) {
-      expect(within(list).getByRole("link", { name: contact.label })).toHaveAttribute(
+      const name = contact.id === "telegram" ? t.messengers : contact.label;
+      expect(within(list).getByRole("link", { name })).toHaveAttribute(
         "href",
         contact.href
       );
